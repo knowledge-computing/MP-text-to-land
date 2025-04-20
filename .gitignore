@@ -1,4 +1,5 @@
-/data/
+/data/raw/
+/data/processed/
 /output/
 /.DS_Store
 /config/.env
