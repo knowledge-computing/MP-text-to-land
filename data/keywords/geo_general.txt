@@ -1,13 +1,3 @@
-mn
-minn
-minnesota
-mn.
-minn.
-wi
-wis
-wisconsin
-wi.
-wis.
 st
 cty
 tn
@@ -32,6 +22,14 @@ ne
 nw
 se
 sw
+ne.
+nw.
+se.
+sw.
+n.
+w.
+e.
+w.
 bdry
 bd
 bdr
@@ -60,7 +58,6 @@ at the corner
 avenue
 behind
 block
-border
 boundary
 boundary line
 boundary marker
@@ -68,6 +65,7 @@ brushland
 canyon
 center
 city
+cities
 city limits
 city of
 clearing
@@ -82,8 +80,12 @@ defined area
 district
 division
 drainage
-easement
 east
+easter
+easterly
+eastern
+eastbound
+eastmost
 edge
 encompassing
 entrance
@@ -105,6 +107,7 @@ in front of
 intersection
 lakefront
 lot
+lots
 lot line
 lot number
 lowland
@@ -114,6 +117,10 @@ mountain
 nearby
 next to
 north
+northerly
+northern
+northbound
+northmost
 northeast
 northwest
 on the property
@@ -121,6 +128,7 @@ opposite
 parcel
 pasture
 peak
+park
 plain
 plat
 plot
@@ -143,9 +151,14 @@ shared boundary
 shoreline
 slope
 south
+southern
+southerly
+southbound
+southernmost
 southeast
 southwest
 spanning
+square
 state
 state of
 stream
@@ -153,6 +166,7 @@ street
 subdivision
 survey
 timberland
+to-wit
 town
 township
 tract
@@ -162,6 +176,11 @@ village
 waterfront
 waterway
 west
+wester
+westerly
+western
+westbound
+westmost
 wetland
 within
 zone

@@ -1,3 +1,5 @@
+county
+county of
 aitkin
 anoka
 becker
@@ -23,7 +25,6 @@ faribault
 fillmore
 freeborn
 goodhue
-grant
 hennepin
 houston
 hubbard
@@ -86,5 +87,4 @@ washington
 watonwan
 wilkin
 winona
-wright
 yellow medicine
