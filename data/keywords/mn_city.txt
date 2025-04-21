@@ -1,0 +1,861 @@
+ada
+adams
+adolph
+adrian
+afton
+ah-gwah-ching
+aitkin
+akeley
+albany
+albert lea
+alberta
+albertville
+alborn
+alden
+aldrich
+alexandria
+alida
+almelund
+alpha
+altura
+alvarado
+alvena
+amboy
+andover
+angle inlet
+angora
+annandale
+anoka
+apple valley
+appleton
+arco
+arden hills
+arlington
+ashby
+askov
+atwater
+audubon
+aurora
+austin
+avoca
+avon
+babbitt
+backus
+badger
+bagley
+balaton
+barnesville
+barnum
+barrett
+barry
+bassett
+battle lake
+baudette
+baxter
+bayport
+beardsley
+beaver bay
+beaver creek
+becker
+bejou
+belgrade
+belle plaine
+bellechester
+bellingham
+beltrami
+belview
+bemidji
+bena
+bennington
+benson
+bertha
+bethel
+big falls
+big lake
+bigelow
+bigfork
+bingham lake
+birchdale
+bird island
+biwabik
+blackduck
+blomkest
+blooming prairie
+bloomington
+blue earth
+bluffton
+bock
+borup
+bovey
+bowlus
+boyd
+braham
+brainerd
+brandon
+breckenridge
+breezy point
+brewster
+bricelyn
+brook park
+brooklyn center
+brooklyn park
+brooks
+brookston
+brooten
+browerville
+browns valley
+brownsdale
+brownsville
+brownton
+bruno
+buffalo
+buffalo lake
+buhl
+burnsville
+burtrum
+butterfield
+byron
+caledonia
+callaway
+calumet
+cambridge
+campbell
+canby
+cannon falls
+canton
+carlos
+carlton
+carver
+cass lake
+cassadaga
+cedar
+cedar mills
+center city
+centerville
+central lakes
+ceylon
+champlin
+chandler
+chanhassen
+chaska
+chatfield
+chickamaw beach
+chisago city
+chisholm
+chokio
+circle pines
+clara city
+claremont
+clarissa
+clarkfield
+clarks grove
+clear lake
+clearbrook
+clearwater
+clements
+cleveland
+climax
+clinton
+clitherall
+clontarf
+cloquet
+coates
+cobden
+cohasset
+cokato
+cold spring
+coleraine
+cologne
+columbia heights
+comfrey
+comstock
+coon rapids
+coon creek
+cook
+corcoran
+correll
+cosmos
+cottage grove
+cottonwood
+courtland
+covington
+cromwell
+crookston
+crosby
+crosslake
+crystal
+currie
+cushing
+cuyuna
+cyrus
+dakota
+dalbo
+dalton
+danube
+danvers
+darfur
+darwin
+dassel
+dawson
+dayton
+de graff
+deephaven
+deer creek
+deer river
+deerwood
+delano
+delavan
+dellwood
+denham
+denton
+dennison
+dent
+detroit lakes
+dexter
+dilworth
+dodge center
+donaldson
+donnelly
+doran
+dover
+dovray
+duluth
+dumont
+dundas
+dundee
+dunnell
+eagan
+eagle bend
+eagle lake
+east bethel
+east grand forks
+easton
+echo
+eden prairie
+eden valley
+edgerton
+edina
+effie
+eitzen
+elba
+elbow lake
+eldred
+elgin
+elizabeth
+elk river
+elko new market
+ellendale
+ellsworth
+elmore
+elrosa
+elysian
+emily
+emmons
+erhard
+erskine
+esko
+essig
+eveleth
+excelsior
+eyota
+fairfax
+fairmont
+falcon heights
+faribault
+farwell
+federal dam
+felton
+fergus falls
+fertile
+fifty lakes
+finlayson
+fisher
+flensburg
+floodwood
+florence
+foley
+forada
+forest lake
+foreston
+fort ripley
+fosston
+fountain
+foxhome
+franklin
+frazee
+freeborn
+freeport
+fridley
+frost
+fulda
+funkley
+garfield
+garrison
+garvin
+gary
+gaylord
+gem lake
+geneva
+geno
+georgetown
+ghent
+gibbon
+gilbert
+gilman
+glencoe
+glenville
+glenwood
+glyndon
+golden valley
+gonvick
+good thunder
+goodhue
+goodridge
+goodview
+graceville
+granada
+grand marais
+grand meadow
+grand rapids
+granite falls
+grant
+grasston
+green isle
+greenbush
+greenfield
+greenwald
+greenwood
+grey eagle
+grove city
+grygla
+guckeen
+gunflint lake
+hackensack
+hadley
+halma
+halstad
+ham lake
+hamburg
+hamel
+hanley falls
+hanover
+hanska
+harding
+hardwick
+harmony
+harris
+hartland
+hastings
+hatfield
+hawley
+hayfield
+hayward
+hazel run
+hector
+heidelberg
+henderson
+hendricks
+hendrum
+henning
+henriette
+herman
+hermantown
+heron lake
+hewitt
+hibbing
+hill city
+hillman
+hills
+hinckley
+hitterdal
+hoffman
+hokah
+holdingford
+holland
+hollandale
+holloway
+holmes city
+holt
+hopkins
+houston
+howard lake
+hoyt lakes
+hugo
+humboldt
+hutchinson
+ihlen
+independence
+international falls
+inver grove heights
+iona
+iron junction
+isanti
+isle
+ivanhoe
+jackson
+janesville
+jasper
+jeffers
+jenkins
+johnson
+johnstown
+jordan
+kabetogama
+kandiyohi
+karlstad
+kasson
+kelliher
+kellogg
+kennedy
+kenneth
+kensington
+kent
+kenyon
+kerrick
+kettle river
+keewatin
+kimball
+kinbrae
+kingston
+kinney
+la crescent
+la prairie
+lafayette
+lake benton
+lake bronson
+lake city
+lake crystal
+lake elmo
+lake george
+lake henry
+lake lillian
+lake park
+lake shore
+lake wilson
+lakeland
+lakeland shores
+lakeville
+lakewood
+lamberton
+lancaster
+landfall
+lanesboro
+laporte
+lastrup
+lauderdale
+le center
+le roy
+le sueur
+leader
+leavenworth
+lengby
+leonard
+leonidas
+lester prairie
+lewiston
+lewisville
+lexington
+lilydale
+lindstrom
+lino lakes
+lismore
+litchfield
+little canada
+little falls
+littlesauk
+littlefork
+loman
+lonsdale
+loretto
+louisburg
+lowry
+lucan
+luverne
+lyle
+lynd
+mabel
+madelia
+madison
+madison lake
+magnolia
+mahnomen
+mahtomedi
+mankato
+mantorville
+maple grove
+maple lake
+maple plain
+mapleton
+mapleview
+maplewood
+marble
+marine on st. croix
+marshall
+marysburg
+maryland
+mayer
+maynard
+mazeppa
+mcgrath
+mcgregor
+mcintosh
+mckinley
+meadowlands
+medford
+medicine lake
+medina
+meire grove
+melrose
+menahga
+mendota
+mendota heights
+mentor
+middle river
+miesville
+milaca
+milan
+millerville
+millville
+milroy
+miltona
+minneapolis
+minneiska
+minneota
+minnetonka
+minnetonka beach
+minnetrista
+mizpah
+montevideo
+montgomery
+monticello
+montrose
+moorhead
+moose lake
+morgan
+morris
+morristown
+morton
+motley
+mound
+mounds view
+mountain iron
+mountain lake
+murdock
+nashua
+nashwauk
+nassau
+nelson
+nerstrand
+ness
+nevis
+new auburn
+new brighton
+new germany
+new hope
+new london
+new market
+new munich
+new prague
+new richland
+new trier
+new ulm
+new york mills
+newfolden
+newport
+nicollet
+nielsville
+nimrod
+nisswa
+norcross
+north branch
+north mankato
+north oaks
+north st. paul
+northfield
+northome
+northrop
+norwood
+norwood young america
+nowthen
+noyes
+oak grove
+oak park heights
+oakdale
+ogilvie
+okabena
+oklee
+olivia
+onamia
+ormsby
+orono
+oronoco
+orr
+ortonville
+osage
+osakis
+oslo
+osse
+osseo
+ostranders
+otsego
+oxford
+outaouais
+palisade
+park rapids
+parkers prairie
+paynesville
+pease
+pelican rapids
+pemberton
+pennock
+pequot lakes
+perham
+perley
+peterson
+pierz
+pillager
+pine city
+pine island
+pine river
+pine springs
+pinewood
+pipestone
+plainview
+plato
+pleasant lake
+plummer
+plymouth
+porter
+preston
+princeton
+prinsburg
+prior lake
+proctor
+quamba
+racine
+ramsey
+randall
+randolph
+ranier
+raymond
+red lake
+red lake falls
+red wing
+redby
+redwood falls
+regal
+remer
+renville
+revere
+rice
+rice lake
+richfield
+richmond
+riverton
+robbinsdale
+rochester
+rock creek
+rockford
+rockville
+rogers
+rollingstone
+roosevelt
+roscoe
+rose creek
+roseau
+rosemount
+roseville
+rothsay
+round lake
+royalton
+rush city
+rushford
+rushford village
+rushmore
+russell
+ruthton
+rutledge
+sabin
+sacred heart
+saginaw
+saint anthony
+saint augusta
+saint bonifacius
+saint charles
+saint clair
+saint cloud
+saint francis
+saint hilaire
+saint james
+saint joseph
+saint louis park
+saint martin
+saint marys point
+saint michael
+saint paul
+saint paul park
+saint peter
+st. anthony
+st. augusta
+st. bonifacius
+st. charles
+st. clair
+st. cloud
+st. francis
+st. hilaire
+st. james
+st. joseph
+st. louis park
+st. martin
+st. marys point
+st. michael
+st. paul
+st. paul park
+st. peter
+salol
+sandstone
+sargeant
+sartell
+sauk centre
+sauk rapids
+savage
+scandia
+scanlon
+schroeder
+sebeka
+sedan
+shafer
+shakopee
+shelly
+sherburn
+shevlin
+shoreview
+shorewood
+silver bay
+silver lake
+slayton
+sleepy eye
+soudan
+south haven
+south saint paul
+spicer
+spring grove
+spring hill
+spring lake park
+spring park
+spring valley
+squaw lake
+stacy
+staples
+starbuck
+steen
+stephen
+stewart
+stewartville
+stillwater
+stockton
+storden
+strandquist
+sturgeon lake
+swan river
+swanville
+taconite
+tamarack
+taopi
+taylors falls
+tenstrike
+thief river falls
+tintah
+tofte
+tonka bay
+tower
+tracy
+trail
+trimont
+trosky
+truman
+turtle lake
+twin lakes
+twin valley
+twinsburg
+tyler
+ulen
+underwood
+upsala
+urbank
+utica
+vadnais heights
+vergas
+vermillion
+verndale
+vernon center
+vesta
+victoria
+viking
+villard
+vining
+virginia
+vesta
+wabasha
+wabasso
+waconia
+wadena
+wahkon
+waite park
+waldorf
+walker
+walnut grove
+walters
+waltham
+wanamingo
+wanda
+wanless
+warren
+warroad
+warsaw
+waseca
+watertown
+waterville
+watkins
+watson
+waubun
+waverly
+wayzata
+welcome
+wells
+wendell
+west concord
+west saint paul
+west union
+westbrook
+whalan
+wheaton
+white bear lake
+wilder
+willernie
+williams
+willmar
+willow river
+wilmont
+wilton
+windom
+winger
+winnebago
+winona
+winsted
+winthrop
+winton
+wolf lake
+wolverton
+wood lake
+woodbury
+woodland
+woods
+worthington
+wrenshall
+wright
+wykoff
+wyoming
+zemple
+zumbro falls
+zumbrota
