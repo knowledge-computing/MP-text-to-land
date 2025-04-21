@@ -22,8 +22,9 @@ from src.data_preprocessing.geosentence_identifier import filter_relevant_senten
 columns_to_keep = ["image_ids", "saved_path", "seller", "buyer", "street_add", "cnty_name", "city", "state", "cov_text", "add_cov", "lot_cov", "block_cov"]
 entity_columns = []
 # entity_columns = ["street_add", "cnty_name", "city", "state", "add_cov"]
-
-
+# Keep the entity_columns an empty list so that it is purely keyword match, using the keywords identified in /data/keywords/*.txt files
+# If you want to use purely entity matching and non keyword matching, please use empty txt file.
+# The "entity" refers to the attributes appeared in the geojson locations
 
 def main():
 
