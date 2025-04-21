@@ -1,3 +1,5 @@
+city
+city of
 ada
 adams
 adolph
@@ -318,7 +320,6 @@ grand marais
 grand meadow
 grand rapids
 granite falls
-grant
 grasston
 green isle
 greenbush
@@ -853,7 +854,6 @@ woodland
 woods
 worthington
 wrenshall
-wright
 wykoff
 wyoming
 zemple

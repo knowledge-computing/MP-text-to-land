@@ -1,7 +1,9 @@
 # Import specific functions or classes from submodules to make them available at the package level
 from src.utils.config_loader import load_config
+from src.utils.keyword_loader import load_keywords_from_txt_directory
 from src.data_preprocessing.path_generator import generate_saved_path, create_s3_paths, create_download_paths, create_command_paths, save_commands_as_txt
 from src.data_preprocessing.geojson_loader import load_geojson_to_gdf
+from src.data_preprocessing.geosentence_identifier import filter_relevant_sentences
 # If needed, initialize other things or perform logging setup
 import logging
 
@@ -19,5 +21,7 @@ __all__ = [
     'generate_saved_path', 
     'create_command_paths',
     'save_commands_as_txt',
-    'load_geojson_to_gdf'
+    'load_geojson_to_gdf',
+    'load_keywords_from_txt_directory',
+    'filter_relevant_sentences'
 ]
