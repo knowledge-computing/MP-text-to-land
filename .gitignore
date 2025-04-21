@@ -2,5 +2,7 @@
 /data/processed/
 /output/
 /.DS_Store
-/config/.env
+/.env
 /.vscode/
+/private/code/
+/src/__pycache__/*.pyc
