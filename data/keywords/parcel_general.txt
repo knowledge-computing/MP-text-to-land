@@ -1,0 +1,66 @@
+lot
+lots
+block
+blocks
+blk
+tract
+section
+sec
+range
+rge
+quarter
+quarters
+township
+town
+twp
+parcel
+subdivision
+subd
+addition
+add
+park
+avenue
+village
+ridge
+division
+hill
+plot
+forest
+valley
+stream
+creek
+half
+center
+north
+east
+west
+south
+northwest
+southwest
+southeast
+northeast
+se
+ne
+nw
+sw
+easterly
+southerly
+westerly
+northerly
+feet
+lot
+block
+subdivision
+addition
+plat book
+map book
+northeast quarter of Section
+southeast quarter of Section
+southwest quarter of Section
+northwest quarter of Section
+described as follows, to wit:
+bounded and described as follows:
+beginning at a point
+beginning at a line
+beginning at an iron pipe
+commencing a point

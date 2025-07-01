@@ -9,9 +9,10 @@ from src.utils.config_loader import load_config
 geojson_path, folder_names, ocrtxt_path, _ = load_config()
 
 def filter_and_modify(ids, prefix='Abstract_Images_Books_MR N-Z', target_ids={" 27-71 by Book and Page/MISC/doc_NONE_book_46_page_549", " 27-71 by Book and Page/MISC/doc_NONE_book_46_page_550", " 27-71 by Book and Page/MISC/doc_NONE_book_46_page_551"}):
-    """ This function has not been added to __init__.py 
+    """ 
+        This function has not been added to __init__.py 
         since this is currently used by only load_geojson_to_gdf() 
-        to modify the spesific 3 files of dakota county
+        to modify the specific 3 files of dakota county
     """
     if not isinstance(ids, list):
         return ids
@@ -76,6 +77,7 @@ def load_geojson_to_gdf(list_of_county_folder=folder_names, columns_to_keep=["im
                     
                     
     # Select relevant columns
+    # print("Selecting relevant columns...", type(columns_to_keep))
     full_gdf = full_gdf[columns_to_keep]
 
     return full_gdf
