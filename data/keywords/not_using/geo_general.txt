@@ -1,0 +1,186 @@
+st
+cty
+tn
+twn
+vlg
+vill
+cmn
+comm
+ave
+str
+subd
+s/d
+trct
+twp
+rng
+sec
+blk
+lt
+qtr
+plt
+ne
+nw
+se
+sw
+ne.
+nw.
+se.
+sw.
+n.
+w.
+e.
+w.
+bdry
+bd
+bdr
+along
+nxt
+adj
+ahead
+bhd
+on property
+on lot
+acrs frm
+across frm
+at corner
+at intersection
+edg
+ft
+abutting
+access
+acre
+acreage
+across from
+adjacent
+along
+alongside
+at the corner
+avenue
+behind
+block
+boundary
+boundary line
+boundary marker
+brushland
+canyon
+center
+city
+cities
+city limits
+city of
+clearing
+cliff
+community
+corner
+county
+county line
+county of
+creek
+defined area
+district
+division
+drainage
+east
+easter
+easterly
+eastern
+eastbound
+eastmost
+edge
+encompassing
+entrance
+expanse
+extending
+feet
+field
+floodplain
+foot
+forest
+fort
+grid
+half
+high ground
+highway
+hill
+hillside
+in front of
+intersection
+lakefront
+lot
+lots
+lot line
+lot number
+lowland
+marsh
+meadow
+mountain
+nearby
+next to
+north
+northerly
+northern
+northbound
+northmost
+northeast
+northwest
+on the property
+opposite
+parcel
+pasture
+peak
+park
+plain
+plat
+plot
+point of beginning
+private road
+property line
+proximity
+public road
+quart
+quarter
+range
+ridge
+ridge line
+right of way
+riverfront
+roadway
+rock formation
+section
+shared boundary
+shoreline
+slope
+south
+southern
+southerly
+southbound
+southernmost
+southeast
+southwest
+spanning
+square
+state
+state of
+stream
+street
+subdivision
+survey
+timberland
+to-wit
+town
+township
+tract
+tributary
+valley
+village
+waterfront
+waterway
+west
+wester
+westerly
+western
+westbound
+westmost
+wetland
+within
+zone

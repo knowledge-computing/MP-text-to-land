@@ -1,0 +1,188 @@
+state
+state of
+ala
+alabama
+al.
+ala.
+ak
+alaska
+ak.
+ariz
+arizona
+az.
+ariz.
+ark
+arkansas
+ar.
+ark.
+cal
+california
+ca.
+cal.
+colo
+colorado
+co.
+colo.
+conn
+connecticut
+ct.
+conn.
+del
+delaware
+de.
+del.
+fla
+florida
+fl.
+fla.
+geo
+georgia
+ga.
+geo.
+haw
+hawaii
+hi.
+haw.
+ida
+idaho
+id.
+ida.
+ill
+illinois
+il.
+ill.
+ind
+indiana
+in.
+ind.
+iowa
+ia.
+kan
+kansas
+ks.
+kan.
+kent
+kentucky
+ky.
+kent.
+lou
+louisiana
+la.
+lou.
+main
+maine
+me.
+main.
+mar
+maryland
+md.
+mar.
+mass
+massachusetts
+ma.
+mass.
+mic
+michigan
+mi.
+mic.
+minn
+minnesota
+mn.
+minn.
+miss
+mississippi
+ms.
+miss.
+miss
+missouri
+mo.
+miss.
+mon
+montana
+mt.
+mon.
+neb
+nebraska
+ne.
+neb.
+neva
+nevada
+nv.
+neva.
+new hampshire
+nh.
+new hampshire.
+new jersey
+nj.
+new jersey.
+new mexico
+nm.
+new mexico.
+new york
+ny.
+new york.
+north carolina
+nc.
+north carolina.
+north dakota
+nd.
+north dakota.
+ohi
+ohio
+oh.
+ohi.
+okla
+oklahoma
+ok.
+okla.
+ore
+oregon
+or.
+ore.
+pen
+pennsylvania
+pa.
+pen.
+rhode
+rhode island
+ri.
+rhode.
+south carolina
+sc.
+south carolina.
+south dakota
+sd.
+south dakota.
+tenn
+tennessee
+tn.
+tenn.
+texas
+tx.
+uta
+utah
+ut.
+uta.
+ver
+vermont
+vt.
+ver.
+vir
+virginia
+va.
+vir.
+wash
+washington
+wa.
+wash.
+west virginia
+wv.
+west virginia.
+wis
+wisconsin
+wi.
+wis.
+wyo
+wyoming
+wy.
+wyo.

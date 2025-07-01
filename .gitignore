@@ -1,5 +1,7 @@
 /data/raw/
 /data/processed/
+/data/spacy_ner_subdivision_labels/
+/data/subdivision_sample/
 /output/
 /.DS_Store
 /.vscode/
@@ -8,4 +10,3 @@
 *.pyo
 __pycache__/
 .env/
-
