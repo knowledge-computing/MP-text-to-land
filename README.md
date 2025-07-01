@@ -3,17 +3,13 @@
 **Discover geographic entities in historical deed documents.**  
 This project aims to automatically extract geographic entities—such as lot numbers, blocks, subdivisions, and more—from historical deed texts and output structured data for use in geographic information systems (GIS) and downstream analysis.
 
-As a tool developer, my goal is to help the Map Prejudice team automate the process of extracting important information and try to approximate the same metadata format as in the existing `*.geojson` attributes: each feature item corresponds to a different deed's images, details, and its property location. Thus, the tools 3, 4 & 5 aim at generating the `*.geojson`-similar format with the automatically extracted geo-info strings, hoping to achieve an effect similar to the volunteer labels or to effectively prompt during the crowdsourcing.
+As a tool developer, my goal is to help the Map Prejudice team automate the process of extracting important information and try to approximate the same metadata format as in the existing `*.geojson` attributes: each feature item corresponds to a different deed's images, details, and its property location. Thus, the tools 3 - 9 aim at generating the `*.geojson`-similar format with the automatically extracted geo-info strings, hoping to achieve an effect similar to the volunteer labels or to effectively prompt during the crowdsourcing.
 
 ## Table of Contents
 
 1. [Features](#features)  
 2. [Installation](#installation)  
 3. [Usage](#usage)  
-4. [Project Structure](#project-structure)  
-5. [Examples](#examples)  
-6. [Contributing](#contributing)  
-7. [License](#license)
 
 ## Features
 
