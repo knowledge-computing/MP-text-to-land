@@ -3,6 +3,7 @@
 /data/spacy_ner_subdivision_labels/
 /data/subdivision_sample/
 /src/__pycache__/
+*.cpython-310.pyc
 /output/
 /.DS_Store
 /.vscode/
