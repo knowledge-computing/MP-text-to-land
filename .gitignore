@@ -3,6 +3,7 @@
 /data/<NER_LABEL_DIR>/
 /data/subdivision_sample/
 /src/__pycache__/
+*.cpython-310.pyc
 /output/
 /.DS_Store
 /.vscode/
