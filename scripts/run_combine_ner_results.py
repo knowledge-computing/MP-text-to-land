@@ -16,36 +16,36 @@ def parse_args():
 
 def merge_dictionaries(dictionaries):
     """
-    合并具有相同image_ids的字典数据
+    combine dicts with same image_ids
     
-    参数:
-    dictionaries -- 包含多个字典的列表，每个字典具有相同的结构
+    param:
+    dictionaries -- a list of dictionaries, each dictionary has the same structure
     
-    返回:
-    合并后的字典列表
+    return:
+    combined dictionaries with same image_ids
     """
-    # 用于存储分组后的数据
+    # to store grouped dictionaries
     grouped_data = {}
     
-    # 按image_ids对字典进行分组
+    # group dictionaties by image_ids
     for item in dictionaries:
-        # 将image_ids转换为元组以便作为字典键
+        # convert to tuple to use image_ids as keys for dictionaries
         image_key = tuple(item['image_ids'])
         
-        # 如果image_ids已存在于分组中，合并数据
+        # if image_ids exist in the group, merge
         if image_key in grouped_data:
             existing_item = grouped_data[image_key]
             
-            # 合并除text外的所有属性
+            # merge all attributes except text
             for key in existing_item:
                 if key != 'text' and key != 'image_ids' and key in item and item[key]:
                     existing_item[key] = existing_item[key] + item[key]
-        # 如果image_ids不存在，创建新的分组
+        # if image_ids does not exist, create new group
         else:
-            # 复制当前字典作为新分组的基础
+            # copy the current dictionary as the basis of find other items that should be belonging to its group
             grouped_data[image_key] = item.copy()
     
-    # 将分组后的数据转换为列表并返回
+    # convert to list and return the grouped data
     return list(grouped_data.values())
 
 def load_test_data(file_path):
@@ -82,37 +82,6 @@ def main():
 
     file.close()
     print(f"Combined all predicted entities from NER and saved to {args.output_path}")
-
-    # result = defaultdict(list)
-    # for item in data:
-    #     key = tuple(item["image_ids"])
-    #     result[key].append(item["text"])
-
-    # result_list = [
-    #     {"image_ids": sorted(list(img_ids)), "sentences": sentences}
-    #     for img_ids, sentences in result.items()
-    # ]
-    # print(len(result_list))
-    # print(type(result_list))
-    # print(result_list[:1])
-
-
-
-    # for item in result_list[10:20]:
-    # for item in result_list:
-        # print("=====================================")
-        # print(f"Image IDs: {item['image_ids']}")
-        # print("Number of sentences: ", len(item['sentences']), )
-        # for text in item['sentences']:
-            # doc = nlp(text)
-            # kv = extract_state_cnty_cty_kv(doc)
-            # print(text)
-            # print(kv)
-
-    
-    # file.close()
-    # print(f"Predicted state/county/city with its image_ids and original sentence saved to {args.output_path}")
-
 
 if __name__ == "__main__":
 

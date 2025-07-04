@@ -15,7 +15,7 @@ from src.data_preprocessing.generate_image_ids_list_from_filenames import group_
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Test geo sentence identifier saving results as jsonl")
-    parser.add_argument('--root_path', type=str, default="/root/path/.../covenants-deed-images/ocr/txt",
+    parser.add_argument('--root_path', type=str, default="./covenants-deed-images/ocr/txt",
                         help='load text files of ocr results from this path')
     
     parser.add_argument('--keyword_threshold', type=int, default=90,
@@ -27,7 +27,7 @@ def parse_args():
     parser.add_argument('--spacy_model_name', type=str, default="en_core_web_md",
                         help='spaCy language model to use')
 
-    parser.add_argument('--output_path', type=str, default="./output/filtered_sentences_w_raw_txt_and_image_ids.jsonl",
+    parser.add_argument('--output_path', type=str, default="./output/all_sentences_w_raw_txt_and_image_ids.jsonl",
                         help='save filtered sentences to this path as jsonl file')
 
     return parser.parse_args()
