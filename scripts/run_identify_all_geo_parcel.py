@@ -6,7 +6,7 @@ from collections import defaultdict
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run the state/county/city NER model to predicted the subdivision names from the sentences.")
-    parser.add_argument('--file_path', type=str, default="./output/filtered_sentences_w_raw_txt_and_image_ids.jsonl",
+    parser.add_argument('--file_path', type=str, default="./output/all_sentences_w_raw_txt_and_image_ids.jsonl",
                         help='load jsonl from this path')
     
     parser.add_argument('--model_aut_path', type=str, default="./src/models/state_county_city_ner_model/model-best",
