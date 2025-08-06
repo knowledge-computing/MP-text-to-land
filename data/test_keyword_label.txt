@@ -1,0 +1,8 @@
+township
+range
+section
+twp
+rge
+town
+sec
+sect
