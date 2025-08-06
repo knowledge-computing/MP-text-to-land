@@ -5,6 +5,7 @@ from src.utils.extract_shp_attribute_to_txt import extract_shp_attribute_to_txt
 from src.data_preprocessing.path_generator import generate_saved_path, create_s3_paths, create_download_paths, create_command_paths, save_commands_as_txt
 from src.data_preprocessing.geojson_loader import load_geojson_to_gdf
 from src.data_preprocessing.sentence_identifier import filter_relevant_sentences
+from src.data_preprocessing.passage_identifier import filter_relevant_sentences2
 from src.data_preprocessing.generate_image_ids_list_from_filenames import group_files_by_prefix
 # If needed, initialize other things or perform logging setup
 import logging
