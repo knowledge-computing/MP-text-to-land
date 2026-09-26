@@ -21,3 +21,20 @@ __pycache__/
 # Editor / OS files
 /.DS_Store
 /.vscode/
+
+# Real/private Mapping Prejudice data - never commit
+MP-dataset-save/
+covenants-deed-images/
+zooniverse_location/
+geojson_split/
+subdivision_Michael_shared/
+July2025_updated/
+spacy_ner_subdivision_labels/
+*.geojson
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.jsonl
+*.spacy

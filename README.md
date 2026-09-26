@@ -175,6 +175,7 @@ For example, assuming the user of this tool has collected a list of keywords in 
 
 1. **Prepare your data**
    - Place OCR `*.txt` deed files under the `data/` directory, using the same folder structure as in the S3 bucket.
+   - `--root_path` must point to the folder that **contains the county folders**, i.e. the same folder as `OCRTXT_PATH` in `.env` (e.g. `.../covenants-deed-images/ocr/txt/`, which contains `mn-anoka-county/`, `wi-milwaukee-county/`, ...). Do not point it at a single county folder, or the first subfolder of every image_id will be dropped.
    - Place all the keywords lists at the `data/keywords/` directory. All files endwith `*.txt` at the `data/keywords/` will be loaded. Each row in the `*.txt` files will be considered as a keyword. 
    - The `*.txt` files at the`data/keywords/not_using` directory would not be loaded anytime, so this is where the user can store the temporarily unnecessary keyword lists. Users can find the developer suggested keywords there too.
 
@@ -191,10 +192,14 @@ python -m scripts.run_identify_sentences_with_imageids_f_raw_txt_to_jsonl \
 3. **Output**
 The script saves filtered geographic-relevant sentences to `output/filtered_sentences_w_raw_txt_and_image_ids.jsonl`.
 Each sentence are saved in this format:
-`{"text": "Lots 1 in block one and lot 2 in block two.", "image_ids": ["123456/012345_INDEX_001", "123456/012345_INDEX_002"]}`
+`{"text": "Lots 1 in block one and lot 2 in block two.", "image_ids": ["toy-book-a/page_001", "toy-book-a/page_002"]}`
+
+Each `image_ids` entry is the OCR `*.txt` path **relative to its county folder**, without `.txt`, so it matches the `image_ids` in the county's `*.geojson`. For example, `<root_path>/mn-anoka-county/toy-book-a/page_001.txt` becomes `"toy-book-a/page_001"`. This does not depend on where `--root_path` is on disk, whether it ends with `/`, or whether it is a relative path.
+
+> **Note:** Before commit `68a61cb`, Tool 3 derived image_ids with `split('/', 10)`, which only matched the GeoJSON ids at one specific folder depth. Do not mix Tool 3 outputs (or Tool 4–9 outputs built from them) created before and after this fix, because Tool 9 groups results by `image_ids`. Rerun Tool 3 → 7 → 9 from scratch.
 
 #### 🛠️ Arguments
-- `--root_path`: Load ocr `*.txt` files from this path.
+- `--root_path`: Load ocr `*.txt` files from this path. It must be the folder that contains the county folders (the same as `OCRTXT_PATH`).
 - `--keyword_threshold`: Fuzzy match threshold for keywords (0–100), recommended 80-90.
 - `--item_threshold`: Minimum number of matched keywords to keep a sentence (>=0) recommended at least 2 for keyword matching.
 - `--output_path`: Output `*.jsonl` file to save filtered sentences.
@@ -226,7 +231,7 @@ python -m scripts.run_state_county_city_ner_model \
 3. **Output**
 The script saves filtered geographic-relevant sentences to `output/state_cnty_cty_w_txt_n_image_ids.jsonl`.
 Each sentence and its ids and state/county/city are saved in this format:
-`{"text": ".....parcel of land lying in the County of Anoka and State of Minnisota described as follows, to-wit: Block XX, XX Addition, to the City of Anoka, County of Anoka and State of Minnesota.", "image_ids": ["123456/012345_INDEX_001", "123456/012345_INDEX_002"], "NERpredicted_STATE": ["State of Minnesota"], "NERpredicted_CNTY": ["County of Anoka", "County of Anoka"], "NERpredicted_CTY": ["City of Anoka"]}`.
+`{"text": ".....parcel of land lying in the County of Anoka and State of Minnisota described as follows, to-wit: Block XX, XX Addition, to the City of Anoka, County of Anoka and State of Minnesota.", "image_ids": ["toy-book-a/page_001", "toy-book-a/page_002"], "NERpredicted_STATE": ["State of Minnesota"], "NERpredicted_CNTY": ["County of Anoka", "County of Anoka"], "NERpredicted_CTY": ["City of Anoka"]}`.
 
 #### 🛠️ Arguments
 - `--file_path`: The exact same format as the tool 3 output `*.jsonl` file
@@ -260,7 +265,7 @@ python -m scripts.run_subd_ner_model \
 3. **Output**
 The script saves filtered geographic-relevant sentences to `output/subd_w_txt_n_image_ids.jsonl`.
 Each sentence and its ids and subdivision names are saved in this format:
-`{"text": "Lots 1 in block one, An Example Addition, Minneapolis, Minnesota, and lot 2 in block two, Another Example Addition, St Paul, Minnesota.", "image_ids": ["123456/012345_INDEX_001", "123456/012345_INDEX_002"], "NERpredicted_SUBD": ["An Example Addition", "Another Example Addition"]}`.
+`{"text": "Lots 1 in block one, An Example Addition, Minneapolis, Minnesota, and lot 2 in block two, Another Example Addition, St Paul, Minnesota.", "image_ids": ["toy-book-a/page_001", "toy-book-a/page_002"], "NERpredicted_SUBD": ["An Example Addition", "Another Example Addition"]}`.
 
 #### 🛠️ Arguments
 - `--file_path`: The exact same format as the tool 3 output `*.jsonl` file
@@ -294,7 +299,7 @@ python -m scripts.run_parcel_ner_model \
 The script saves filtered geographic-relevant sentences to `output/parcel_w_txt_n_image_ids.jsonl`.
 Each sentence and its ids and parcel information (lot/block/unit/township/range/section/quarter) are saved in this format:
 
-`{"text": "... the Southwest Quarter (SW-1) of the Northeast Quarter (NE') of Section One (1), in Township Thirty-two (32) and Range Ten (10), and .... -lot One (1) in said ...;", "image_ids": ["123456/012345_INDEX_001", "123456/012345_INDEX_002"], "NERpredicted_LOT": ["lot One (1)"], "NERpredicted_BLOCK": [], "NERpredicted_UNIT": [], "NERpredicted_TOWNSHIP": ["Township Thirty"], "NERpredicted_RANGE": ["Range Ten"], "NERpredicted_SECTION": ["Section One"], "NERpredicted_QUARTER": ["Southwest Quarter", "Northeast Quarter", "NE"]}`
+`{"text": "... the Southwest Quarter (SW-1) of the Northeast Quarter (NE') of Section One (1), in Township Thirty-two (32) and Range Ten (10), and .... -lot One (1) in said ...;", "image_ids": ["toy-book-a/page_001", "toy-book-a/page_002"], "NERpredicted_LOT": ["lot One (1)"], "NERpredicted_BLOCK": [], "NERpredicted_UNIT": [], "NERpredicted_TOWNSHIP": ["Township Thirty"], "NERpredicted_RANGE": ["Range Ten"], "NERpredicted_SECTION": ["Section One"], "NERpredicted_QUARTER": ["Southwest Quarter", "Northeast Quarter", "NE"]}`
 
 #### 🛠️ Arguments
 - `--file_path`: The exact same format as the tool 3 output `*.jsonl` file
@@ -325,7 +330,7 @@ python -m scripts.run_identify_all_geo_parcel \
 The script saves filtered geographic-relevant sentences to `output/all_geo_parcel_w_txt_n_image_ids.jsonl`.
 Each sentence and its ids and all known categories of geographic and parcel information (state/county/city/subdivision/lot/block/unit/township/range/section/quarter) are saved in this format:
 
-`{"text": ".... of the County of Sherburne and State of Minnesota ... Stdte of Minnesota., described as follows, to-wit: Lot One (1) of Fake Lake Park Addition, being part of Government Lot Two(2) ; of Section Thirty One (31), Township Thirty One (31), Range Twenty One (21) according to ... Deeds in and for said Sherburne County.", "image_ids": ["123456/012345_INDEX_001", "123456/012345_INDEX_002"], "NERpredicted_STATE": ["State of Minnesota", "Minnesota"], "NERpredicted_CNTY": ["County of Sherburne", "County of Sherburne", "Sherburne County"], "NERpredicted_CTY": [], "NERpredicted_SUBD": ["Fake Lake Park Addition"], "NERpredicted_LOT": ["Lot One (1)", "Lot Two(2)"], "NERpredicted_BLOCK": [], "NERpredicted_UNIT": [], "NERpredicted_TOWNSHIP": ["Township Thirty"], "NERpredicted_RANGE": ["Range Twenty"], "NERpredicted_SECTION": ["Section Thirty"], "NERpredicted_QUARTER": []}`
+`{"text": ".... of the County of Sherburne and State of Minnesota ... Stdte of Minnesota., described as follows, to-wit: Lot One (1) of Fake Lake Park Addition, being part of Government Lot Two(2) ; of Section Thirty One (31), Township Thirty One (31), Range Twenty One (21) according to ... Deeds in and for said Sherburne County.", "image_ids": ["toy-book-a/page_001", "toy-book-a/page_002"], "NERpredicted_STATE": ["State of Minnesota", "Minnesota"], "NERpredicted_CNTY": ["County of Sherburne", "County of Sherburne", "Sherburne County"], "NERpredicted_CTY": [], "NERpredicted_SUBD": ["Fake Lake Park Addition"], "NERpredicted_LOT": ["Lot One (1)", "Lot Two(2)"], "NERpredicted_BLOCK": [], "NERpredicted_UNIT": [], "NERpredicted_TOWNSHIP": ["Township Thirty"], "NERpredicted_RANGE": ["Range Twenty"], "NERpredicted_SECTION": ["Section Thirty"], "NERpredicted_QUARTER": []}`
 
 #### 🛠️ Arguments
 - `--file_path`: The exact same format as the tool 3 output `*.jsonl` file
@@ -358,7 +363,7 @@ python -m scripts.run_identify_all_geo_parcel_with_index \
 The script saves filtered geographic-relevant sentences to `output/all_geo_parcel_w_txt_n_image_ids_n_index.jsonl`.
 Each sentence and its ids and all known categories of geographic and parcel information (state/county/city/subdivision/lot/block/unit/township/range/section/quarter) are saved in this format:
 
-`{"text": "Lot Three (3) in Block Two (2), Kenth Park according to ... ", "image_ids": ["123456/012345_INDEX_001", "123456/012345_INDEX_002"], "NERpredicted_STATE": [], "NERpredicted_CNTY": [], "NERpredicted_CTY": [], "NERpredicted_SUBD": [["Kenth Park", 32, 42]], "NERpredicted_LOT": [["Lot Three (3)", 0, 13]], "NERpredicted_BLOCK": [["Block Two (2)", 17, 30]], "NERpredicted_UNIT": [], "NERpredicted_TOWNSHIP": [], "NERpredicted_RANGE": [], "NERpredicted_SECTION": [], "NERpredicted_QUARTER": []}`
+`{"text": "Lot Three (3) in Block Two (2), Kenth Park according to ... ", "image_ids": ["toy-book-a/page_001", "toy-book-a/page_002"], "NERpredicted_STATE": [], "NERpredicted_CNTY": [], "NERpredicted_CTY": [], "NERpredicted_SUBD": [["Kenth Park", 32, 42]], "NERpredicted_LOT": [["Lot Three (3)", 0, 13]], "NERpredicted_BLOCK": [["Block Two (2)", 17, 30]], "NERpredicted_UNIT": [], "NERpredicted_TOWNSHIP": [], "NERpredicted_RANGE": [], "NERpredicted_SECTION": [], "NERpredicted_QUARTER": []}`
 
 #### 🛠️ Arguments
 - `--file_path`: The exact same format as the tool 3 output `*.jsonl` file
@@ -374,6 +379,7 @@ The input `*.jsonl` file format is exactly the same as the `*.jsonl` output from
 
 1. **Prepare your data**
    - Use tool 7 to generated the entities and save them associate with their corresponding `image_ids` list. Place the `*.jsonl` output from tool 7 under the `output` or `data` folder.
+   - Only combine outputs that come from the same Tool 3 run made after the image_id fix (see the note in Tool 3). Mixing older and newer outputs splits one deed into separate `image_ids` groups.
 
 2. **Run the identifier**
 If you would like to combine all known categories of information (state/county/city/subdivision/lot/block/unit/township/range/section/quarter) from the same set of `image_ids` from the tool 7's `*.jsonl` output:
@@ -387,7 +393,7 @@ python -m scripts.run_combine_ner_results \
 The script saves combined ner results to `output/combine_ner_results.jsonl`.
 Each unique image_ids and all known categories of geographic and parcel information (state/county/city/subdivision/lot/block/unit/township/range/section/quarter) identified from all different sentences of that individual document are saved in this format:
 
-`{"image_ids": ["123456/012345_INDEX_001", "123456/012345_INDEX_002"], "NERpredicted_STATE": ["Minnesota", "State of Minnesota", "State of Minnesota", "State of Minnesota"], "NERpredicted_CNTY": ["Anoka County", "County of Anoka", "County of Anoka", "County of Anoka", "Anoka County"], "NERpredicted_CTY": [], ..., "NERpredicted_TOWNSHIP": ["Township Thirty"], "NERpredicted_RANGE": ["Range Twenty"], "NERpredicted_SECTION": ["Section Thirteen"], "NERpredicted_QUARTER": ["Northeast Quarter", "Southwest Quarter", "Northeast Quarter", "Northeast Quarter"]}`
+`{"image_ids": ["toy-book-a/page_001", "toy-book-a/page_002"], "NERpredicted_STATE": ["Minnesota", "State of Minnesota", "State of Minnesota", "State of Minnesota"], "NERpredicted_CNTY": ["Anoka County", "County of Anoka", "County of Anoka", "County of Anoka", "Anoka County"], "NERpredicted_CTY": [], ..., "NERpredicted_TOWNSHIP": ["Township Thirty"], "NERpredicted_RANGE": ["Range Twenty"], "NERpredicted_SECTION": ["Section Thirteen"], "NERpredicted_QUARTER": ["Northeast Quarter", "Southwest Quarter", "Northeast Quarter", "Northeast Quarter"]}`
 
 #### 🛠️ Arguments
 - `--file_path`: The exact same format as the tool 7 output `*.jsonl` file

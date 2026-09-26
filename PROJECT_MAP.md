@@ -1,9 +1,10 @@
 # PROJECT_MAP.md — MP-text-to-land
 
 A reading map of this repository, written from the README, the source files, and a few
-read-only smoke checks (2026-09-25). **No source code was changed.** Items marked
-*(verified)* were confirmed by running code in the local `mapprejudice/` venv; everything
-else comes from reading the code.
+read-only smoke checks (2026-09-25). Writing the map changed no source code; later source
+fixes are noted where they apply (e.g. the Tool 3 image_id fix, commit `68a61cb`). Items
+marked *(verified)* were confirmed by running code in the local `mapprejudice/` venv;
+everything else comes from reading the code.
 
 ---
 
@@ -51,7 +52,7 @@ MP-text-to-land/
 │   └── models/
 │       ├── state_county_city_ner_model/model-best   # 6.4 MB, spaCy 3.7.x
 │       └── subdivision_ner_model/model-best         # 53 MB, fine-tuned en_core_web_md 3.7.1
-└── test/                     # manual smoke scripts, NOT pytest tests (see §8)
+└── test/                     # test_tool3_image_ids.py (unittest) + older manual smoke scripts (see §8)
 ```
 
 Git-ignored but referenced in code: `/output/`, `/data/raw/`, `/data/processed/`,
@@ -74,7 +75,7 @@ Git-ignored but referenced in code: `/output/`, `/data/raw/`, `/data/processed/`
     **`OCRTXT_PATH` must end in `/`**.
 - Pages of one deed are recognised by filename. Tool 3 groups files whose basename is
   the same **up to the last `_`** (`group_files_by_prefix`); for example,
-  `012345_INDEX_001` and `012345_INDEX_002` form one deed.
+  `page_001` and `page_002` form one deed.
 - Tools 1–3 (the ones that read OCR text) collapse whitespace (`re.sub(r"\s+", " ", ...)`) and joins a deed's pages
   with `\n`.
 
@@ -162,7 +163,11 @@ Details per script:
 - **Tool 3 (`run_identify_sentences_with_imageids_f_raw_txt_to_jsonl`)**:
   `group_files_by_prefix(root_path)` builds page groups. Each group is concatenated and
   filtered by keyword, and each kept sentence is written with
-  `image_ids = [p.split('/', 10)[-1] for p in group]` (§7). Its default output name
+  `image_ids = [county_relative_image_id(p, root_path) for p in group]`: each path relative
+  to its county folder (the first folder under `--root_path`), without `.txt`, so it
+  matches GeoJSON `image_ids`. `--root_path` must therefore be the folder that contains the
+  county folders, e.g. `OCRTXT_PATH`. Before commit `68a61cb` it used `split('/', 10)`
+  (§7, item 13). Its default output name
   `all_sentences_w_raw_txt_and_image_ids.jsonl` differs from the
   `filtered_sentences_...` name the README and Tools 4/5/6/8 expect.
 - **Tools 4–8**: Each loads the jsonl and regroups sentences by `tuple(image_ids)`. It
@@ -221,7 +226,10 @@ In practice:
 2. Create `.env` from the template (`cp .env.example .env`, then fill in your paths; see §6)
    and run everything **from the repo root**.
 3. Put keyword lists in `data/keywords/`.
-4. Run Tool 3 **with an explicit `--output_path`** so later tools can find the file.
+4. Run Tool 3 with `--root_path` set to the folder that **contains the county folders**
+   (`OCRTXT_PATH`) and **with an explicit `--output_path`** so later tools can find the
+   file. If you have Tool 3–9 outputs from before commit `68a61cb`, don't mix them with
+   new ones: rerun Tool 3 → 7 → 9 from scratch.
 5. Run Tool 7 (or 8), then Tool 9. Tools 4, 5 and 6 are single-category subsets of Tool 7.
 
 README commands fixed in the documentation cleanup (every command now names an
@@ -314,14 +322,19 @@ cp .env.example .env   # then edit the paths
 12. **Page grouping is keyed by basename prefix only (verified).** `a/doc_1.txt` and
     `b/doc_2.txt` in *different folders or counties* merge into one "deed". Page order is
     lexicographic, so `_10` sorts before `_2`. Any filename with an `_` in it is treated as
-    a paged document; `doc_NONE_book_46_page_549`, for example, groups every page of
-    book 46.
-13. **The `image_ids` in Tool 3 output depend on your path depth.**
-    `file_path.split('/', 10)[-1]` keeps everything after the 10th `/` of the *absolute*
-    path. It only matches GeoJSON-style ids (relative to the county folder) when
-    `--root_path` sits at exactly the depth the original developer used. Deeper paths keep
-    extra directories; shallower ones drop the id's subfolder. Nothing flags a mismatch,
-    and joining back to GeoJSON then fails.
+    a paged document; `toy_book_page_003`, for example, is grouped with every other
+    `toy_book_page_*` file.
+13. **Fixed in `68a61cb`: Tool 3 `image_ids` used to depend on path depth.** The old rule,
+    `file_path.split('/', 10)[-1]`, kept everything after the 10th `/` of the absolute
+    path, so it matched GeoJSON ids only at one depth. With the real `OCRTXT_PATH` it
+    dropped the first folder under each county, matching 0 of 5,034 GeoJSON ids. Tool 3
+    now uses ids relative to the county folder, which reproduce all 5,034 *(verified,
+    read-only)*. `test/test_tool3_image_ids.py` covers several depths, a trailing `/`,
+    and relative roots. What's left:
+    - `--root_path` must be the folder that contains the county folders. Pointed at a
+      single county folder, every id loses its first subfolder, and nothing warns you.
+    - Tool 3–9 outputs from before the fix have different ids. Don't mix them with new
+      ones; rerun Tool 3 → 7 → 9 from scratch.
 14. **Speed.** Keyword matching is O(#keywords × #words) per sentence. With all city lists
     enabled that is about 2,300 keywords. `get_fuzzy_match_index` is O(len(text) × len(phrase)).
 
@@ -372,9 +385,11 @@ cp .env.example .env   # then edit the paths
 
 ## 8. What to test before changing anything
 
-The repo has **no automated tests**. The `test/*.py` files are manual `main()` scripts
-that print output and contain no assertions. They need the real GeoJSON and OCR data, and
-one of them writes to `/home/yaoyi/jiao0052/...`. pytest would collect 0 tests from them,
+The only automated tests are in `test/test_tool3_image_ids.py`: 7 `unittest` tests of
+Tool 3's image_ids, using toy temp files and no real data. Run them with
+`python -m unittest discover -s test`. The other `test/*.py` files are manual `main()`
+scripts that print output and contain no assertions. They need the real GeoJSON and OCR
+data, and one of them writes to `/home/yaoyi/jiao0052/...`. They contain no test cases,
 and importing them triggers `load_config()`.
 
 Before changing code, set up a **golden baseline** plus some small unit tests.
@@ -395,7 +410,8 @@ Before changing code, set up a **golden baseline** plus some small unit tests.
       semantics in the calling scripts.
 - [ ] `group_files_by_prefix`: same-dir pages, **cross-dir basename collision**, `_10`
       vs `_2` ordering, and names with no `_`.
-- [ ] The `split('/', 10)` image_id derivation at several root depths (documents item 13).
+- [x] Tool 3 image_id derivation at several root depths, trailing `/`, and relative
+      roots: `test/test_tool3_image_ids.py` (item 13).
 - [ ] `path_generator`: trailing-slash assumption on `OCRTXT_PATH` / `S3_PATH`.
 - [ ] `load_geojson_to_gdf` on a tiny 2–3-feature GeoJSON: string→list parsing of
       `image_ids`, empty or invalid ids dropped, `saved_path` built, a missing column, one
