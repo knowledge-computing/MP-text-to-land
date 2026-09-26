@@ -1,19 +1,23 @@
+# Local environment and secrets (copy .env.example to .env)
+.env
+
+# Local virtual environment and machine-specific dependency freeze
+mapprejudice/
+requirements-mac-working.txt
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Data and outputs (not part of the repository)
 /data/raw/
 /data/processed/
 /data/spacy_ner_subdivision_labels/
 /data/subdivision_sample/
-/src/__pycache__/
-*.cpython-310.pyc
 /output/
+/private/code/
+
+# Editor / OS files
 /.DS_Store
 /.vscode/
-/private/code/
-*.pyc
-*.pyo
-__pycache__/
-.env/
-.env
-mapprejudice/
-__pycache__/
-*.pyc
-requirements-mac-working.txt

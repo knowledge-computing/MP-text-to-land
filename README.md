@@ -21,8 +21,15 @@ As a tool developer, my goal is to help the Map Prejudice team automate the proc
 
 ### Prerequisites
 
-- Python 3.10.16
+- Python 3.10.16 (original Linux environment) or Python 3.11.9 (verified on macOS)
 - Recommended: use `virtualenv` or `conda` for environment isolation
+
+> **Note on requirements files**
+> `requirements.txt` was exported from a Linux/conda environment. It contains
+> conda-build wheel paths (`@ file:///croot/...`) built for Linux x86_64 / Python 3.10,
+> so `pip install -r requirements.txt` may fail on macOS. On macOS, use
+> `requirements-macos.txt`, which pins only the direct dependencies to versions
+> verified on macOS. `requirements.txt` is kept for reference.
 
 ### Dependencies
 
@@ -38,25 +45,40 @@ As a tool developer, my goal is to help the Map Prejudice team automate the proc
    ```bash
    git clone https://github.com/knowledge-computing/MP-text-to-land.git
    cd MP-text-to-land
+   ```
 
 2. Set up a virtual environment:
    ```bash
    python -m venv venv
    source venv/bin/activate        # On Windows: venv\Scripts\activate
+   ```
 
 3. Install dependencies:
    ```bash
+   # macOS (recommended there; see the note above)
+   pip install -r requirements-macos.txt
+
+   # Original Linux/conda environment
    pip install -r requirements.txt
+   ```
 
-4. Download spaCy English model:
+4. Download spaCy English model(s):
    ```bash
-   python -m spacy download en_core_web_sm
+   python -m spacy download en_core_web_sm   # already included in requirements-macos.txt
+   python -m spacy download en_core_web_md   # needed only for Tool 3's default --spacy_model_name
+   ```
 
-5. Create an .env file in the root of MP-text-to-land folder and include these following paths:
-   GEOJSON_PATH="" # The path where you store the *.geojson files.
-   OCRTXT_PATH="" # The path where you store the *.txt files of the OCR results.
-   S3_PATH="" # (optional) The path to find the *.txt files of the OCR results from the S3 buckets.
+5. Create an `.env` file in the root of the MP-text-to-land folder by copying the template, then fill in your local paths:
+   ```bash
+   cp .env.example .env
+   ```
+   ```
+   GEOJSON_PATH=""   # The path where you store the *.geojson files (per-county folders).
+   OCRTXT_PATH=""    # The path where you store the *.txt files of the OCR results. Keep the trailing "/".
+   S3_PATH=""        # (optional) The path to find the *.txt files of the OCR results from the S3 buckets. Keep the trailing "/".
    FOLDER_NAMES="mn-anoka-county,mn-dakota-county,mn-olmsted-county,mn-sherburne-county,mn-washington-county,wi-milwaukee-county" # County folder names as a comma-separated string
+   ```
+   `.env` is git-ignored and must not be committed. `FOLDER_NAMES` must be set even for tools that do not read GeoJSON, because importing `src` reads it. Run all tools from the repository root.
 
 ## Usage
 ### Tool 1: Identify deed sentences containing specified keywords (load *.txt files directly from the ocr results folder)
@@ -75,7 +97,7 @@ For example, assuming the user of this tool has collected a list of keywords in 
 2. **Run the identifier**
 ```bash
 python -m scripts.run_sentence_identifier_w_raw_txt \
-    --root_path /root/path/covenants-deed-images/ocr/txt/
+    --root_path /root/path/covenants-deed-images/ocr/txt/ \
     --keyword_threshold 90 \
     --item_threshold 2 \
     --spacy_model_name en_core_web_sm \
@@ -158,8 +180,8 @@ For example, assuming the user of this tool has collected a list of keywords in 
 
 2. **Run the identifier**
 ```bash
-python -m scripts.identify_sentences_f_raw_txt_to_jsonl \
-    --root_path /root/path/.../covenants-deed-images/ocr/txt/
+python -m scripts.run_identify_sentences_with_imageids_f_raw_txt_to_jsonl \
+    --root_path /root/path/.../covenants-deed-images/ocr/txt/ \
     --keyword_threshold 90 \
     --item_threshold 2 \
     --spacy_model_name en_core_web_sm \
@@ -344,7 +366,7 @@ Each sentence and its ids and all known categories of geographic and parcel info
 - `--model_subd_path`: Load the same pretrained spaCy NER model for subdivision in the document.
 - `--output_path`: The output `*.jsonl` file to store the original filtered sentences associated with its `image_ids` list and recognized entities `"NERpredicted_STATE", "NERpredicted_CNTY", "NERpredicted_CTY", "NERpredicted_SUBD", "NERpredicted_LOT", "NERpredicted_BLOCK", "NERpredicted_UNIT", "NERpredicted_TOWNSHIP", "NERpredicted_RANGE", "NERpredicted_SECTION", "NERpredicted_QUARTER"`. Each entity is stored in a list which contains its entity string, start index, and end index.
 
-### Tool 9: Identify all geo and parcel information in deed sentences with trained named entity recognition (NER) model and save with entity indices in sentence strings. 
+### Tool 9: Combine the NER results of all sentences that belong to the same deed document (same image_ids)
 The tool 9 is designed for combining extracted entities from different sentences by tool 7. Given locating the deed document to real-world location is a document-level task and all the extracted entities from multiple sentences from the document would jointly decide the location of the deed document. Thus, it might be necessary to develop this tool 9.
 The input `*.jsonl` file format is exactly the same as the `*.jsonl` output from the tool 7, so please use tool 7 & 9 by sequence.
 
@@ -356,7 +378,7 @@ The input `*.jsonl` file format is exactly the same as the `*.jsonl` output from
 2. **Run the identifier**
 If you would like to combine all known categories of information (state/county/city/subdivision/lot/block/unit/township/range/section/quarter) from the same set of `image_ids` from the tool 7's `*.jsonl` output:
 ```bash
-python -m scripts.run_identify_all_geo_parcel_with_index \
+python -m scripts.run_combine_ner_results \
     --file_path ./output/all_geo_parcel_w_txt_n_image_ids.jsonl \
     --output_path ./output/combine_ner_results.jsonl
 ```
