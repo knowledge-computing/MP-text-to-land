@@ -2,16 +2,10 @@
 Tests for how Tool 3 (scripts/run_identify_sentences_with_imageids_f_raw_txt_to_jsonl.py)
 builds the `image_ids` it writes to its jsonl output.
 
-Tool 3 currently derives each id with `file_path.split('/', 10)[-1]`, i.e. "everything after
-the 10th '/' of the path returned by os.walk". Whether that equals the GeoJSON-style id
-(the path relative to the county folder, without ".txt") depends on how deep --root_path
-sits on disk.
-
-  * CurrentBehaviorTests pin down what the code does today, at several depths.
-  * DesiredBehaviorTests document the intended rule: ids are relative to the county
-    folder at any depth. Cases the current code gets wrong are marked
-    @unittest.expectedFailure. Once Tool 3 is fixed they will report
-    "unexpected success"; then remove the decorators and update CurrentBehaviorTests.
+Rule: each image_id is the OCR txt path relative to its county folder (the first folder
+under --root_path), without ".txt", so it matches the 'image_ids' in the GeoJSON files.
+It must not depend on how deep --root_path sits on disk. (Tool 3 previously used
+`file_path.split('/', 10)[-1]`, which was only correct at one absolute depth.)
 
 Only synthetic toy files in a temporary directory are used; no Mapping Prejudice data and
 no spaCy model are needed. Run from the repository root:
@@ -46,8 +40,8 @@ TOY_FILES = {
     "wi-toy-county/toy-milwaukee-book/toy_page_004": "Lot 4 toy page",
 }
 
-# Desired image_ids per deed: relative to the county folder.
-DESIRED = [
+# Expected image_ids per deed: relative to the county folder.
+EXPECTED = [
     ["toy-abstracts/other/year/abstract_page_003"],
     ["toy-book-a/page_001", "toy-book-a/page_002"],
     ["toy-milwaukee-book/toy_page_004"],
@@ -59,7 +53,7 @@ def fake_filter_relevant_sentences(text, **kwargs):
     return [{"sentence": text.strip(), "keyword_matches": [("lot", "lot", 100)]}]
 
 
-class Tool3ImageIdTestBase(unittest.TestCase):
+class Tool3ImageIdTests(unittest.TestCase):
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
@@ -69,8 +63,7 @@ class Tool3ImageIdTestBase(unittest.TestCase):
     def make_root(self, root_slashes, files=TOY_FILES):
         """Create the toy tree under a root path containing exactly `root_slashes` '/'.
 
-        The path up to and including the '/' after the county folder then has
-        root_slashes + 2 slashes. For comparison, a typical absolute OCRTXT_PATH such as
+        For comparison, a typical absolute OCRTXT_PATH such as
         /Users/<user>/<project>/<data-dir>/<bucket>/ocr/txt has 7.
         """
         pads = root_slashes - self.base.count("/")
@@ -95,75 +88,43 @@ class Tool3ImageIdTestBase(unittest.TestCase):
         with open(self.out_path, encoding="utf-8") as f:
             return sorted(json.loads(line)["image_ids"] for line in f)
 
-
-class CurrentBehaviorTests(Tool3ImageIdTestBase):
-    """What split('/', 10)[-1] produces today. Update these when Tool 3 is fixed."""
-
-    def test_root_like_real_setup_drops_first_id_folder(self):
-        # 7-slash root, like a typical OCRTXT_PATH: the first folder under the county is lost.
+    def test_root_like_real_setup(self):
+        # 7-slash root with a trailing '/', like a typical OCRTXT_PATH and the README example.
         root = self.make_root(7)
-        self.assertEqual(self.run_tool3(root + "/"), [
-            ["other/year/abstract_page_003"],
-            ["page_001", "page_002"],
-            ["toy_page_004"],
-        ])
+        self.assertEqual(self.run_tool3(root + "/"), EXPECTED)
 
     def test_trailing_slash_on_root_path_makes_no_difference(self):
         root = self.make_root(7)
-        self.assertEqual(self.run_tool3(root), self.run_tool3(root + "/"))
-
-    def test_root_one_level_deeper_happens_to_match_geojson_ids(self):
-        # The one depth where the current rule is correct.
-        root = self.make_root(8)
-        self.assertEqual(self.run_tool3(root), DESIRED)
-
-    def test_root_two_levels_deeper_keeps_county_folder(self):
-        root = self.make_root(9)
-        self.assertEqual(self.run_tool3(root), [
-            ["mn-toy-county/toy-abstracts/other/year/abstract_page_003"],
-            ["mn-toy-county/toy-book-a/page_001", "mn-toy-county/toy-book-a/page_002"],
-            ["wi-toy-county/toy-milwaukee-book/toy_page_004"],
-        ])
-
-    def test_relative_root_path_keeps_only_basename(self):
-        # A relative root yields short paths from os.walk, so fewer than 10 '/' remain
-        # and [-1] is just the file name.
-        root = self.make_root(7)
-        old_cwd = os.getcwd()
-        self.addCleanup(os.chdir, old_cwd)
-        os.chdir(os.path.dirname(root))
-        self.assertEqual(self.run_tool3(os.path.basename(root)), [
-            ["abstract_page_003"],
-            ["page_001", "page_002"],
-            ["toy_page_004"],
-        ])
-
-
-class DesiredBehaviorTests(Tool3ImageIdTestBase):
-    """Intended rule: image_ids are relative to the county folder, at any depth."""
-
-    @unittest.expectedFailure
-    def test_root_like_real_setup(self):
-        root = self.make_root(7)
-        self.assertEqual(self.run_tool3(root + "/"), DESIRED)
+        self.assertEqual(self.run_tool3(root), EXPECTED)
+        self.assertEqual(self.run_tool3(root + "/"), EXPECTED)
 
     def test_root_one_level_deeper(self):
-        # Already correct today (see CurrentBehaviorTests); must stay correct after the fix.
+        # The only depth where the old split('/', 10) rule happened to be correct.
         root = self.make_root(8)
-        self.assertEqual(self.run_tool3(root), DESIRED)
+        self.assertEqual(self.run_tool3(root), EXPECTED)
 
-    @unittest.expectedFailure
     def test_root_two_levels_deeper(self):
+        # Old rule kept the county folder here ("mn-toy-county/toy-book-a/...").
         root = self.make_root(9)
-        self.assertEqual(self.run_tool3(root), DESIRED)
+        self.assertEqual(self.run_tool3(root), EXPECTED)
 
-    @unittest.expectedFailure
+    def test_deeply_nested_root(self):
+        root = self.make_root(14)
+        self.assertEqual(self.run_tool3(root), EXPECTED)
+
     def test_relative_root_path(self):
+        # Old rule kept only the file name here ("abstract_page_003").
         root = self.make_root(7)
         old_cwd = os.getcwd()
         self.addCleanup(os.chdir, old_cwd)
         os.chdir(os.path.dirname(root))
-        self.assertEqual(self.run_tool3(os.path.basename(root)), DESIRED)
+        self.assertEqual(self.run_tool3(os.path.basename(root)), EXPECTED)
+        self.assertEqual(self.run_tool3("./" + os.path.basename(root)), EXPECTED)
+
+    def test_file_directly_under_root_keeps_its_name(self):
+        # No county folder to strip: fall back to the file name instead of failing.
+        root = self.make_root(7, files={"loose_page_1": "Lot 5 toy page with no county folder"})
+        self.assertEqual(self.run_tool3(root), [["loose_page_1"]])
 
 
 if __name__ == "__main__":

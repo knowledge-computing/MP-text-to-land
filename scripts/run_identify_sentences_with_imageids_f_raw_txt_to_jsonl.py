@@ -13,6 +13,14 @@ from pathlib import Path
 from src.data_preprocessing.sentence_identifier import filter_relevant_sentences
 from src.data_preprocessing.generate_image_ids_list_from_filenames import group_files_by_prefix
 
+def county_relative_image_id(file_path, root_path):
+    """
+    Return the image_id of an OCR txt path (without suffix) relative to its county folder, i.e. the first folder under root_path,
+    so that it matches the 'image_ids' format in the geojson, e.g. "<root_path>/mn-anoka-county/toy-book-a/page_001" -> "toy-book-a/page_001".
+    """
+    parts = Path(os.path.relpath(file_path, root_path)).parts
+    return "/".join(parts[1:]) if len(parts) > 1 else parts[0]
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Test geo sentence identifier saving results as jsonl")
     parser.add_argument('--root_path', type=str, default="./covenants-deed-images/ocr/txt",
@@ -82,7 +90,7 @@ def main():
                 this_covenant_dense.append(res["sentence"]) # list of sentences with more than threshold number of matched keywords in this deed
                 # print(temp_tuple) # print tuple to see the keywords/entities matched in this sentence
                 
-                json_line = json.dumps({"text": res["sentence"], "image_ids": [file_path.split('/', 10)[-1] for file_path in deed_list]}, ensure_ascii=False)
+                json_line = json.dumps({"text": res["sentence"], "image_ids": [county_relative_image_id(file_path, args.root_path) for file_path in deed_list]}, ensure_ascii=False)
                 file.write(json_line + '\n')
 
     # print(this_covenant_dense)
