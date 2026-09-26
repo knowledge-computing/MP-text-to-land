@@ -34,8 +34,9 @@ MP-text-to-land/
 ├── .env.example              # template for .env with the required variable names
 ├── .gitignore
 ├── README.md                 # user guide for Tools 1–9
-├── requirements.txt          # pipdeptree-style freeze from a Linux/conda env (see §7)
-├── requirements-mac-working.txt   # git-ignored; flat pins that match the local venv
+├── requirements.txt          # pipdeptree-style freeze from a Linux/conda env; may fail on macOS (see §7)
+├── requirements-macos.txt    # clean direct-dependency pins verified on macOS (Python 3.11.9)
+├── requirements-mac-working.txt   # git-ignored; full local `pip freeze` of the venv
 ├── mapprejudice/             # git-ignored 1.3 GB local Python 3.11.9 venv
 ├── data/
 │   ├── test_keyword_label.txt     # 7 short parcel words (township, range, twp, ...)
@@ -215,28 +216,30 @@ Details per script:
 
 In practice:
 
-1. Set up the environment: venv, spaCy 3.7.5, `en_core_web_sm` (plus `en_core_web_md`
-   if you keep Tool 3's default), python-dotenv, geopandas, rapidfuzz, tqdm.
+1. Set up the environment: on macOS, `pip install -r requirements-macos.txt`. It includes
+   spaCy 3.7.5 and `en_core_web_sm`; add `en_core_web_md` if you keep Tool 3's default.
 2. Create `.env` from the template (`cp .env.example .env`, then fill in your paths; see §6)
    and run everything **from the repo root**.
 3. Put keyword lists in `data/keywords/`.
 4. Run Tool 3 **with an explicit `--output_path`** so later tools can find the file.
 5. Run Tool 7 (or 8), then Tool 9. Tools 4, 5 and 6 are single-category subsets of Tool 7.
 
-README command errors to watch for:
+README commands fixed in the documentation cleanup (every command now names an
+existing script and uses only flags that script defines):
 
-- Tool 1's example is missing the `\` after `--root_path ...`.
-- Tool 3's example calls `scripts.identify_sentences_f_raw_txt_to_jsonl`, which doesn't
-  exist. The real module is `scripts.run_identify_sentences_with_imageids_f_raw_txt_to_jsonl`.
-- Tool 9's example calls `scripts.run_identify_all_geo_parcel_with_index`. It should be
-  `scripts.run_combine_ner_results`.
+- Tool 1: added the missing `\` after `--root_path ...`.
+- Tool 3: `scripts.identify_sentences_f_raw_txt_to_jsonl`, which doesn't exist, became
+  `scripts.run_identify_sentences_with_imageids_f_raw_txt_to_jsonl`; added the missing `\`.
+- Tool 9: `scripts.run_identify_all_geo_parcel_with_index` became
+  `scripts.run_combine_ner_results`, and its heading no longer copies Tool 8's.
 
 ---
 
 ## 6. Required `.env` variables
 
-`.env` was previously tracked in git. It is now being removed from Git tracking and is
-git-ignored, so each user should copy `.env.example` to `.env` and fill in local paths:
+`.env` was previously tracked in git. It was removed from Git tracking in commit
+`c5a148f` and is git-ignored, so each user should copy `.env.example` to `.env` and fill
+in local paths:
 
 ```bash
 cp .env.example .env   # then edit the paths
@@ -265,15 +268,16 @@ cp .env.example .env   # then edit the paths
 ## 7. Fragile points and assumptions
 
 ### Environment and packaging
-1. **`.env` was previously tracked.** It is now being removed from Git tracking and is
-   git-ignored. Users should copy `.env.example` to `.env`. Two consequences:
-   - Earlier commits still contain the old `.env`, which held only local data paths, no
-     secrets.
-   - Pulling the commit that untracks it **deletes an existing `.env`** from other
-     checkouts, so those users need to recreate it from `.env.example`.
+1. **`.env` was previously tracked.** It was removed from Git tracking in commit
+   `c5a148f` and is git-ignored. Users should copy `.env.example` to `.env`. Two
+   consequences:
+   - Commits before `c5a148f` still contain the old `.env`, which held only local data
+     paths, no secrets.
+   - Pulling `c5a148f` **deletes an existing `.env`** from other checkouts, so those
+     users need to recreate it from `.env.example`.
 
-   The five `src/**/__pycache__/*.cpython-310.pyc` files that were committed are being
-   untracked in the same change.
+   The five `src/**/__pycache__/*.cpython-310.pyc` files that were committed were also
+   untracked in `c5a148f`.
 2. **Local-only files are ignored**: the `mapprejudice/` venv,
    `requirements-mac-working.txt`, `__pycache__/` and `*.pyc` (verified with
    `git check-ignore`).
@@ -281,9 +285,9 @@ cp .env.example .env   # then edit the paths
    indented duplicates and 9 `@ file:///croot/...` conda-build wheels built for Linux
    x86_64 cp310. It also lacks **python-dotenv**, **torch** (imported by the training
    script and not installed locally), and the `en_core_web_sm` wheel the README relies on.
-   `requirements-mac-working.txt` is the list that actually works, but it's git-ignored,
-   so it lives only on this machine. The README
-   says Python 3.10.16; the local venv is 3.11.9.
+   It is kept for reference. `requirements-macos.txt` pins only the direct dependencies,
+   at the versions in the working macOS venv (Python 3.11.9); the README install section
+   explains which file to use. It hasn't yet been tested in a fresh venv.
 4. **Import-time side effects.** `import src` loads `.env`, reads `data/keywords/`
    relative to the working directory, imports geopandas, and sets global logging, even for
    Tools 1 and 3, which need none of that. Running from outside the repo root breaks it.
@@ -376,7 +380,7 @@ and importing them triggers `load_config()`.
 Before changing code, set up a **golden baseline** plus some small unit tests.
 
 ### A. Environment smoke checks
-- [ ] Fresh venv from `requirements-mac-working.txt`: `python -c "import src"` succeeds from
+- [ ] Fresh venv from `requirements-macos.txt`: `python -c "import src"` succeeds from
       the repo root.
 - [ ] Both models load under spaCy 3.7.5: `spacy.load(".../model-best")`.
 - [ ] Record current behaviour when `.env` / `FOLDER_NAMES` is missing (it crashes today).

@@ -1,0 +1,35 @@
+# Direct dependencies for MP-text-to-land, pinned to versions verified on macOS
+# (Apple Silicon, Python 3.11.9). pip resolves the transitive dependencies.
+#
+#   python3.11 -m venv venv && source venv/bin/activate
+#   pip install -r requirements-macos.txt
+#
+# requirements.txt is kept for reference; it was exported from a Linux/conda
+# environment and may fail to install on macOS.
+
+# NLP / NER (bundled models in src/models/ require spaCy >=3.7,<3.8)
+spacy==3.7.5
+thinc==8.2.5
+numpy==1.26.4            # spaCy 3.7 / thinc 8.2 wheels are built against numpy < 2
+
+# Fuzzy matching
+RapidFuzz==3.14.6
+
+# GeoJSON / shapefile loading
+geopandas==1.0.1
+pandas==2.2.3
+shapely==2.1.2
+pyogrio==0.13.0
+pyproj==3.7.2
+
+# Config and progress bars
+python-dotenv==1.2.3
+tqdm==4.70.1
+
+# spaCy English model used for sentence splitting (Tools 1-3 default)
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl#sha256=86cc141f63942d4b2c5fcee06630fd6f904788d2f0ab005cce45aadb8fb73889
+
+# Optional, not installed by default:
+# - Tool 3's default --spacy_model_name and the training script use en_core_web_md:
+#     python -m spacy download en_core_web_md
+# - src/training/subdivision_ner_training.py imports torch: pip install torch
