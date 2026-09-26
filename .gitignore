@@ -12,3 +12,8 @@
 *.pyo
 __pycache__/
 .env/
+.env
+mapprejudice/
+__pycache__/
+*.pyc
+requirements-mac-working.txt
