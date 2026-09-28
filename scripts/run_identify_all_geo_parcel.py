@@ -76,12 +76,12 @@ def main():
 
     result = defaultdict(list)
     for item in data:
-        key = tuple(item["image_ids"])
+        key = (item.get("county"), tuple(item["image_ids"]))  # old rows without county -> None
         result[key].append(item["text"])
 
     result_list = [
-        {"image_ids": sorted(list(img_ids)), "sentences": sentences}
-        for img_ids, sentences in result.items()
+        {"county": county, "image_ids": sorted(list(img_ids)), "sentences": sentences}
+        for (county, img_ids), sentences in result.items()
     ]
     # print(len(result_list))
     # print(type(result_list))
@@ -102,7 +102,7 @@ def main():
             kv_subd = extract_subd_kv(doc2)
             # print(text)
             # print(kv)
-            json_line = json.dumps({"text": text, "image_ids": item['image_ids'], "NERpredicted_STATE": kv['STATE'], "NERpredicted_CNTY": kv['COUNTY'], "NERpredicted_CTY": kv['CITY'], "NERpredicted_SUBD": kv_subd['SUBDIVISION'], "NERpredicted_LOT": kv['LOT'], "NERpredicted_BLOCK": kv['BLOCK'], "NERpredicted_UNIT": kv['UNIT'], "NERpredicted_TOWNSHIP": kv['TOWNSHIP'], "NERpredicted_RANGE": kv['RANGE'], "NERpredicted_SECTION": kv['SECTION'], "NERpredicted_QUARTER": kv['QUARTER']}, ensure_ascii=False)
+            json_line = json.dumps({"text": text, "county": item['county'], "image_ids": item['image_ids'], "NERpredicted_STATE": kv['STATE'], "NERpredicted_CNTY": kv['COUNTY'], "NERpredicted_CTY": kv['CITY'], "NERpredicted_SUBD": kv_subd['SUBDIVISION'], "NERpredicted_LOT": kv['LOT'], "NERpredicted_BLOCK": kv['BLOCK'], "NERpredicted_UNIT": kv['UNIT'], "NERpredicted_TOWNSHIP": kv['TOWNSHIP'], "NERpredicted_RANGE": kv['RANGE'], "NERpredicted_SECTION": kv['SECTION'], "NERpredicted_QUARTER": kv['QUARTER']}, ensure_ascii=False)
             file.write(json_line + '\n')
     
     file.close()

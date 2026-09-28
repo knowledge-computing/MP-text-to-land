@@ -16,29 +16,29 @@ def parse_args():
 
 def merge_dictionaries(dictionaries):
     """
-    combine dicts with same image_ids
+    combine dicts with same county and image_ids
     
     param:
     dictionaries -- a list of dictionaries, each dictionary has the same structure
     
     return:
-    combined dictionaries with same image_ids
+    combined dictionaries with same county and image_ids (old rows without county are grouped under county None)
     """
     # to store grouped dictionaries
     grouped_data = {}
     
-    # group dictionaties by image_ids
+    # group dictionaties by county and image_ids (image_ids are only unique within a county)
     for item in dictionaries:
-        # convert to tuple to use image_ids as keys for dictionaries
-        image_key = tuple(item['image_ids'])
+        # convert to tuple to use county and image_ids as keys for dictionaries
+        image_key = (item.get('county'), tuple(item['image_ids']))
         
-        # if image_ids exist in the group, merge
+        # if county and image_ids exist in the group, merge
         if image_key in grouped_data:
             existing_item = grouped_data[image_key]
             
-            # merge all attributes except text
+            # merge all attributes except text, image_ids and county (the same for every item in the group)
             for key in existing_item:
-                if key != 'text' and key != 'image_ids' and key in item and item[key]:
+                if key not in ('text', 'image_ids', 'county') and key in item and item[key]:
                     existing_item[key] = existing_item[key] + item[key]
         # if image_ids does not exist, create new group
         else:
@@ -69,9 +69,9 @@ def main():
     for item in merged_result:
         # if len(item['image_ids']) > 1:
         # print(f"image_ids: {item['image_ids']}")
-        temp = {"image_ids": item['image_ids']}
+        temp = {"county": item.get('county'), "image_ids": item['image_ids']}
         for key in item:
-            if key != 'text' and key != 'image_ids':
+            if key not in ('text', 'image_ids', 'county'):
                 # print(f"  {key}: {item[key]}")
                 temp[key] = item[key]
         # print("------------------------")

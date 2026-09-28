@@ -1,12 +1,13 @@
 """
-Shared helpers for running Tool 3 -> Tool 7 -> Tool 9 on synthetic toy data.
+Shared helpers for running Tools 3-9 (Tool 3 -> Tool 7/8 -> Tool 9, and Tools 4/5/6) on synthetic
+toy data.
 
 Not a test module (unittest discovery only collects test*.py). Uses only toy files written
 to temporary directories; no Mapping Prejudice data. Each tool's real main() is run with
 only these stubbed:
   * Tool 3's keyword filter: data/keywords/ may be empty, so each page becomes one sentence.
-  * spaCy model loading: Tool 7 gets tiny deterministic fake NER models unless
-    real_models=True, which loads the bundled models from src/models/.
+  * spaCy model loading: Tools 4-8 get tiny deterministic fake NER models unless
+    real_models=True (Tool 7 only), which loads the bundled models from src/models/.
 """
 
 import json
@@ -24,7 +25,11 @@ os.environ["OCRTXT_PATH"] = "/nonexistent/ocr/txt/"
 os.environ["S3_PATH"] = "s3://nonexistent/ocr/txt/"
 
 from scripts import run_identify_sentences_with_imageids_f_raw_txt_to_jsonl as tool3  # noqa: E402
+from scripts import run_state_county_city_ner_model as tool4  # noqa: E402
+from scripts import run_subd_ner_model as tool5  # noqa: E402
+from scripts import run_parcel_ner_model as tool6  # noqa: E402
 from scripts import run_identify_all_geo_parcel as tool7  # noqa: E402
+from scripts import run_identify_all_geo_parcel_with_index as tool8  # noqa: E402
 from scripts import run_combine_ner_results as tool9  # noqa: E402
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -72,7 +77,7 @@ def fake_nlp(patterns):
     return nlp
 
 
-FAKE_AUT_MODEL = fake_nlp([("LOT", r"Lot \d+"), ("BLOCK", r"Block \d+")])
+FAKE_AUT_MODEL = fake_nlp([("LOT", r"Lot \d+"), ("BLOCK", r"Block \d+"), ("COUNTY", r"County of [A-Z][a-z]+")])
 FAKE_SUBD_MODEL = fake_nlp([("SUBDIVISION", r"Toy [A-Z][a-z]+")])
 
 
@@ -84,19 +89,54 @@ def run_tool3(root_path, out_path):
     return read_jsonl(out_path)
 
 
-def run_tool7(in_path, out_path, real_models=False):
-    argv = ["tool7", "--file_path", in_path, "--output_path", out_path]
+def _run_two_model_tool(tool, name, in_path, out_path, real_models=False):
+    """Tools 7 and 8: --model_aut_path (state/county/city + parcel) and --model_subd_path."""
+    argv = [name, "--file_path", in_path, "--output_path", out_path]
     if real_models:
         with mock.patch.object(sys, "argv", argv + ["--model_aut_path", AUT_MODEL_PATH,
                                                     "--model_subd_path", SUBD_MODEL_PATH]):
-            tool7.main()
+            tool.main()
     else:
         models = {"fake-aut": FAKE_AUT_MODEL, "fake-subd": FAKE_SUBD_MODEL}
-        with mock.patch.object(tool7.spacy, "load", side_effect=models.__getitem__), \
+        with mock.patch.object(tool.spacy, "load", side_effect=models.__getitem__), \
                 mock.patch.object(sys, "argv", argv + ["--model_aut_path", "fake-aut",
                                                        "--model_subd_path", "fake-subd"]):
-            tool7.main()
+            tool.main()
     return read_jsonl(out_path)
+
+
+def run_tool7(in_path, out_path, real_models=False):
+    return _run_two_model_tool(tool7, "tool7", in_path, out_path, real_models)
+
+
+def run_tool8(in_path, out_path):
+    return _run_two_model_tool(tool8, "tool8", in_path, out_path)
+
+
+def _run_single_model_tool(tool, name, fake_model, in_path, out_path):
+    """Tools 4, 5 and 6: a single --model_path."""
+    with mock.patch.object(tool.spacy, "load", return_value=fake_model), \
+            mock.patch.object(sys, "argv", [name, "--file_path", in_path, "--model_path", "fake",
+                                            "--output_path", out_path]):
+        tool.main()
+    return read_jsonl(out_path)
+
+
+def run_tool4(in_path, out_path):
+    return _run_single_model_tool(tool4, "tool4", FAKE_AUT_MODEL, in_path, out_path)
+
+
+def run_tool5(in_path, out_path):
+    return _run_single_model_tool(tool5, "tool5", FAKE_SUBD_MODEL, in_path, out_path)
+
+
+def run_tool6(in_path, out_path):
+    return _run_single_model_tool(tool6, "tool6", FAKE_AUT_MODEL, in_path, out_path)
+
+
+# Tools that read a Tool 3 jsonl and regroup it: name -> runner(in_path, out_path).
+NER_TOOL_RUNNERS = {"tool4": run_tool4, "tool5": run_tool5, "tool6": run_tool6,
+                    "tool7": run_tool7, "tool8": run_tool8}
 
 
 def run_tool9(in_path, out_path):
