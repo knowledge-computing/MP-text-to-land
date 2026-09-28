@@ -43,6 +43,7 @@ MP-text-to-land/
 │   ├── test_keyword_label.txt     # 7 short parcel words (township, range, twp, ...)
 │   └── keywords/
 │       └── not_using/             # suggested keyword lists, NEVER loaded (see §3.3)
+├── dev/                      # aggregate-only local checks, e.g. check_county_id_collisions.py (counts only)
 ├── scripts/                  # CLI entry points = "Tools" 1–9 (run with python -m)
 ├── src/
 │   ├── __init__.py           # eagerly imports every submodule (side effects!)
@@ -52,7 +53,8 @@ MP-text-to-land/
 │   └── models/
 │       ├── state_county_city_ner_model/model-best   # 6.4 MB, spaCy 3.7.x
 │       └── subdivision_ner_model/model-best         # 53 MB, fine-tuned en_core_web_md 3.7.1
-└── test/                     # test_tool3_image_ids.py (unittest) + older manual smoke scripts (see §8)
+└── test/                     # unittest toy-data tests (test_tool3_image_ids, test_pipeline_tool3_7_9,
+                              #   test_county_collisions, test_dev_collision_script) + older manual scripts (see §8)
 ```
 
 Git-ignored but referenced in code: `/output/`, `/data/raw/`, `/data/processed/`,
@@ -140,13 +142,13 @@ Run each one from the repo root as a module, e.g. `python -m scripts.<name>`.
 |---|---|---|---|
 | 1 | `run_sentence_identifier_w_raw_txt.py` | walk OCR txt under `--root_path` → keyword-matched sentences as plain **`.txt`**, one per line | yes (only for import; values unused) |
 | 2 | `run_sentence_identifier_w_geojson.py` | GeoJSON rows → their OCR pages → sentences matching GeoJSON attribute values (`--entity_columns`) and/or keywords → plain **`.txt`** | yes (`GEOJSON_PATH`, `OCRTXT_PATH`) |
-| 3 | `run_identify_sentences_with_imageids_f_raw_txt_to_jsonl.py` | walk OCR txt, group pages into deeds, keyword-filter → **`.jsonl`** `{"text", "image_ids"}` | yes (only for import) |
-| 4 | `run_state_county_city_ner_model.py` | Tool 3 jsonl → adds `NERpredicted_STATE/CNTY/CTY` | no |
-| 5 | `run_subd_ner_model.py` | Tool 3 jsonl → adds `NERpredicted_SUBD` | no |
-| 6 | `run_parcel_ner_model.py` | Tool 3 jsonl → adds `NERpredicted_LOT/BLOCK/UNIT/TOWNSHIP/RANGE/SECTION/QUARTER` (uses the state/county/city model) | no |
-| 7 | `run_identify_all_geo_parcel.py` | Tool 3 jsonl → all 11 `NERpredicted_*` fields as lists of strings, using both models | no |
-| 8 | `run_identify_all_geo_parcel_with_index.py` | same as Tool 7, but each entity is `[text, start_char, end_char]` | no |
-| 9 | `run_combine_ner_results.py` | Tool 7 jsonl → one row per unique `image_ids` with every sentence's entity lists concatenated (`text` dropped) | no |
+| 3 | `run_identify_sentences_with_imageids_f_raw_txt_to_jsonl.py` | walk OCR txt, group pages into deeds, keyword-filter → **`.jsonl`** `{"text", "county", "image_ids"}` | yes (only for import) |
+| 4 | `run_state_county_city_ner_model.py` | Tool 3 jsonl → adds `NERpredicted_STATE/CNTY/CTY`; keeps `county` | no |
+| 5 | `run_subd_ner_model.py` | Tool 3 jsonl → adds `NERpredicted_SUBD`; keeps `county` | no |
+| 6 | `run_parcel_ner_model.py` | Tool 3 jsonl → adds `NERpredicted_LOT/BLOCK/UNIT/TOWNSHIP/RANGE/SECTION/QUARTER` (uses the state/county/city model); keeps `county` | no |
+| 7 | `run_identify_all_geo_parcel.py` | Tool 3 jsonl → all 11 `NERpredicted_*` fields as lists of strings, using both models; keeps `county` | no |
+| 8 | `run_identify_all_geo_parcel_with_index.py` | same as Tool 7, but each entity is `[text, start_char, end_char]`; keeps `county` | no |
+| 9 | `run_combine_ner_results.py` | Tool 7 jsonl → one row per unique (`county`, `image_ids`) with every sentence's entity lists concatenated (`text` dropped, `county` written once) | no |
 
 Details per script:
 
@@ -167,10 +169,13 @@ Details per script:
   to its county folder (the first folder under `--root_path`), without `.txt`, so it
   matches GeoJSON `image_ids`. `--root_path` must therefore be the folder that contains the
   county folders, e.g. `OCRTXT_PATH`. Before commit `68a61cb` it used `split('/', 10)`
-  (§7, item 13). Its default output name
+  (§7, item 13). Each row also carries `county`, the first folder under `--root_path`
+  (`null` for a file directly under it). Page groups that span counties are split by
+  county, so a row never mixes counties (§7, item 27). Its default output name
   `all_sentences_w_raw_txt_and_image_ids.jsonl` differs from the
   `filtered_sentences_...` name the README and Tools 4/5/6/8 expect.
-- **Tools 4–8**: Each loads the jsonl and regroups sentences by `tuple(image_ids)`. It
+- **Tools 4–8**: Each loads the jsonl and regroups sentences by (`county`, `image_ids`),
+  with `county` `null` for old rows that lack it, and writes `county` in every row. It
   writes `image_ids` **sorted** and emits one line per sentence. Output order is
   group-first, so it can differ from input order. None of them re-read the OCR txt, even
   though the README suggests they do.
@@ -178,7 +183,8 @@ Details per script:
   Tool 7 doesn't. Tool 7 defaults to Tool 3's real default output name; Tool 8 defaults to
   the README name.
 - **Tool 9 (`run_combine_ner_results`)**: `merge_dictionaries` concatenates list fields
-  for rows that share an `image_ids` tuple. Duplicates are kept on purpose, since repeated
+  for rows that share the same (`county`, `image_ids`) key. `county` itself is written
+  once per record, never concatenated, and is `null` for old rows. Duplicates are kept on purpose, since repeated
   mentions act as evidence. It imports spaCy but doesn't use it.
 
 ### Non-CLI modules the tools depend on
@@ -229,7 +235,8 @@ In practice:
 4. Run Tool 3 with `--root_path` set to the folder that **contains the county folders**
    (`OCRTXT_PATH`) and **with an explicit `--output_path`** so later tools can find the
    file. If you have Tool 3–9 outputs from before commit `68a61cb`, don't mix them with
-   new ones: rerun Tool 3 → 7 → 9 from scratch.
+   new ones: rerun Tool 3 → 7 → 9 from scratch. The same applies to outputs from before
+  commit `55003a0`, which have no `county` field: rerun from Tool 3 onward.
 5. Run Tool 7 (or 8), then Tool 9. Tools 4, 5 and 6 are single-category subsets of Tool 7.
 
 README commands fixed in the documentation cleanup (every command now names an
@@ -323,7 +330,10 @@ cp .env.example .env   # then edit the paths
     `b/doc_2.txt` in *different folders or counties* merge into one "deed". Page order is
     lexicographic, so `_10` sorts before `_2`. Any filename with an `_` in it is treated as
     a paged document; `toy_book_page_003`, for example, is grouped with every other
-    `toy_book_page_*` file.
+    `toy_book_page_*` file. Since `55003a0`, Tool 3 splits such groups by county, so pages
+    from different counties are never merged. Groups spanning several folders *within*
+    one county are unchanged; an aggregate-only check found 1 such group in the current
+    data. That remains a separate RQ.
 13. **Fixed in `68a61cb`: Tool 3 `image_ids` used to depend on path depth.** The old rule,
     `file_path.split('/', 10)[-1]`, kept everything after the 10th `/` of the absolute
     path, so it matched GeoJSON ids only at one depth. With the real `OCRTXT_PATH` it
@@ -368,16 +378,30 @@ cp .env.example .env   # then edit the paths
     are no context managers. A crash in the middle leaves partial files.
 26. `os.makedirs(os.path.dirname(output_path))` fails when `--output_path` has no
     directory part (e.g. `out.jsonl`), because `dirname` is `""`.
+27. **Fixed in `55003a0`: records were identified by `image_ids` alone.** `image_ids` are
+    county-relative, so the same id in two counties merged into one Tool 7/9 record, and
+    Tool 3 could build one mixed-county deed. Every Tool 3–9 row now carries `county`.
+    Tools 4–8 group, and Tool 9 merges, by (`county`, `image_ids`). Old rows without
+    `county` are read as `null` and never merge with rows that have one. The toy tests in
+    `test/test_county_collisions.py` cover Tools 3–9. An aggregate-only check
+    (`dev/check_county_id_collisions.py`, counts only) found no cross-county collisions in
+    the current data: 0 page groups mixing more than one county, and 0 county-relative ids
+    present in more than one county. So this prevents future silent cross-county merges
+    rather than changing today's records. What's left:
+    - `county` is the first folder under `--root_path`. Pointed at a single county folder,
+      `county` becomes that county's first subfolder, and nothing warns you.
+    - Tool 3–9 outputs from before `55003a0` lack `county`. Don't mix them with new ones;
+      rerun from Tool 3 onward.
 
 ### Training script
-27. `save_model` writes to the literal folder `"{output_dir}/model-last"` because the
+28. `save_model` writes to the literal folder `"{output_dir}/model-last"` because the
     f-string prefix is missing.
-28. `evaluate_model` calls `nlp.update(...)` on the dev set. In spaCy 3 that seems to
+29. `evaluate_model` calls `nlp.update(...)` on the dev set. In spaCy 3 that seems to
     **train on validation data** with a default optimizer, so the "best val loss" choice is
     biased. This needs checking.
-29. It relies on the globals `nlp` and `output_dir`, uses placeholder paths, and imports
+30. It relies on the globals `nlp` and `output_dir`, uses placeholder paths, and imports
     `torch` only to print the device.
-30. The README says both models were "trained from scratch", but the subdivision model is
+31. The README says both models were "trained from scratch", but the subdivision model is
     a fine-tuned `en_core_web_md`. Its meta.json metrics are the stock ones, so there is no
     recorded SUBDIVISION score.
 
@@ -385,9 +409,17 @@ cp .env.example .env   # then edit the paths
 
 ## 8. What to test before changing anything
 
-The only automated tests are in `test/test_tool3_image_ids.py`: 7 `unittest` tests of
-Tool 3's image_ids, using toy temp files and no real data. Run them with
-`python -m unittest discover -s test`. The other `test/*.py` files are manual `main()`
+Automated `unittest` tests use only synthetic toy files in temp directories, never real
+data. Run them all with `python -m unittest discover -s test` (35 tests; one opt-in test
+with the bundled models runs only when `MP_RUN_MODEL_TESTS=1` is set):
+- `test_tool3_image_ids.py`: Tool 3 image_ids at several root depths (item 13).
+- `test_pipeline_tool3_7_9.py`: Tool 3 → 7 → 9 end to end, via each tool's real `main()`.
+- `test_county_collisions.py`: `county` in Tools 3–9, grouping and merging by
+  (`county`, `image_ids`), old rows, mixed old/new files (item 27).
+- `test_dev_collision_script.py`: the aggregate-only checker runs on the standard library
+  alone and prints counts only.
+
+The other `test/*.py` files are manual `main()`
 scripts that print output and contain no assertions. They need the real GeoJSON and OCR
 data, and one of them writes to `/home/yaoyi/jiao0052/...`. They contain no test cases,
 and importing them triggers `load_config()`.
@@ -420,6 +452,8 @@ Before changing code, set up a **golden baseline** plus some small unit tests.
       tuples: gap 0, gap 1, gap 2, and two adjacent separate mentions.
 - [ ] `merge_dictionaries` (Tool 9): same ids merged, duplicates kept, `text` dropped,
       distinct ids kept apart.
+- [x] `county` through Tools 3–9: same id in two counties stays separate, old rows get
+      `null`, mixed old/new rows don't merge: `test/test_county_collisions.py` (item 27).
 
 ### C. End-to-end regression (golden files)
 - [ ] Build a small fixture tree, e.g. `test/fixtures/ocr/txt/mn-anoka-county/...`, with a
