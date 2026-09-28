@@ -21,6 +21,14 @@ def county_relative_image_id(file_path, root_path):
     parts = Path(os.path.relpath(file_path, root_path)).parts
     return "/".join(parts[1:]) if len(parts) > 1 else parts[0]
 
+def county_of(file_path, root_path):
+    """
+    Return the county folder of an OCR txt path, i.e. the first folder under root_path (the same folder name as in the geojson layout),
+    or None if the file sits directly under root_path. image_ids are only unique within a county, so rows carry this as "county".
+    """
+    parts = Path(os.path.relpath(file_path, root_path)).parts
+    return parts[0] if len(parts) > 1 else None
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Test geo sentence identifier saving results as jsonl")
     parser.add_argument('--root_path', type=str, default="./covenants-deed-images/ocr/txt",
@@ -46,6 +54,13 @@ def main():
     args = parse_args()
 
     grouped_files = group_files_by_prefix(args.root_path)
+    # group_files_by_prefix groups by basename prefix across all folders; split any group that spans counties
+    # so that a deed never mixes pages from different counties (grouping within a county is unchanged)
+    grouped_files = [
+        [p for p in deed_list if county_of(p, args.root_path) == county]
+        for deed_list in grouped_files
+        for county in dict.fromkeys(county_of(p, args.root_path) for p in deed_list)
+    ]
 
     nlp = spacy.load(args.spacy_model_name)
 
@@ -90,7 +105,7 @@ def main():
                 this_covenant_dense.append(res["sentence"]) # list of sentences with more than threshold number of matched keywords in this deed
                 # print(temp_tuple) # print tuple to see the keywords/entities matched in this sentence
                 
-                json_line = json.dumps({"text": res["sentence"], "image_ids": [county_relative_image_id(file_path, args.root_path) for file_path in deed_list]}, ensure_ascii=False)
+                json_line = json.dumps({"text": res["sentence"], "county": county_of(deed_list[0], args.root_path), "image_ids": [county_relative_image_id(file_path, args.root_path) for file_path in deed_list]}, ensure_ascii=False)
                 file.write(json_line + '\n')
 
     # print(this_covenant_dense)

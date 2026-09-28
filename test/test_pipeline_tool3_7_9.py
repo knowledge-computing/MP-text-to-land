@@ -2,11 +2,14 @@
 End-to-end check of the Tool 3 -> Tool 7 -> Tool 9 flow on synthetic toy data.
 
   Tool 3  scripts/run_identify_sentences_with_imageids_f_raw_txt_to_jsonl.py
-          OCR txt tree -> {"text", "image_ids"} per kept sentence
+          OCR txt tree -> {"text", "county", "image_ids"} per kept sentence
   Tool 7  scripts/run_identify_all_geo_parcel.py
-          adds NERpredicted_* lists; regroups rows by tuple(image_ids), writes ids sorted
+          adds NERpredicted_* lists; regroups rows by (county, image_ids), writes ids sorted
   Tool 9  scripts/run_combine_ner_results.py
-          merges rows with the same image_ids into one record per deed
+          merges rows with the same (county, image_ids) into one record per deed
+
+County handling in detail (including Tools 4/5/6/8 and old rows without county) is
+covered by test_county_collisions.py.
 
 Each tool's real main() runs; see toy_pipeline.py for the stubs. Set MP_RUN_MODEL_TESTS=1
 to also run one smoke test with the real bundled models in src/models/ (repository files,
@@ -34,12 +37,13 @@ TOY_PAGES = {
     "wi-toy-county/toy-milwaukee-book/toy_page_004": "Lot 4 Block 1 of Toy Heights.",
 }
 
-# GeoJSON-style ids (relative to the county folder), grouped per deed.
-EXPECTED_GROUPS = {
-    ("toy-book-a/page_001", "toy-book-a/page_002"),
-    ("toy-abstracts/other/year/abstract_page_003",),
-    ("toy-milwaukee-book/toy_page_004",),
+# GeoJSON-style ids (relative to the county folder), grouped per deed, with each deed's county.
+EXPECTED_COUNTY_BY_GROUP = {
+    ("toy-book-a/page_001", "toy-book-a/page_002"): "mn-toy-county",
+    ("toy-abstracts/other/year/abstract_page_003",): "mn-toy-county",
+    ("toy-milwaukee-book/toy_page_004",): "wi-toy-county",
 }
+EXPECTED_GROUPS = set(EXPECTED_COUNTY_BY_GROUP)
 
 
 class PipelineTestBase(unittest.TestCase):
@@ -65,21 +69,25 @@ class PipelineImageIdTests(PipelineTestBase):
         rows3, _, _ = tp.run_pipeline(self.make_root(7) + "/", self.out, "t3")
         self.assertEqual({tuple(r["image_ids"]) for r in rows3}, EXPECTED_GROUPS)
         self.assertEqual(len(rows3), len(TOY_PAGES))  # one sentence per page
+        for r in rows3:
+            self.assertEqual(r["county"], EXPECTED_COUNTY_BY_GROUP[tuple(r["image_ids"])])
 
     def test_tool7_passes_ids_through_unchanged(self):
         rows3, rows7, _ = tp.run_pipeline(self.make_root(7) + "/", self.out, "t7")
         self.assertEqual(len(rows7), len(rows3))
-        self.assertEqual(sorted((r["text"], tuple(r["image_ids"])) for r in rows7),
-                         sorted((r["text"], tuple(r["image_ids"])) for r in rows3))
+        self.assertEqual(sorted((r["text"], r["county"], tuple(r["image_ids"])) for r in rows7),
+                         sorted((r["text"], r["county"], tuple(r["image_ids"])) for r in rows3))
         for r in rows7:
             self.assertEqual(r["image_ids"], sorted(r["image_ids"]))
-            self.assertEqual(set(r) - {"text", "image_ids"}, set(tp.NER_KEYS))
+            self.assertEqual(set(r) - {"text", "county", "image_ids"}, set(tp.NER_KEYS))
 
     def test_tool9_gives_one_record_per_deed_with_merged_entities(self):
         _, _, rows9 = tp.run_pipeline(self.make_root(7) + "/", self.out, "t9")
         by_ids = {tuple(r["image_ids"]): r for r in rows9}
         self.assertEqual(set(by_ids), EXPECTED_GROUPS)
         self.assertEqual(len(rows9), len(EXPECTED_GROUPS))
+        for ids, r in by_ids.items():
+            self.assertEqual(r["county"], EXPECTED_COUNTY_BY_GROUP[ids])
         two_page = by_ids[("toy-book-a/page_001", "toy-book-a/page_002")]
         self.assertEqual(two_page["NERpredicted_LOT"], ["Lot 1", "Lot 2"])
         self.assertEqual(two_page["NERpredicted_SUBD"], ["Toy Addition", "Toy Addition"])
@@ -127,7 +135,8 @@ class PipelineWithBundledModelsTests(PipelineTestBase):
         self.assertEqual({tuple(r["image_ids"]) for r in rows7}, EXPECTED_GROUPS)
         self.assertEqual({tuple(r["image_ids"]) for r in rows9}, EXPECTED_GROUPS)
         for r in rows9:
-            self.assertEqual(set(r) - {"image_ids"}, set(tp.NER_KEYS))
+            self.assertEqual(set(r) - {"county", "image_ids"}, set(tp.NER_KEYS))
+            self.assertEqual(r["county"], EXPECTED_COUNTY_BY_GROUP[tuple(r["image_ids"])])
             self.assertTrue(all(isinstance(r[k], list) for k in tp.NER_KEYS))
 
 
