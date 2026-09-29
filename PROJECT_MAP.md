@@ -43,7 +43,8 @@ MP-text-to-land/
 │   ├── test_keyword_label.txt     # 7 short parcel words (township, range, twp, ...)
 │   └── keywords/
 │       └── not_using/             # suggested keyword lists, NEVER loaded (see §3.3)
-├── dev/                      # aggregate-only local checks, e.g. check_county_id_collisions.py (counts only)
+├── dev/                      # aggregate-only local checks (counts only): check_county_id_collisions.py,
+│                             #   check_page_grouping.py
 ├── scripts/                  # CLI entry points = "Tools" 1–9 (run with python -m)
 ├── src/
 │   ├── __init__.py           # eagerly imports every submodule (side effects!)
@@ -54,7 +55,8 @@ MP-text-to-land/
 │       ├── state_county_city_ner_model/model-best   # 6.4 MB, spaCy 3.7.x
 │       └── subdivision_ner_model/model-best         # 53 MB, fine-tuned en_core_web_md 3.7.1
 └── test/                     # unittest toy-data tests (test_tool3_image_ids, test_pipeline_tool3_7_9,
-                              #   test_county_collisions, test_dev_collision_script) + older manual scripts (see §8)
+                              #   test_county_collisions, test_folder_grouping, test_dev_collision_script,
+                              #   test_dev_grouping_check) + older manual scripts (see §8)
 ```
 
 Git-ignored but referenced in code: `/output/`, `/data/raw/`, `/data/processed/`,
@@ -332,8 +334,18 @@ cp .env.example .env   # then edit the paths
     a paged document; `toy_book_page_003`, for example, is grouped with every other
     `toy_book_page_*` file. Since `55003a0`, Tool 3 splits such groups by county, so pages
     from different counties are never merged. Groups spanning several folders *within*
-    one county are unchanged; an aggregate-only check found 1 such group in the current
-    data. That remains a separate RQ.
+    one county are unchanged.
+    - **Folder-level grouping was investigated and not adopted (2026-09-29).** Question:
+      should the key be (county, folder, prefix)? `dev/check_page_grouping.py`
+      (aggregate-only, counts only) scored both keys against the GeoJSON deeds. The one
+      real multi-folder group is consistent with a single GeoJSON deed. Folder-level
+      grouping would split it (split deeds 248 → 249, exact matches 11,547 → 11,546)
+      without reducing over-merged groups (20 → 20). Tool 3 keeps (county, prefix), and
+      `test/test_folder_grouping.py` pins that behavior.
+    - **Open, separate future RQs:** the 20 over-merged groups (separate GeoJSON deeds in
+      one Tool 3 group, which can also happen within one folder) and the 248 GeoJSON
+      deeds whose pages fall into more than one group. `dev/check_page_grouping.py` gives
+      the baseline counts for both.
 13. **Fixed in `68a61cb`: Tool 3 `image_ids` used to depend on path depth.** The old rule,
     `file_path.split('/', 10)[-1]`, kept everything after the 10th `/` of the absolute
     path, so it matched GeoJSON ids only at one depth. With the real `OCRTXT_PATH` it
@@ -410,14 +422,16 @@ cp .env.example .env   # then edit the paths
 ## 8. What to test before changing anything
 
 Automated `unittest` tests use only synthetic toy files in temp directories, never real
-data. Run them all with `python -m unittest discover -s test` (35 tests; one opt-in test
+data. Run them all with `python -m unittest discover -s test` (47 tests; one opt-in test
 with the bundled models runs only when `MP_RUN_MODEL_TESTS=1` is set):
 - `test_tool3_image_ids.py`: Tool 3 image_ids at several root depths (item 13).
 - `test_pipeline_tool3_7_9.py`: Tool 3 → 7 → 9 end to end, via each tool's real `main()`.
 - `test_county_collisions.py`: `county` in Tools 3–9, grouping and merging by
   (`county`, `image_ids`), old rows, mixed old/new files (item 27).
-- `test_dev_collision_script.py`: the aggregate-only checker runs on the standard library
-  alone and prints counts only.
+- `test_folder_grouping.py`: Tool 3's (county, prefix) page grouping, kept on purpose
+  (item 12).
+- `test_dev_collision_script.py`, `test_dev_grouping_check.py`: the aggregate-only checkers
+  in `dev/` run on the standard library alone and print counts only.
 
 The other `test/*.py` files are manual `main()`
 scripts that print output and contain no assertions. They need the real GeoJSON and OCR
