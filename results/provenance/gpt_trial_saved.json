@@ -1,0 +1,77 @@
+{
+  "errors": {
+    "subd#1460:AttributeError": 1,
+    "subd#1963:AttributeError": 1,
+    "subd#2079:AttributeError": 1,
+    "subd#533:AttributeError": 1
+  },
+  "inputs": {
+    "deeds": 2436,
+    "plss_features": 14224,
+    "triples": "saved"
+  },
+  "subdivision": {
+    "deeds_candidate_intersects_deed": 339,
+    "deeds_candidate_intersects_deed_pct_of_all_deeds": 13.92,
+    "deeds_candidate_intersects_deed_pct_of_with_prediction": 15.68,
+    "deeds_with_>=1_plat_candidate": 350,
+    "deeds_with_>=1_plat_candidate_pct_of_all_deeds": 14.37,
+    "deeds_with_>=1_plat_candidate_pct_of_with_prediction": 16.19,
+    "deeds_with_subdivision_prediction": 2162
+  },
+  "table2": {
+    "City": {
+      "FN": 1435,
+      "FP": 171,
+      "TP": 743,
+      "f1": 0.4806,
+      "precision": 0.8129,
+      "recall": 0.3411
+    },
+    "County": {
+      "FN": 874,
+      "FP": 32,
+      "TP": 1530,
+      "f1": 0.7716,
+      "precision": 0.9795,
+      "recall": 0.6364
+    },
+    "State": {
+      "FN": 833,
+      "FP": 14,
+      "TP": 1589,
+      "f1": 0.7896,
+      "precision": 0.9913,
+      "recall": 0.6561
+    },
+    "Subdivision": {
+      "FN": 274,
+      "FP": 92,
+      "TP": 2070,
+      "f1": 0.9188,
+      "precision": 0.9574,
+      "recall": 0.8831
+    }
+  },
+  "table3": {
+    "coverage_pct": 60.34,
+    "deeds_total": 2436,
+    "fixed_1x1_contains": 1258,
+    "fixed_1x1_contains_pct_of_with_triple": 85.58,
+    "fixed_1x1_intersects": 1265,
+    "fixed_1x1_intersects_pct_of_with_triple": 86.05,
+    "fixed_6x6_contains": 1291,
+    "fixed_6x6_contains_pct_of_with_triple": 87.82,
+    "fixed_6x6_intersects": 1292,
+    "fixed_6x6_intersects_pct_of_with_triple": 87.89,
+    "orig_1x1": 1258,
+    "orig_1x1_pct_of_with_triple": 85.58,
+    "orig_6x6": 1270,
+    "orig_6x6_pct_of_with_triple": 86.39,
+    "orig_failed_with_dir_never_retried": 88,
+    "orig_step1_dir": 1228,
+    "orig_step2_nodir": 30,
+    "orig_step3_tuple": 12,
+    "with_triple": 1470
+  }
+}

@@ -38,3 +38,11 @@ __pycache__/
 *.cpg
 *.jsonl
 *.spacy
+
+# Private project materials and local-only files - never commit
+/docs/context/
+/output/private/
+.claude/settings.local.json
+
+# Local agent instructions (internal notes; keep out of the public repo)
+CLAUDE.md

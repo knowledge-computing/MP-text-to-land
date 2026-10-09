@@ -1,0 +1,387 @@
+{
+  "inputs": {
+    "layouts": {
+      "STR": 542,
+      "TR": 99,
+      "TRS": 87,
+      "compact": 122,
+      "multi_section": 97,
+      "multi_triple": 53
+    },
+    "n": 1000,
+    "ocr_p": 0.05,
+    "seed": 0,
+    "span_p": 0.2,
+    "table": "toy"
+  },
+  "oracle": {
+    "clean": {
+      "oracle_R": 1.0,
+      "oracle_S": 1.0,
+      "oracle_T": 1.0,
+      "oracle_TRS": 1.0
+    },
+    "ocr": {
+      "oracle_R": 0.981,
+      "oracle_S": 0.989,
+      "oracle_T": 0.98,
+      "oracle_TRS": 0.95
+    },
+    "ocr+span": {
+      "oracle_R": 0.918,
+      "oracle_S": 0.932,
+      "oracle_T": 0.913,
+      "oracle_TRS": 0.782
+    },
+    "span": {
+      "oracle_R": 0.936,
+      "oracle_S": 0.942,
+      "oracle_T": 0.932,
+      "oracle_TRS": 0.823
+    }
+  },
+  "results": {
+    "clean": {
+      "regex_v1": {
+        "covered": 1.0,
+        "exact_any_of_k": 0.719,
+        "exact_top1": 0.719,
+        "exact_top1_ignore_dir": 0.905,
+        "k_hist": {
+          "1": 901,
+          "2": 99
+        },
+        "reasons": {},
+        "slot_R": 0.955,
+        "slot_Rdir": 0.799,
+        "slot_S": 0.959,
+        "slot_T": 0.99,
+        "township_top1": 0.947,
+        "triples_per_covered": 1.099
+      },
+      "rule_v2[county]": {
+        "covered": 1.0,
+        "exact_any_of_k": 1.0,
+        "exact_top1": 1.0,
+        "exact_top1_ignore_dir": 1.0,
+        "k_hist": {
+          "1": 899,
+          "2": 99,
+          "3": 2
+        },
+        "reasons": {},
+        "slot_R": 1.0,
+        "slot_Rdir": 1.0,
+        "slot_S": 1.0,
+        "slot_T": 1.0,
+        "township_top1": 1.0,
+        "triples_per_covered": 1.103
+      },
+      "rule_v2[none]": {
+        "covered": 1.0,
+        "exact_any_of_k": 0.84,
+        "exact_top1": 0.838,
+        "exact_top1_ignore_dir": 1.0,
+        "k_hist": {
+          "1": 899,
+          "2": 96,
+          "3": 5
+        },
+        "reasons": {},
+        "slot_R": 1.0,
+        "slot_Rdir": 0.838,
+        "slot_S": 1.0,
+        "slot_T": 1.0,
+        "township_top1": 1.0,
+        "triples_per_covered": 1.106
+      },
+      "rule_v2[state]": {
+        "covered": 1.0,
+        "exact_any_of_k": 1.0,
+        "exact_top1": 1.0,
+        "exact_top1_ignore_dir": 1.0,
+        "k_hist": {
+          "1": 899,
+          "2": 99,
+          "3": 2
+        },
+        "reasons": {},
+        "slot_R": 1.0,
+        "slot_Rdir": 1.0,
+        "slot_S": 1.0,
+        "slot_T": 1.0,
+        "township_top1": 1.0,
+        "triples_per_covered": 1.103
+      }
+    },
+    "ocr": {
+      "regex_v1": {
+        "covered": 0.999,
+        "exact_any_of_k": 0.448,
+        "exact_top1": 0.443,
+        "exact_top1_ignore_dir": 0.599,
+        "k_hist": {
+          "0": 1,
+          "1": 902,
+          "2": 97
+        },
+        "reasons": {
+          "no_candidate": 1
+        },
+        "slot_R": 0.833,
+        "slot_Rdir": 0.738,
+        "slot_S": 0.872,
+        "slot_T": 0.836,
+        "township_top1": 0.697,
+        "triples_per_covered": 1.097
+      },
+      "rule_v2[county]": {
+        "covered": 0.96,
+        "exact_any_of_k": 0.946,
+        "exact_top1": 0.941,
+        "exact_top1_ignore_dir": 0.941,
+        "k_hist": {
+          "0": 40,
+          "1": 847,
+          "2": 109,
+          "3": 4
+        },
+        "reasons": {
+          "filtered_out": 2,
+          "no_candidate": 12,
+          "not_in_plss": 26
+        },
+        "slot_R": 0.96,
+        "slot_Rdir": 0.96,
+        "slot_S": 0.941,
+        "slot_T": 0.96,
+        "township_top1": 0.96,
+        "triples_per_covered": 1.122
+      },
+      "rule_v2[none]": {
+        "covered": 0.986,
+        "exact_any_of_k": 0.753,
+        "exact_top1": 0.745,
+        "exact_top1_ignore_dir": 0.924,
+        "k_hist": {
+          "0": 14,
+          "1": 821,
+          "2": 152,
+          "3": 13
+        },
+        "reasons": {
+          "filtered_out": 2,
+          "no_candidate": 12
+        },
+        "slot_R": 0.96,
+        "slot_Rdir": 0.788,
+        "slot_S": 0.967,
+        "slot_T": 0.969,
+        "township_top1": 0.943,
+        "triples_per_covered": 1.182
+      },
+      "rule_v2[state]": {
+        "covered": 0.96,
+        "exact_any_of_k": 0.946,
+        "exact_top1": 0.941,
+        "exact_top1_ignore_dir": 0.941,
+        "k_hist": {
+          "0": 40,
+          "1": 847,
+          "2": 109,
+          "3": 4
+        },
+        "reasons": {
+          "filtered_out": 2,
+          "no_candidate": 12,
+          "not_in_plss": 26
+        },
+        "slot_R": 0.96,
+        "slot_Rdir": 0.96,
+        "slot_S": 0.941,
+        "slot_T": 0.96,
+        "township_top1": 0.96,
+        "triples_per_covered": 1.122
+      }
+    },
+    "ocr+span": {
+      "regex_v1": {
+        "covered": 0.997,
+        "exact_any_of_k": 0.334,
+        "exact_top1": 0.331,
+        "exact_top1_ignore_dir": 0.461,
+        "k_hist": {
+          "0": 3,
+          "1": 869,
+          "2": 123,
+          "3": 5
+        },
+        "reasons": {
+          "no_candidate": 3
+        },
+        "slot_R": 0.763,
+        "slot_Rdir": 0.673,
+        "slot_S": 0.809,
+        "slot_T": 0.74,
+        "township_top1": 0.571,
+        "triples_per_covered": 1.133
+      },
+      "rule_v2[county]": {
+        "covered": 0.839,
+        "exact_any_of_k": 0.772,
+        "exact_top1": 0.764,
+        "exact_top1_ignore_dir": 0.764,
+        "k_hist": {
+          "0": 161,
+          "1": 746,
+          "2": 90,
+          "3": 3
+        },
+        "reasons": {
+          "filtered_out": 1,
+          "no_candidate": 129,
+          "not_in_plss": 31
+        },
+        "slot_R": 0.837,
+        "slot_Rdir": 0.839,
+        "slot_S": 0.77,
+        "slot_T": 0.835,
+        "township_top1": 0.835,
+        "triples_per_covered": 1.114
+      },
+      "rule_v2[none]": {
+        "covered": 0.87,
+        "exact_any_of_k": 0.597,
+        "exact_top1": 0.571,
+        "exact_top1_ignore_dir": 0.725,
+        "k_hist": {
+          "0": 130,
+          "1": 697,
+          "2": 153,
+          "3": 20
+        },
+        "reasons": {
+          "filtered_out": 1,
+          "no_candidate": 129
+        },
+        "slot_R": 0.836,
+        "slot_Rdir": 0.674,
+        "slot_S": 0.797,
+        "slot_T": 0.822,
+        "township_top1": 0.789,
+        "triples_per_covered": 1.226
+      },
+      "rule_v2[state]": {
+        "covered": 0.839,
+        "exact_any_of_k": 0.772,
+        "exact_top1": 0.764,
+        "exact_top1_ignore_dir": 0.764,
+        "k_hist": {
+          "0": 161,
+          "1": 746,
+          "2": 90,
+          "3": 3
+        },
+        "reasons": {
+          "filtered_out": 1,
+          "no_candidate": 129,
+          "not_in_plss": 31
+        },
+        "slot_R": 0.837,
+        "slot_Rdir": 0.839,
+        "slot_S": 0.77,
+        "slot_T": 0.835,
+        "township_top1": 0.835,
+        "triples_per_covered": 1.114
+      }
+    },
+    "span": {
+      "regex_v1": {
+        "covered": 0.999,
+        "exact_any_of_k": 0.533,
+        "exact_top1": 0.531,
+        "exact_top1_ignore_dir": 0.687,
+        "k_hist": {
+          "0": 1,
+          "1": 877,
+          "2": 117,
+          "3": 5
+        },
+        "reasons": {
+          "no_candidate": 1
+        },
+        "slot_R": 0.877,
+        "slot_Rdir": 0.725,
+        "slot_S": 0.884,
+        "slot_T": 0.878,
+        "township_top1": 0.775,
+        "triples_per_covered": 1.127
+      },
+      "rule_v2[county]": {
+        "covered": 0.876,
+        "exact_any_of_k": 0.818,
+        "exact_top1": 0.811,
+        "exact_top1_ignore_dir": 0.811,
+        "k_hist": {
+          "0": 124,
+          "1": 793,
+          "2": 81,
+          "3": 2
+        },
+        "reasons": {
+          "no_candidate": 119,
+          "not_in_plss": 5
+        },
+        "slot_R": 0.873,
+        "slot_Rdir": 0.876,
+        "slot_S": 0.819,
+        "slot_T": 0.871,
+        "township_top1": 0.871,
+        "triples_per_covered": 1.097
+      },
+      "rule_v2[none]": {
+        "covered": 0.881,
+        "exact_any_of_k": 0.665,
+        "exact_top1": 0.645,
+        "exact_top1_ignore_dir": 0.789,
+        "k_hist": {
+          "0": 119,
+          "1": 761,
+          "2": 112,
+          "3": 8
+        },
+        "reasons": {
+          "no_candidate": 119
+        },
+        "slot_R": 0.873,
+        "slot_Rdir": 0.719,
+        "slot_S": 0.824,
+        "slot_T": 0.848,
+        "township_top1": 0.842,
+        "triples_per_covered": 1.146
+      },
+      "rule_v2[state]": {
+        "covered": 0.876,
+        "exact_any_of_k": 0.818,
+        "exact_top1": 0.811,
+        "exact_top1_ignore_dir": 0.811,
+        "k_hist": {
+          "0": 124,
+          "1": 793,
+          "2": 81,
+          "3": 2
+        },
+        "reasons": {
+          "no_candidate": 119,
+          "not_in_plss": 5
+        },
+        "slot_R": 0.873,
+        "slot_Rdir": 0.876,
+        "slot_S": 0.819,
+        "slot_T": 0.871,
+        "township_top1": 0.871,
+        "triples_per_covered": 1.097
+      }
+    }
+  }
+}

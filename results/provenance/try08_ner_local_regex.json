@@ -1,0 +1,63 @@
+{
+  "errors": {},
+  "inputs": {
+    "deeds": 2436,
+    "plss_features": 14224,
+    "triples": "regex"
+  },
+  "table2": {
+    "City": {
+      "FN": 1435,
+      "FP": 171,
+      "TP": 743,
+      "f1": 0.4806,
+      "precision": 0.8129,
+      "recall": 0.3411
+    },
+    "County": {
+      "FN": 345,
+      "FP": 38,
+      "TP": 2053,
+      "f1": 0.9147,
+      "precision": 0.9818,
+      "recall": 0.8561
+    },
+    "State": {
+      "FN": 288,
+      "FP": 19,
+      "TP": 2129,
+      "f1": 0.9327,
+      "precision": 0.9912,
+      "recall": 0.8808
+    },
+    "Subdivision": {
+      "FN": 274,
+      "FP": 92,
+      "TP": 2070,
+      "f1": 0.9188,
+      "precision": 0.9574,
+      "recall": 0.8831
+    }
+  },
+  "table3": {
+    "coverage_pct": 60.43,
+    "deeds_total": 2436,
+    "fixed_1x1_contains": 1174,
+    "fixed_1x1_contains_pct_of_with_triple": 79.76,
+    "fixed_1x1_intersects": 1181,
+    "fixed_1x1_intersects_pct_of_with_triple": 80.23,
+    "fixed_6x6_contains": 1213,
+    "fixed_6x6_contains_pct_of_with_triple": 82.4,
+    "fixed_6x6_intersects": 1214,
+    "fixed_6x6_intersects_pct_of_with_triple": 82.47,
+    "orig_1x1": 1174,
+    "orig_1x1_pct_of_with_triple": 79.76,
+    "orig_6x6": 1183,
+    "orig_6x6_pct_of_with_triple": 80.37,
+    "orig_failed_with_dir_never_retried": 162,
+    "orig_step1_dir": 1155,
+    "orig_step2_nodir": 19,
+    "orig_step3_tuple": 9,
+    "with_triple": 1472
+  }
+}

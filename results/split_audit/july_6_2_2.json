@@ -1,0 +1,141 @@
+{
+  "all_splits_unique_deeds": 3455,
+  "deed_share_of_union": {
+    "test": 0.7051,
+    "train": 0.2712,
+    "val": 0.1421
+  },
+  "error_count": 0,
+  "errors": {},
+  "feature_share": {
+    "test": 0.2,
+    "train": 0.6,
+    "val": 0.2
+  },
+  "pairs": {
+    "train~test": {
+      "identical_deeds": 0,
+      "shared_pages": 11,
+      "test_deeds_sharing_a_page_with_train": 8,
+      "train_deeds_overlapping_not_identical": 6,
+      "train_deeds_sharing_a_page_with_test": 6
+    },
+    "train~val": {
+      "identical_deeds": 409,
+      "shared_pages": 599,
+      "train_deeds_overlapping_not_identical": 8,
+      "train_deeds_sharing_a_page_with_val": 417,
+      "val_deeds_sharing_a_page_with_train": 411
+    },
+    "val~test": {
+      "identical_deeds": 0,
+      "shared_pages": 3,
+      "test_deeds_sharing_a_page_with_val": 2,
+      "val_deeds_overlapping_not_identical": 1,
+      "val_deeds_sharing_a_page_with_test": 1
+    }
+  },
+  "splits": {
+    "test": {
+      "by_county": {
+        "anoka": {
+          "deeds": 519,
+          "features": 519
+        },
+        "dakota": {
+          "deeds": 64,
+          "features": 64
+        },
+        "milwaukee": {
+          "deeds": 1369,
+          "features": 1369
+        },
+        "olmsted": {
+          "deeds": 347,
+          "features": 347
+        },
+        "sherburne": {
+          "deeds": 137,
+          "features": 137
+        }
+      },
+      "deeds": 2436,
+      "deeds_with_multiple_features": 0,
+      "features": 2436,
+      "max_features_per_deed": 1,
+      "pages": 3254
+    },
+    "train": {
+      "by_county": {
+        "anoka": {
+          "deeds": 186,
+          "features": 820
+        },
+        "dakota": {
+          "deeds": 21,
+          "features": 151
+        },
+        "milwaukee": {
+          "deeds": 354,
+          "features": 5694
+        },
+        "olmsted": {
+          "deeds": 105,
+          "features": 285
+        },
+        "sherburne": {
+          "deeds": 10,
+          "features": 14
+        },
+        "washington": {
+          "deeds": 261,
+          "features": 344
+        }
+      },
+      "deeds": 937,
+      "deeds_with_multiple_features": 506,
+      "features": 7308,
+      "max_features_per_deed": 376,
+      "pages": 1616
+    },
+    "val": {
+      "by_county": {
+        "anoka": {
+          "deeds": 109,
+          "features": 287
+        },
+        "dakota": {
+          "deeds": 13,
+          "features": 50
+        },
+        "milwaukee": {
+          "deeds": 225,
+          "features": 1896
+        },
+        "olmsted": {
+          "deeds": 62,
+          "features": 108
+        },
+        "sherburne": {
+          "deeds": 1,
+          "features": 1
+        },
+        "washington": {
+          "deeds": 81,
+          "features": 94
+        }
+      },
+      "deeds": 491,
+      "deeds_with_multiple_features": 190,
+      "features": 2436,
+      "max_features_per_deed": 145,
+      "pages": 777
+    }
+  },
+  "test_leakage": {
+    "test_deeds": 2436,
+    "test_deeds_identical_to_a_non_test_deed": 0,
+    "test_deeds_sharing_any_page_with_non_test": 10,
+    "test_pages_seen_outside_test": 14
+  }
+}

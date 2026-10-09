@@ -1,0 +1,19 @@
+{
+ "normalizer": "rule_v2.0",
+ "counts": {
+  "deeds": 491,
+  "with_plss_span": 219,
+  "with_reading": 207,
+  "with_section_reading": 205,
+  "reason:None": 0,
+  "reason:no_candidate": 11,
+  "reason:not_in_plss": 1
+ },
+ "readings_per_deed": {
+  "0": 286,
+  "1": 192,
+  "4": 1,
+  "2": 11,
+  "3": 1
+ }
+}

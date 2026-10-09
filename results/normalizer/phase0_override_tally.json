@@ -1,0 +1,72 @@
+{
+  "change_types": {
+    "R_changed": 52,
+    "S_changed": 10,
+    "T_changed": 47,
+    "triple_count_changed": 28
+  },
+  "changed_deeds": 81,
+  "deeds_after": 2436,
+  "deeds_before": 2436,
+  "duplicate_keys_after": 0,
+  "duplicate_keys_before": 0,
+  "errors": {},
+  "gold_all_matched_deeds": {
+    "after": {
+      "any_S_T_R": 1267,
+      "top1_R": 1364,
+      "top1_S": 1302,
+      "top1_S_T_R_dir": 1245,
+      "top1_T": 1321,
+      "top1_dir": 1313
+    },
+    "before": {
+      "any_S_T_R": 1222,
+      "top1_R": 1336,
+      "top1_S": 1299,
+      "top1_S_T_R_dir": 1206,
+      "top1_T": 1299,
+      "top1_dir": 1313
+    },
+    "with_gold": 2435
+  },
+  "gold_changed_deeds": {
+    "after": {
+      "any_S_T_R": 49,
+      "top1_R": 71,
+      "top1_S": 50,
+      "top1_S_T_R_dir": 43,
+      "top1_T": 55,
+      "top1_dir": 52
+    },
+    "before": {
+      "any_S_T_R": 4,
+      "top1_R": 43,
+      "top1_S": 47,
+      "top1_S_T_R_dir": 4,
+      "top1_T": 33,
+      "top1_dir": 52
+    },
+    "with_gold": 81
+  },
+  "matched": 2436,
+  "only_after": 0,
+  "only_before": 0,
+  "triples_per_deed_after_changed": {
+    "1": 57,
+    "2": 17,
+    "3": 5,
+    "4": 1,
+    "6": 1
+  },
+  "triples_per_deed_before_changed": {
+    "1": 30,
+    "2": 38,
+    "3": 6,
+    "4": 1,
+    "5": 1,
+    "6": 3,
+    "7": 1,
+    "9": 1
+  }
+}

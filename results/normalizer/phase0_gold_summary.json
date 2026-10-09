@@ -1,0 +1,209 @@
+{
+  "deed_sets": {
+    "train": {
+      "deeds": 937,
+      "deeds_with_gold_by_county": {
+        "anoka": 186,
+        "dakota": 21,
+        "milwaukee": 354,
+        "olmsted": 105,
+        "sherburne": 10,
+        "washington": 261
+      },
+      "deeds_with_gold_set": 937,
+      "gold_set_size": {
+        "1": 924,
+        "2": 12,
+        "3": 1
+      },
+      "multi_row_deeds": 506,
+      "status": {
+        "ok": 937
+      },
+      "township_set_size": {
+        "1": 934,
+        "2": 3
+      }
+    },
+    "train~val_identical_deed_keys": 409,
+    "val": {
+      "deeds": 491,
+      "deeds_with_gold_by_county": {
+        "anoka": 109,
+        "dakota": 13,
+        "milwaukee": 225,
+        "olmsted": 62,
+        "sherburne": 1,
+        "washington": 81
+      },
+      "deeds_with_gold_set": 491,
+      "gold_set_size": {
+        "1": 485,
+        "2": 6
+      },
+      "multi_row_deeds": 190,
+      "status": {
+        "ok": 491
+      },
+      "township_set_size": {
+        "1": 490,
+        "2": 1
+      }
+    }
+  },
+  "errors": {},
+  "inputs": {
+    "min_key_share": 0.01,
+    "section_rows": 2961,
+    "splits": [
+      "train",
+      "val",
+      "test"
+    ]
+  },
+  "single_ok": {
+    "test": {
+      "Rdir": {
+        "E": 1369,
+        "W": 1066
+      },
+      "S_outside_1_36": 0,
+      "Tdir": {
+        "N": 2435
+      },
+      "gold_section_not_assigned_to_deed_county": 0,
+      "rows": 2435,
+      "section_key_differs_from_township_key": 0,
+      "section_overlap_ratio_hist": {
+        "[0.5,0.9)": 23,
+        "[0.9,0.99)": 24,
+        "[0.99,1.0]": 2388
+      },
+      "sections_touched_ge_1pct": {
+        "1": 2389,
+        "2": 46
+      },
+      "straddling_rows_gt1_section": 46,
+      "township_overlap_ratio_hist": {
+        "[0.5,0.9)": 2,
+        "[0.9,0.99)": 1,
+        "[0.99,1.0]": 2432
+      }
+    },
+    "train": {
+      "Rdir": {
+        "E": 109,
+        "W": 321
+      },
+      "S_outside_1_36": 0,
+      "Tdir": {
+        "N": 430
+      },
+      "gold_section_not_assigned_to_deed_county": 0,
+      "rows": 430,
+      "section_key_differs_from_township_key": 0,
+      "section_overlap_ratio_hist": {
+        "[0.5,0.9)": 5,
+        "[0.9,0.99)": 3,
+        "[0.99,1.0]": 422
+      },
+      "sections_touched_ge_1pct": {
+        "1": 423,
+        "2": 7
+      },
+      "straddling_rows_gt1_section": 7,
+      "township_overlap_ratio_hist": {
+        "[0.9,0.99)": 1,
+        "[0.99,1.0]": 429
+      }
+    },
+    "val": {
+      "Rdir": {
+        "E": 108,
+        "W": 193
+      },
+      "S_outside_1_36": 0,
+      "Tdir": {
+        "N": 301
+      },
+      "gold_section_not_assigned_to_deed_county": 0,
+      "rows": 301,
+      "section_key_differs_from_township_key": 0,
+      "section_overlap_ratio_hist": {
+        "[0.5,0.9)": 5,
+        "[0.9,0.99)": 2,
+        "[0.99,1.0]": 294
+      },
+      "sections_touched_ge_1pct": {
+        "1": 294,
+        "2": 7
+      },
+      "straddling_rows_gt1_section": 7,
+      "township_overlap_ratio_hist": {
+        "[0.9,0.99)": 2,
+        "[0.99,1.0]": 299
+      }
+    }
+  },
+  "splits": {
+    "test": {
+      "multi_part_rows": 1,
+      "rows": 2436,
+      "rows_of_multi_row_deeds": 0,
+      "single_polygon_rows": 2435,
+      "single_rows_by_county": {
+        "anoka": 518,
+        "dakota": 64,
+        "milwaukee": 1369,
+        "olmsted": 347,
+        "sherburne": 137
+      },
+      "status_all_rows": {
+        "ok": 2436
+      },
+      "status_single_rows": {
+        "ok": 2435
+      }
+    },
+    "train": {
+      "multi_part_rows": 7,
+      "rows": 7308,
+      "rows_of_multi_row_deeds": 6877,
+      "single_polygon_rows": 430,
+      "single_rows_by_county": {
+        "anoka": 54,
+        "dakota": 5,
+        "milwaukee": 109,
+        "olmsted": 36,
+        "sherburne": 6,
+        "washington": 220
+      },
+      "status_all_rows": {
+        "ok": 7308
+      },
+      "status_single_rows": {
+        "ok": 430
+      }
+    },
+    "val": {
+      "multi_part_rows": 0,
+      "rows": 2436,
+      "rows_of_multi_row_deeds": 2135,
+      "single_polygon_rows": 301,
+      "single_rows_by_county": {
+        "anoka": 71,
+        "dakota": 5,
+        "milwaukee": 108,
+        "olmsted": 42,
+        "sherburne": 1,
+        "washington": 74
+      },
+      "status_all_rows": {
+        "ok": 2436
+      },
+      "status_single_rows": {
+        "ok": 301
+      }
+    }
+  }
+}

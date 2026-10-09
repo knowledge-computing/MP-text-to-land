@@ -55,8 +55,8 @@ MP-text-to-land/
 │       ├── state_county_city_ner_model/model-best   # 6.4 MB, spaCy 3.7.x
 │       └── subdivision_ner_model/model-best         # 53 MB, fine-tuned en_core_web_md 3.7.1
 └── test/                     # unittest toy-data tests (test_tool3_image_ids, test_pipeline_tool3_7_9,
-                              #   test_county_collisions, test_folder_grouping, test_dev_collision_script,
-                              #   test_dev_grouping_check) + older manual scripts (see §8)
+                              #   test_county_collisions, test_folder_grouping, test_grouping_mismatches,
+                              #   test_dev_collision_script, test_dev_grouping_check) + older manual scripts (see §8)
 ```
 
 Git-ignored but referenced in code: `/output/`, `/data/raw/`, `/data/processed/`,
@@ -342,10 +342,29 @@ cp .env.example .env   # then edit the paths
       grouping would split it (split deeds 248 → 249, exact matches 11,547 → 11,546)
       without reducing over-merged groups (20 → 20). Tool 3 keeps (county, prefix), and
       `test/test_folder_grouping.py` pins that behavior.
-    - **Open, separate future RQs:** the 20 over-merged groups (separate GeoJSON deeds in
-      one Tool 3 group, which can also happen within one folder) and the 248 GeoJSON
-      deeds whose pages fall into more than one group. `dev/check_page_grouping.py` gives
-      the baseline counts for both.
+    - **Grouping mismatches were classified, and Tool 3 was not changed (2026-09-29).**
+      The "diagnosis" section of `dev/check_page_grouping.py` (aggregate-only, counts
+      only) found:
+      - *Over-merged groups: 20.* A group is over-merged when no single GeoJSON deed
+        contains all of its GeoJSON-listed pages. 9 merge **disjoint** deeds (no shared
+        ids), which look like real prefix over-merges. 11 merge **overlapping** deeds
+        (the deeds share an id), which is tied to GeoJSON overlap rather than to Tool 3.
+      - *GeoJSON deeds split across >1 group: 248.* A deed is split when its present
+        OCR pages fall into more than one group. All 248 have pages with **different
+        basename prefixes**; none come from names without `_`. 223 of the prefixes
+        differ **only in digits** and 25 differ in other text.
+      - *GeoJSON hygiene:* 15 deeds have all pages missing; 1,112 ids are listed in
+        more than one deed; 9,553 deeds share an id with another deed; 8,771 are exact
+        duplicates; 30 ids repeat within one deed; 115 OCR pages are referenced by no
+        deed.
+      - Folder-level grouping was not adopted (see above).
+      - `test/test_grouping_mismatches.py` has one synthetic case per category.
+    - **Separate future RQs:**
+      1. GeoJSON duplicate/overlap hygiene: exact duplicate and overlapping deeds, which
+         also explain the 11 overlapping over-merges.
+      2. Digit-normalized grouping: the 223 digits-only prefix splits.
+      3. The 9 true disjoint over-merges (prefix rule too coarse).
+      `dev/check_page_grouping.py` gives the baseline counts for all three.
 13. **Fixed in `68a61cb`: Tool 3 `image_ids` used to depend on path depth.** The old rule,
     `file_path.split('/', 10)[-1]`, kept everything after the 10th `/` of the absolute
     path, so it matched GeoJSON ids only at one depth. With the real `OCRTXT_PATH` it
@@ -422,7 +441,7 @@ cp .env.example .env   # then edit the paths
 ## 8. What to test before changing anything
 
 Automated `unittest` tests use only synthetic toy files in temp directories, never real
-data. Run them all with `python -m unittest discover -s test` (47 tests; one opt-in test
+data. Run them all with `python -m unittest discover -s test` (54 tests; one opt-in test
 with the bundled models runs only when `MP_RUN_MODEL_TESTS=1` is set):
 - `test_tool3_image_ids.py`: Tool 3 image_ids at several root depths (item 13).
 - `test_pipeline_tool3_7_9.py`: Tool 3 → 7 → 9 end to end, via each tool's real `main()`.
@@ -430,6 +449,8 @@ with the bundled models runs only when `MP_RUN_MODEL_TESTS=1` is set):
   (`county`, `image_ids`), old rows, mixed old/new files (item 27).
 - `test_folder_grouping.py`: Tool 3's (county, prefix) page grouping, kept on purpose
   (item 12).
+- `test_grouping_mismatches.py`: over-merge and split-deed categories, and how the
+  grouping checker classifies them (item 12).
 - `test_dev_collision_script.py`, `test_dev_grouping_check.py`: the aggregate-only checkers
   in `dev/` run on the standard library alone and print counts only.
 

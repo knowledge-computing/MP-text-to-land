@@ -79,7 +79,9 @@ class GroupingCheckTests(unittest.TestCase):
                               env={**os.environ, "OCRTXT_PATH": "", "GEOJSON_PATH": ""})
 
     def test_counts_on_toy_data(self):
-        self.assertEqual(script.summary(self.ocr, self.geo), EXPECTED)
+        # The "diagnosis" section is covered by test_grouping_mismatches.py.
+        s = script.summary(self.ocr, self.geo)
+        self.assertEqual({k: v for k, v in s.items() if k != "diagnosis"}, EXPECTED)
 
     def test_folder_grouping_trades_over_merges_for_split_deeds(self):
         # The toy data has one over-merge that folder grouping fixes (b/scan vs c/scan),

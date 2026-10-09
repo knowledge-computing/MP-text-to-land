@@ -1,0 +1,83 @@
+{
+ "counts": {
+  "old_deeds": 2436,
+  "new_deeds": 2436,
+  "matched": 2436,
+  "only_old": 0,
+  "only_new": 0
+ },
+ "exact_equal_pct": {
+  "STATE_p": 100.0,
+  "COUNTY_p": 100.0,
+  "CITY_p": 100.0,
+  "SUBDIVISION_p": 100.0,
+  "SECTION_p": 100.0,
+  "TOWNSHIP_p": 100.0,
+  "RANGE_p": 100.0,
+  "ALL_7_FIELDS": 100.0
+ },
+ "exact_equal_n": {
+  "STATE_p": 2436,
+  "COUNTY_p": 2436,
+  "CITY_p": 2436,
+  "SUBDIVISION_p": 2436,
+  "SECTION_p": 2436,
+  "TOWNSHIP_p": 2436,
+  "RANGE_p": 2436,
+  "ALL_7_FIELDS": 2436
+ },
+ "order_insensitive_equal_pct": {
+  "STATE_p": 100.0,
+  "COUNTY_p": 100.0,
+  "CITY_p": 100.0,
+  "SUBDIVISION_p": 100.0,
+  "SECTION_p": 100.0,
+  "TOWNSHIP_p": 100.0,
+  "RANGE_p": 100.0
+ },
+ "errors": {},
+ "run": {
+  "counts": {
+   "rows_in": 2436,
+   "deeds": 2436,
+   "pages": 3306,
+   "pages_missing": 0,
+   "deeds_with_missing_page": 0,
+   "deeds_empty_text": 0,
+   "deeds_multi_part": 1,
+   "deeds_written": 2436
+  },
+  "entities_per_label": {
+   "STATE": 3693,
+   "COUNTY": 4608,
+   "CITY": 1231,
+   "SUBDIVISION": 3285,
+   "SECTION": 1609,
+   "TOWNSHIP": 1488,
+   "RANGE": 1516
+  },
+  "deeds_with_label": {
+   "STATE": 2148,
+   "COUNTY": 2091,
+   "CITY": 920,
+   "SUBDIVISION": 2162,
+   "SECTION": 1466,
+   "TOWNSHIP": 1403,
+   "RANGE": 1434
+  },
+  "deeds_with_any_plss": 1500,
+  "ner_seconds": 1176.9,
+  "deeds_per_second": 2.07
+ },
+ "model_load_seconds": 6.1,
+ "versions": {
+  "python": "3.11.9",
+  "spacy": "3.7.5",
+  "spacy-transformers": "1.3.9",
+  "thinc": "8.2.5",
+  "torch": "2.14.1",
+  "transformers": "4.49.0",
+  "shapely": "2.2.0",
+  "repo_commit": "a5b8581"
+ }
+}

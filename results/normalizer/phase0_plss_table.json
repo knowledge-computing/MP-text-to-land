@@ -1,0 +1,147 @@
+{
+  "counties": {
+    "MN:anoka": {
+      "Rdir_counts": {
+        "W": 463
+      },
+      "S_outside_1_36_values_excluded": [],
+      "section_rows": 463,
+      "townships": 18,
+      "townships_T_ge_100": 0,
+      "townships_T_lt_100": 18,
+      "trs_with_more_than_one_polygon": 0,
+      "unique_trs_valid": 463
+    },
+    "MN:dakota": {
+      "Rdir_counts": {
+        "W": 639
+      },
+      "S_outside_1_36_values_excluded": [],
+      "section_rows": 649,
+      "townships": 27,
+      "townships_T_ge_100": 20,
+      "townships_T_lt_100": 7,
+      "trs_with_more_than_one_polygon": 10,
+      "unique_trs_valid": 639
+    },
+    "MN:olmsted": {
+      "Rdir_counts": {
+        "W": 660
+      },
+      "S_outside_1_36_values_excluded": [],
+      "section_rows": 660,
+      "townships": 20,
+      "townships_T_ge_100": 20,
+      "townships_T_lt_100": 0,
+      "trs_with_more_than_one_polygon": 0,
+      "unique_trs_valid": 660
+    },
+    "MN:sherburne": {
+      "Rdir_counts": {
+        "W": 481
+      },
+      "S_outside_1_36_values_excluded": [
+        37
+      ],
+      "section_rows": 482,
+      "townships": 20,
+      "townships_T_ge_100": 2,
+      "townships_T_lt_100": 18,
+      "trs_with_more_than_one_polygon": 0,
+      "unique_trs_valid": 481
+    },
+    "MN:washington": {
+      "Rdir_counts": {
+        "W": 453
+      },
+      "S_outside_1_36_values_excluded": [
+        37
+      ],
+      "section_rows": 454,
+      "townships": 20,
+      "townships_T_ge_100": 1,
+      "townships_T_lt_100": 19,
+      "trs_with_more_than_one_polygon": 0,
+      "unique_trs_valid": 453
+    },
+    "WI:milwaukee": {
+      "Rdir_counts": {
+        "E": 256
+      },
+      "S_outside_1_36_values_excluded": [],
+      "section_rows": 256,
+      "townships": 10,
+      "townships_T_ge_100": 0,
+      "townships_T_lt_100": 10,
+      "trs_with_more_than_one_polygon": 0,
+      "unique_trs_valid": 256
+    }
+  },
+  "inputs": {
+    "min_frac": 0.01,
+    "study_counties_found": [
+      "MN:anoka",
+      "MN:dakota",
+      "MN:olmsted",
+      "MN:sherburne",
+      "MN:washington",
+      "WI:milwaukee"
+    ]
+  },
+  "mn_primary_county_vs_COUN_code": {
+    "anoka|13": 3,
+    "anoka|2": 458,
+    "anoka|30": 2,
+    "dakota|19": 637,
+    "dakota|25": 7,
+    "dakota|27": 3,
+    "dakota|82": 1,
+    "olmsted|55": 660,
+    "sherburne|71": 479,
+    "sherburne|73": 1,
+    "sherburne|86": 2,
+    "washington|82": 452
+  },
+  "mn_rdir_code_counts_in_study": {
+    "0": 2705
+  },
+  "mn_rdir_map": {
+    "map": {
+      "0": "W"
+    },
+    "source": "given (--mn-rdir)"
+  },
+  "mn_trs_descri_names_county": {
+    "anoka": 458,
+    "dakota": 637,
+    "olmsted": 660,
+    "sherburne": 479,
+    "washington": 452
+  },
+  "states": {
+    "MN": {
+      "multi_county_pairs": {
+        "dakota;washington": 3
+      },
+      "rows_in_study_counties": 2705,
+      "sections_in_more_than_one_county": 3,
+      "sliver_overlaps_below_min_frac": 261,
+      "source_rows": 85268
+    },
+    "WI": {
+      "multi_county_pairs": {},
+      "rows_in_study_counties": 256,
+      "sections_in_more_than_one_county": 0,
+      "sliver_overlaps_below_min_frac": 32,
+      "source_rows": 57929
+    }
+  },
+  "valid_state_keys": {
+    "MN": 84414,
+    "WI": 57929
+  },
+  "wi_dir_alpha_counts_statewide": {
+    "E": 34731,
+    "W": 23198
+  }
+}
