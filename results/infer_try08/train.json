@@ -1,0 +1,58 @@
+{
+ "counts": {
+  "rows_in": 7308,
+  "rows_merged_into_existing_deed": 6371,
+  "deeds": 937,
+  "pages": 1653,
+  "pages_missing": 0,
+  "deeds_with_missing_page": 0,
+  "deeds_empty_text": 0,
+  "deeds_multi_part": 227,
+  "deeds_written": 937
+ },
+ "entities_per_label": {
+  "STATE": 1934,
+  "COUNTY": 2258,
+  "CITY": 354,
+  "SUBDIVISION": 1400,
+  "SECTION": 506,
+  "TOWNSHIP": 451,
+  "RANGE": 448
+ },
+ "deeds_with_label": {
+  "STATE": 871,
+  "COUNTY": 848,
+  "CITY": 240,
+  "SUBDIVISION": 832,
+  "SECTION": 406,
+  "TOWNSHIP": 399,
+  "RANGE": 397
+ },
+ "deeds_with_any_plss": 417,
+ "ner_seconds": 537.5,
+ "deeds_per_second": 1.74,
+ "split": "train",
+ "limit": null,
+ "batch_size": 16,
+ "gpu": false,
+ "model_load_seconds": 6.0,
+ "versions": {
+  "python": "3.11.9",
+  "spacy": "3.7.5",
+  "spacy-transformers": "1.3.9",
+  "thinc": "8.2.5",
+  "torch": "2.14.1",
+  "transformers": "4.49.0",
+  "shapely": "2.2.0",
+  "repo_commit": "9ae93f1"
+ },
+ "model_meta": {
+  "name": "pipeline",
+  "version": "0.0.0",
+  "spacy_version": ">=3.7.5,<3.8.0",
+  "pipeline": [
+   "transformer",
+   "ner"
+  ]
+ }
+}

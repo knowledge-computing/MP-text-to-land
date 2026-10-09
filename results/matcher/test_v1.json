@@ -1,0 +1,915 @@
+{
+ "matcher": {
+  "milwaukee": {
+   "counts": {
+    "b_all": 1369,
+    "a_with_pred": 1203,
+    "original_any_candidate": 1195,
+    "original_candidate_intersects": 1180,
+    "top1": 1195,
+    "plat_correct": 1100,
+    "contains": 1023,
+    "intersects": 1118,
+    "centroid_in": 1117
+   },
+   "plat_acc_a": 91.44,
+   "plat_acc_b": 80.35,
+   "original_pct_a": 99.33,
+   "original_intersects_pct_a": 98.09,
+   "contains_pct_a": 85.04,
+   "intersects_pct_a": 92.93,
+   "centroid_in_pct_a": 92.85,
+   "contains_pct_b": 74.73,
+   "intersects_pct_b": 81.67,
+   "centroid_in_pct_b": 81.59,
+   "covered": {
+    "n": 1195,
+    "mean": 0.9328,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 77,
+     "(0,.25)": 0,
+     "[.25,.5)": 1,
+     "[.5,.9)": 10,
+     "[.9,.99)": 1,
+     ">=.99": 1106
+    }
+   },
+   "iou": {
+    "n": 1195,
+    "mean": 0.0061,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0013,
+     0.0018,
+     0.0032,
+     0.0056,
+     0.0104,
+     0.6208
+    ],
+    "bins": {
+     "=0": 77,
+     "(0,.25)": 1116,
+     "[.25,.5)": 0,
+     "[.5,.9)": 2,
+     "[.9,.99)": 0,
+     ">=.99": 0
+    }
+   },
+   "centroid_m": {
+    "n": 1195,
+    "mean": 280.9964,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     19591.5732
+    ],
+    "bins": {
+     "0": 1117,
+     "<100m": 14,
+     "<500m": 22,
+     "<1km": 1,
+     "<5km": 10,
+     ">=5km": 31
+    }
+   }
+  },
+  "ALL": {
+   "counts": {
+    "b_all": 2435,
+    "a_with_pred": 2162,
+    "original_any_candidate": 2142,
+    "original_candidate_intersects": 2066,
+    "top1": 2142,
+    "plat_correct": 1832,
+    "contains": 1519,
+    "intersects": 1858,
+    "centroid_in": 1851
+   },
+   "plat_acc_a": 84.74,
+   "plat_acc_b": 75.24,
+   "original_pct_a": 99.07,
+   "original_intersects_pct_a": 95.56,
+   "contains_pct_a": 70.26,
+   "intersects_pct_a": 85.94,
+   "centroid_in_pct_a": 85.62,
+   "contains_pct_b": 62.38,
+   "intersects_pct_b": 76.3,
+   "centroid_in_pct_b": 76.02,
+   "covered": {
+    "n": 2142,
+    "mean": 0.8626,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 284,
+     "(0,.25)": 6,
+     "[.25,.5)": 1,
+     "[.5,.9)": 12,
+     "[.9,.99)": 4,
+     ">=.99": 1835
+    }
+   },
+   "iou": {
+    "n": 2142,
+    "mean": 0.0072,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0017,
+     0.0033,
+     0.0075,
+     0.0156,
+     0.6208
+    ],
+    "bins": {
+     "=0": 284,
+     "(0,.25)": 1856,
+     "[.25,.5)": 0,
+     "[.5,.9)": 2,
+     "[.9,.99)": 0,
+     ">=.99": 0
+    }
+   },
+   "centroid_m": {
+    "n": 2142,
+    "mean": 548.3268,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     107.9925,
+     44068.0399
+    ],
+    "bins": {
+     "0": 1851,
+     "<100m": 72,
+     "<500m": 68,
+     "<1km": 4,
+     "<5km": 68,
+     ">=5km": 79
+    }
+   }
+  },
+  "anoka": {
+   "counts": {
+    "b_all": 518,
+    "a_with_pred": 449,
+    "original_any_candidate": 447,
+    "original_candidate_intersects": 439,
+    "top1": 447,
+    "plat_correct": 425,
+    "contains": 334,
+    "intersects": 427,
+    "centroid_in": 427
+   },
+   "plat_acc_a": 94.65,
+   "plat_acc_b": 82.05,
+   "original_pct_a": 99.55,
+   "original_intersects_pct_a": 97.77,
+   "contains_pct_a": 74.39,
+   "intersects_pct_a": 95.1,
+   "centroid_in_pct_a": 95.1,
+   "contains_pct_b": 64.48,
+   "intersects_pct_b": 82.43,
+   "centroid_in_pct_b": 82.43,
+   "covered": {
+    "n": 447,
+    "mean": 0.9532,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.9946,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 20,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 2,
+     "[.9,.99)": 3,
+     ">=.99": 422
+    }
+   },
+   "iou": {
+    "n": 447,
+    "mean": 0.0089,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0012,
+     0.002,
+     0.0046,
+     0.0102,
+     0.0214,
+     0.1105
+    ],
+    "bins": {
+     "=0": 20,
+     "(0,.25)": 427,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 0
+    }
+   },
+   "centroid_m": {
+    "n": 447,
+    "mean": 354.2035,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     22027.8147
+    ],
+    "bins": {
+     "0": 427,
+     "<100m": 3,
+     "<500m": 3,
+     "<1km": 0,
+     "<5km": 0,
+     ">=5km": 14
+    }
+   }
+  },
+  "olmsted": {
+   "counts": {
+    "b_all": 347,
+    "a_with_pred": 312,
+    "original_any_candidate": 302,
+    "original_candidate_intersects": 257,
+    "top1": 302,
+    "plat_correct": 204,
+    "contains": 110,
+    "intersects": 210,
+    "centroid_in": 204
+   },
+   "plat_acc_a": 65.38,
+   "plat_acc_b": 58.79,
+   "original_pct_a": 96.79,
+   "original_intersects_pct_a": 82.37,
+   "contains_pct_a": 35.26,
+   "intersects_pct_a": 67.31,
+   "centroid_in_pct_a": 65.38,
+   "contains_pct_b": 31.7,
+   "intersects_pct_b": 60.52,
+   "centroid_in_pct_b": 58.79,
+   "covered": {
+    "n": 302,
+    "mean": 0.6755,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 92,
+     "(0,.25)": 6,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 204
+    }
+   },
+   "iou": {
+    "n": 302,
+    "mean": 0.0085,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0075,
+     0.0121,
+     0.0197,
+     0.0852
+    ],
+    "bins": {
+     "=0": 92,
+     "(0,.25)": 210,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 0
+    }
+   },
+   "centroid_m": {
+    "n": 302,
+    "mean": 530.1593,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     29.1925,
+     127.7219,
+     28589.4591
+    ],
+    "bins": {
+     "0": 204,
+     "<100m": 53,
+     "<500m": 36,
+     "<1km": 1,
+     "<5km": 0,
+     ">=5km": 8
+    }
+   }
+  },
+  "sherburne": {
+   "counts": {
+    "b_all": 137,
+    "a_with_pred": 135,
+    "original_any_candidate": 135,
+    "original_candidate_intersects": 133,
+    "top1": 135,
+    "plat_correct": 61,
+    "contains": 48,
+    "intersects": 61,
+    "centroid_in": 61
+   },
+   "plat_acc_a": 45.19,
+   "plat_acc_b": 44.53,
+   "original_pct_a": 100.0,
+   "original_intersects_pct_a": 98.52,
+   "contains_pct_a": 35.56,
+   "intersects_pct_a": 45.19,
+   "centroid_in_pct_a": 45.19,
+   "contains_pct_b": 35.04,
+   "intersects_pct_b": 44.53,
+   "centroid_in_pct_b": 44.53,
+   "covered": {
+    "n": 135,
+    "mean": 0.4518,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 74,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 61
+    }
+   },
+   "iou": {
+    "n": 135,
+    "mean": 0.0045,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     0.0057,
+     0.0113,
+     0.0735
+    ],
+    "bins": {
+     "=0": 74,
+     "(0,.25)": 61,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 0
+    }
+   },
+   "centroid_m": {
+    "n": 135,
+    "mean": 2605.491,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     471.6828,
+     1380.5505,
+     5686.3064,
+     44068.0399
+    ],
+    "bins": {
+     "0": 61,
+     "<100m": 0,
+     "<500m": 7,
+     "<1km": 2,
+     "<5km": 50,
+     ">=5km": 15
+    }
+   }
+  },
+  "dakota": {
+   "counts": {
+    "b_all": 64,
+    "a_with_pred": 63,
+    "original_any_candidate": 63,
+    "original_candidate_intersects": 57,
+    "top1": 63,
+    "plat_correct": 42,
+    "contains": 4,
+    "intersects": 42,
+    "centroid_in": 42
+   },
+   "plat_acc_a": 66.67,
+   "plat_acc_b": 65.62,
+   "original_pct_a": 100.0,
+   "original_intersects_pct_a": 90.48,
+   "contains_pct_a": 6.35,
+   "intersects_pct_a": 66.67,
+   "centroid_in_pct_a": 66.67,
+   "contains_pct_b": 6.25,
+   "intersects_pct_b": 65.62,
+   "centroid_in_pct_b": 65.62,
+   "covered": {
+    "n": 63,
+    "mean": 0.6667,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 21,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 42
+    }
+   },
+   "iou": {
+    "n": 63,
+    "mean": 0.0157,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0076,
+     0.0222,
+     0.051,
+     0.0925
+    ],
+    "bins": {
+     "=0": 21,
+     "(0,.25)": 42,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 0
+    }
+   },
+   "centroid_m": {
+    "n": 63,
+    "mean": 2675.3478,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     0.0,
+     0.0,
+     0.0,
+     2079.0258,
+     7165.7657,
+     31749.7962
+    ],
+    "bins": {
+     "0": 42,
+     "<100m": 2,
+     "<500m": 0,
+     "<1km": 0,
+     "<5km": 8,
+     ">=5km": 11
+    }
+   }
+  }
+ },
+ "config": "ratio|n3|county|primary",
+ "split": "test",
+ "deeds": 2436,
+ "weak_labels": {
+  "anoka": {
+   "deeds": 519,
+   "status": {
+    "eligible": 518,
+    "multi_part": 1
+   },
+   "with_weak_label": 518,
+   "overlap_>=2_plats": 61,
+   "max_frac": {
+    "n": 518,
+    "mean": 0.997,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.6352,
+     0.9963,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 0,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 4,
+     "[.9,.99)": 6,
+     ">=.99": 508
+    }
+   },
+   "cover_frac": {
+    "n": 518,
+    "mean": 0.9997,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.986,
+     0.9994,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 0,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 2,
+     ">=.99": 516
+    }
+   }
+  },
+  "dakota": {
+   "deeds": 64,
+   "status": {
+    "eligible": 64
+   },
+   "with_weak_label": 64,
+   "overlap_>=2_plats": 15,
+   "max_frac": {
+    "n": 64,
+    "mean": 1.0,
+    "min,p10,p25,p50,p75,p90,max": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 0,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 64
+    }
+   },
+   "cover_frac": {
+    "n": 64,
+    "mean": 1.0,
+    "min,p10,p25,p50,p75,p90,max": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 0,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 64
+    }
+   }
+  },
+  "milwaukee": {
+   "deeds": 1369,
+   "status": {
+    "eligible": 1369
+   },
+   "with_weak_label": 1369,
+   "overlap_>=2_plats": 129,
+   "max_frac": {
+    "n": 1369,
+    "mean": 0.9974,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.5332,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 0,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 14,
+     "[.9,.99)": 2,
+     ">=.99": 1353
+    }
+   },
+   "cover_frac": {
+    "n": 1369,
+    "mean": 0.9985,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.5379,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 0,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 9,
+     "[.9,.99)": 0,
+     ">=.99": 1360
+    }
+   }
+  },
+  "olmsted": {
+   "deeds": 347,
+   "status": {
+    "eligible": 347
+   },
+   "with_weak_label": 331,
+   "overlap_>=2_plats": 38,
+   "max_frac": {
+    "n": 347,
+    "mean": 0.9538,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 16,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 2,
+     ">=.99": 329
+    }
+   },
+   "cover_frac": {
+    "n": 347,
+    "mean": 0.9538,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 16,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 2,
+     ">=.99": 329
+    }
+   }
+  },
+  "sherburne": {
+   "deeds": 137,
+   "status": {
+    "eligible": 137
+   },
+   "with_weak_label": 137,
+   "overlap_>=2_plats": 20,
+   "max_frac": {
+    "n": 137,
+    "mean": 1.0,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.9995,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 0,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 137
+    }
+   },
+   "cover_frac": {
+    "n": 137,
+    "mean": 1.0,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.9995,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 0,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 0,
+     "[.9,.99)": 0,
+     ">=.99": 137
+    }
+   }
+  },
+  "ALL": {
+   "deeds": 2436,
+   "status": {
+    "eligible": 2435,
+    "multi_part": 1
+   },
+   "with_weak_label": 2419,
+   "overlap_>=2_plats": 263,
+   "max_frac": {
+    "n": 2435,
+    "mean": 0.9913,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 16,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 18,
+     "[.9,.99)": 10,
+     ">=.99": 2391
+    }
+   },
+   "cover_frac": {
+    "n": 2435,
+    "mean": 0.9925,
+    "min,p10,p25,p50,p75,p90,max": [
+     0.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "bins": {
+     "=0": 16,
+     "(0,.25)": 0,
+     "[.25,.5)": 0,
+     "[.5,.9)": 9,
+     "[.9,.99)": 4,
+     ">=.99": 2406
+    }
+   }
+  }
+ },
+ "paper_original": {
+  "anoka": {
+   "counts": {
+    "all_with_pred": 449,
+    "all_hit": 105,
+    "all_hit_intersects": 105,
+    "a_with_pred": 449,
+    "a_hit": 105,
+    "a_hit_intersects": 105
+   },
+   "pct_all": 23.39,
+   "pct_all_intersects": 23.39,
+   "pct_a": 23.39,
+   "pct_a_intersects": 23.39
+  },
+  "ALL": {
+   "counts": {
+    "all_with_pred": 2162,
+    "all_hit": 350,
+    "all_hit_intersects": 339,
+    "a_with_pred": 2162,
+    "a_hit": 350,
+    "a_hit_intersects": 339
+   },
+   "pct_all": 16.19,
+   "pct_all_intersects": 15.68,
+   "pct_a": 16.19,
+   "pct_a_intersects": 15.68
+  },
+  "milwaukee": {
+   "counts": {
+    "all_with_pred": 1203,
+    "all_hit": 236,
+    "all_hit_intersects": 230,
+    "a_with_pred": 1203,
+    "a_hit": 236,
+    "a_hit_intersects": 230
+   },
+   "pct_all": 19.62,
+   "pct_all_intersects": 19.12,
+   "pct_a": 19.62,
+   "pct_a_intersects": 19.12
+  },
+  "olmsted": {
+   "counts": {
+    "all_with_pred": 312,
+    "all_hit": 4,
+    "all_hit_intersects": 3,
+    "a_with_pred": 312,
+    "a_hit": 4,
+    "a_hit_intersects": 3
+   },
+   "pct_all": 1.28,
+   "pct_all_intersects": 0.96,
+   "pct_a": 1.28,
+   "pct_a_intersects": 0.96
+  },
+  "sherburne": {
+   "counts": {
+    "all_with_pred": 135,
+    "all_hit": 0,
+    "all_hit_intersects": 0,
+    "a_with_pred": 135,
+    "a_hit": 0,
+    "a_hit_intersects": 0
+   },
+   "pct_all": 0.0,
+   "pct_all_intersects": 0.0,
+   "pct_a": 0.0,
+   "pct_a_intersects": 0.0
+  },
+  "dakota": {
+   "counts": {
+    "all_with_pred": 63,
+    "all_hit": 5,
+    "all_hit_intersects": 1,
+    "a_with_pred": 63,
+    "a_hit": 5,
+    "a_hit_intersects": 1
+   },
+   "pct_all": 7.94,
+   "pct_all_intersects": 1.59,
+   "pct_a": 7.94,
+   "pct_a_intersects": 1.59
+  }
+ },
+ "errors": {},
+ "seconds": 12.0
+}
