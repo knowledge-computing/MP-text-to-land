@@ -31,8 +31,8 @@ def county_of(file_path, root_path):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Test geo sentence identifier saving results as jsonl")
-    parser.add_argument('--root_path', type=str, default="./<OCR_ROOT>/ocr/txt",
-                        help='load text files of ocr results from this path')
+    parser.add_argument('--root_path', type=str, default=os.environ.get("OCRTXT_PATH"),
+                        help='folder of OCR text files (contains the county folders); default: $OCRTXT_PATH')
     
     parser.add_argument('--keyword_threshold', type=int, default=90,
                         help='Threshold for keyword fuzzy match')
@@ -46,7 +46,10 @@ def parse_args():
     parser.add_argument('--output_path', type=str, default="./output/all_sentences_w_raw_txt_and_image_ids.jsonl",
                         help='save filtered sentences to this path as jsonl file')
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    if not args.root_path:
+        parser.error("no OCR text folder: pass --root_path or set OCRTXT_PATH (see .env.example)")
+    return args
 
 
 def main():

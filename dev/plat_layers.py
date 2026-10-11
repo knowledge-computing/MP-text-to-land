@@ -1,37 +1,42 @@
 """
-Load the five county plat layers (<PARTNER>'s shared shapefiles) for the subdivision matcher.
+Load the county plat layers (partner plat layers) for the subdivision matcher.
+
+Layer locations, name fields and alias fields come from the local JSON named by MP_PLAT_CONFIG; the PLSS
+layer is the paper's merged_plss_5070.geojson under MP_RUN_DIR (dev/private_paths.py). Nothing about the
+private folder layout is written here.
 
 Returns plat records for src.matcher.PlatIndex: {county, name, aliases, geometry (EPSG:26915), sections}
-where sections = set of (S, T, R) PLSS sections the plat overlaps by > 1 m^2 (merged_plss_5070, the paper's
-PLSS layer). Also returns the (name, alias) pairs used to learn step-3 rules (Olmsted PLATNAME/LABEL,
-Sherburne LEGAL_NAME/ALIAS). Prints nothing.
+where sections = set of (S, T, R) PLSS sections the plat overlaps by > 1 m^2. Also returns the (name, alias)
+pairs used to learn step-3 rules (the config's rule_pairs). Prints nothing.
 """
+import sys
 from collections import defaultdict
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-MP = REPO_ROOT.parent / "<DATA_ROOT>"
-PLAT_ROOT = MP / "<PLAT_LAYER_DIR>"
-PLSS = MP / "<RUN_DIR>" / "output" / "try08" / "merged_plss_5070.geojson"
+sys.path.insert(0, str(REPO_ROOT / "dev"))
+import private_paths as pp  # noqa: E402
+
 CRS = "EPSG:26915"
-# county key (lower case) -> (shapefile, primary name field, alias fields)
-LAYERS = {
-    "anoka": ("<PLAT_LAYER>/<PLAT_LAYER>.shp", "PLAT", ["SEARCH_NAM", "EXTRACT_NA"]),
-    "dakota": ("<PLAT_LAYER>/<PLAT_LAYER>.shp", "PLATNAME", []),
-    "milwaukee": ("<PLAT_LAYER>/Subdivision.shp", "Name", []),
-    "olmsted": ("<PLAT_LAYER>/<PLAT_LAYER>.shp", "PLATNAME", ["LABEL"]),
-    "sherburne": ("<PLAT_LAYER> 2/Plats.shp", "LEGAL_NAME", ["ALIAS"]),
-}
-RULE_PAIRS = {"olmsted": ("PLATNAME", "LABEL"), "sherburne": ("LEGAL_NAME", "ALIAS")}
+PLSS = pp.run_dir("output", "try08", "merged_plss_5070.geojson")
 
 
-def load_plats(root=PLAT_ROOT, plss_path=PLSS, crs=CRS):
+def layer_config(cfg=None):
+    """-> (root Path, {county: (relative shapefile, name field, alias fields)}, {county: (name, alias)})."""
+    cfg = cfg or pp.plat_config()
+    layers = {c.lower(): (v["path"], v["name_field"], list(v.get("alias_fields") or [])) for c, v in cfg["layers"].items()}
+    pairs = {c.lower(): tuple(v) for c, v in cfg["rule_pairs"].items()}
+    return Path(cfg["root"]), layers, pairs
+
+
+def load_plats(cfg=None, plss_path=PLSS, crs=CRS):
     import geopandas as gpd
+    root, layers, rule_pairs = layer_config(cfg)
     plats, pairs = [], []
-    for county, (rel, name_f, alias_f) in LAYERS.items():
-        g = gpd.read_file(Path(root) / rel)
-        if county in RULE_PAIRS:
-            a, b = RULE_PAIRS[county]
+    for county, (rel, name_f, alias_f) in layers.items():
+        g = gpd.read_file(root / rel)
+        if county in rule_pairs:
+            a, b = rule_pairs[county]
             pairs += list(zip(g[a], g[b]))
         g = g.to_crs(crs)
         g["geometry"] = g.geometry.make_valid()

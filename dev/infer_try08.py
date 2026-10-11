@@ -1,18 +1,19 @@
 """
 Run the try08 spaCy NER model (the paper's model) on the train or val split, one prediction per deed.
 
-Re-implements the inference of <DATA_ROOT>/<RUN_DIR>/load_test_v2.py (which stays unchanged)
+Re-implements the inference of the 2025 run folder's load_test_v2.py ($MP_RUN_DIR; it stays unchanged)
 with four differences:
   * one document per deed: split rows are grouped by (county, set of image_ids); a split file holds one
     row per parcel geometry, so val has 2,436 rows but 491 deeds;
-  * OCR paths in `saved_path` (MSI absolute paths) are remapped to the local <OCR_ROOT> folder;
+  * OCR paths in `saved_path` (MSI absolute paths) are remapped onto the local OCR root ($MP_OCR_ROOT): the
+    part after the root's folder name is kept;
   * entity character offsets are kept (`ner_spans`), so PLSS components can be paired by position;
   * nothing from the data is printed (load_test_v2 printed OCR text and predictions).
 
 The test split is frozen (CLAUDE.md, "Test-set freeze"): --split only accepts train/val, and any input
 file whose name contains "test" is refused.
 
-Output (a data file; write it under <DATA_ROOT>/, never into this repo): GeoJSON FeatureCollection,
+Output (a data file; write it under $MP_DATA_ROOT, never into this repo): GeoJSON FeatureCollection,
 one feature per deed, geometry = union of the deed's row geometries, properties = the kept metadata
 columns + n_rows, n_parts, n_pages, n_pages_missing, chars, SECTION_p ... CITY_p (lists of strings, the
 same merge rule as load_test_v2.extract_kv) and ner_spans ([label, text, start, end] after merging).
@@ -21,13 +22,14 @@ Privacy: prints and writes to --summary only COUNTS, timing and library versions
 report the exception type and a numeric deed index only.
 
     HF_HOME=~/MapPrejudice/hf_cache ~/MapPrejudice/venvs/thesis-spacy/bin/python dev/infer_try08.py \
-        --split val --out ~/MapPrejudice/<DATA_ROOT>/<RUN_DIR>/output/thesis/try08_val_predicted.geojson \
+        --split val --out "$MP_DATA_ROOT/<run dir>/output/thesis/try08_val_predicted.geojson" \
         --summary results/infer_try08/val.json [--limit 20]
 """
 
 import argparse
 import ast
 import json
+import os
 import platform
 import re
 import subprocess
@@ -38,12 +40,12 @@ from importlib import metadata
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-MP = REPO_ROOT.parent / "<DATA_ROOT>"
-JULY = MP / "<RUN_DIR>"
-SPLITS = {"train": JULY / "train" / "train6_2_2.geojson", "val": JULY / "val" / "val6_2_2.geojson"}
-DEFAULT_MODEL = JULY / "output" / "try08" / "NER_models_msigpu" / "model-best"
-DEFAULT_OCR_ROOT = MP / "<OCR_ROOT>"
-OCR_MARKER = "<OCR_ROOT>/"
+sys.path.insert(0, str(REPO_ROOT / "dev"))
+import private_paths as pp  # noqa: E402  (private locations come from environment variables)
+
+SPLITS = {"train": pp.run_dir("train", "train6_2_2.geojson"), "val": pp.run_dir("val", "val6_2_2.geojson")}
+DEFAULT_MODEL = pp.run_dir("output", "try08", "NER_models_msigpu", "model-best")
+DEFAULT_OCR_ROOT = pp.ocr_root()
 LABELS = ("STATE", "COUNTY", "CITY", "SUBDIVISION", "SECTION", "TOWNSHIP", "RANGE")
 KEEP = ("image_ids", "cnty_name", "city", "state", "add_cov", "add_mod", "lot_cov", "block_cov")
 PACKAGES = ("spacy", "spacy-transformers", "thinc", "torch", "transformers", "shapely")
@@ -69,11 +71,12 @@ def deed_key(props):
 
 
 def remap_path(path, ocr_root):
-    """MSI absolute OCR path -> local path under ocr_root (None if the path has no <OCR_ROOT>/)."""
-    s = str(path)
-    if OCR_MARKER not in s:
+    """MSI absolute OCR path -> local path under ocr_root: the part after "<ocr_root folder name>/" is kept
+    (None if the path does not contain that folder name)."""
+    s, marker = str(path), Path(ocr_root).name + "/"
+    if marker not in s:
         return None
-    return Path(ocr_root) / s.split(OCR_MARKER, 1)[1]
+    return Path(ocr_root) / s.split(marker, 1)[1]
 
 
 def read_and_concat(paths):
@@ -164,6 +167,7 @@ def refuse_test(path):
 # ---------------------------------------------------------------- main
 def run(geojson, out, ocr_root, nlp, limit=None, batch_size=16):
     refuse_test(geojson)
+    ocr_root = os.fspath(ocr_root)
     stats = Counter()
     with open(geojson, encoding="utf-8") as f:
         fc = json.load(f)
@@ -230,8 +234,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
     ap.add_argument("--split", choices=sorted(SPLITS), help="train or val (test is frozen)")
     ap.add_argument("--geojson", help="override the split file (toy runs); names containing 'test' are refused")
-    ap.add_argument("--model", default=str(DEFAULT_MODEL))
-    ap.add_argument("--ocr-root", default=str(DEFAULT_OCR_ROOT))
+    ap.add_argument("--model", default=DEFAULT_MODEL, help="default: $MP_RUN_DIR/output/try08/NER_models_msigpu/model-best")
+    ap.add_argument("--ocr-root", default=DEFAULT_OCR_ROOT, help="default: $MP_OCR_ROOT")
     ap.add_argument("--out", required=True, help="output GeoJSON (data: keep it outside the repo)")
     ap.add_argument("--summary", help="aggregate JSON (counts, timing, versions)")
     ap.add_argument("--limit", type=int, help="first N deeds only (smoke test)")
@@ -248,7 +252,7 @@ def main(argv=None):
     import spacy
     gpu = spacy.prefer_gpu() if args.prefer_gpu else False
     t0 = time.time()
-    nlp = spacy.load(args.model)
+    nlp = spacy.load(os.fspath(args.model))
     load_s = time.time() - t0
     result = run(geojson, args.out, args.ocr_root, nlp, args.limit, args.batch_size)
     meta_path = Path(args.model) / "meta.json"

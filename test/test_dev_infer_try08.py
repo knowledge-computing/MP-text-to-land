@@ -26,7 +26,7 @@ except ImportError:  # pragma: no cover
     spacy = None
 
 SECRET = "Toysecretword"
-MSI = "/home/someone/MapPrejudice/<DATA_ROOT>/<OCR_ROOT>/"
+MSI = "/msi/home/someone/data/toy-ocr/"  # synthetic remote root; local root folder is also "toy-ocr"
 
 
 def square(x0, y0, size=1.0):
@@ -52,7 +52,7 @@ class InferTry08Test(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         root = self.tmp.name
-        self.ocr = os.path.join(root, "ocr_root")
+        self.ocr = os.path.join(root, "toy-ocr")
         os.makedirs(os.path.join(self.ocr, "ocr", "anoka"))
         pages = {"ocr/anoka/p1.txt": f"Lot 3 of  Maple Addition,\n{SECRET} Anoka County",
                  "ocr/anoka/p2.txt": "in Section twelve, Township thirty",
@@ -84,8 +84,8 @@ class InferTry08Test(unittest.TestCase):
 
     # ---- helpers
     def test_remap_and_parse(self):
-        self.assertEqual(script.remap_path(MSI + "ocr/x/y.txt", "/loc"), script.Path("/loc/ocr/x/y.txt"))
-        self.assertIsNone(script.remap_path("/elsewhere/y.txt", "/loc"))
+        self.assertEqual(script.remap_path(MSI + "ocr/x/y.txt", "/loc/toy-ocr"), script.Path("/loc/toy-ocr/ocr/x/y.txt"))
+        self.assertIsNone(script.remap_path("/elsewhere/y.txt", "/loc/toy-ocr"))
         self.assertEqual(script.parse_list("('a', 'b')"), ["a", "b"])
         self.assertEqual(script.parse_list(None), [])
         self.assertEqual(script.parse_list("not a list ("), ["not a list ("])

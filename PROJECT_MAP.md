@@ -60,7 +60,7 @@ MP-text-to-land/
 ```
 
 Git-ignored but referenced in code: `/output/`, `/data/raw/`, `/data/processed/`,
-`/data/<NER_LABEL_DIR>/`, `/data/subdivision_sample/`.
+`/data/subdivision_sample/`, plus local-only data folders listed in `.git/info/exclude`.
 
 ---
 
@@ -69,7 +69,7 @@ Git-ignored but referenced in code: `/output/`, `/data/raw/`, `/data/processed/`
 ### 3.1 OCR `*.txt` files
 
 - One text file per scanned page image, laid out the same way as the S3 bucket
-  `<OCR_ROOT>/ocr/txt/<county-folder>/<...>/<image_id>.txt`.
+  `<ocr-root>/ocr/txt/<county-folder>/<...>/<image_id>.txt`.
 - Two ways to find them:
   - **By directory walk** (Tools 1 and 3): `--root_path` is walked recursively with
     `rglob("*.txt")` or `os.walk`.
@@ -158,7 +158,7 @@ Details per script:
   (no page grouping). It calls `filter_relevant_sentences` with an empty entity dict and
   keeps a sentence when the number of keyword matches is `> --item_threshold`. The output
   loses track of which file each sentence came from. The default `--root_path` is the
-  placeholder `/.../<OCR_ROOT>/ocr/txt/`.
+  placeholder (now: `$OCRTXT_PATH`, error if unset).
 - **Tool 2 (`run_sentence_identifier_w_geojson`)**: `load_geojson_to_gdf(--counties,
   --columns_to_keep)` loads the rows. For each row it reads every path in `saved_path`,
   builds `entity_dict = {col: row[col]}` from `--entity_columns`, and keeps a sentence when
@@ -456,7 +456,7 @@ with the bundled models runs only when `MP_RUN_MODEL_TESTS=1` is set):
 
 The other `test/*.py` files are manual `main()`
 scripts that print output and contain no assertions. They need the real GeoJSON and OCR
-data, and one of them writes to `<MSI_HOME>/<USER>/...`. They contain no test cases,
+data, and one of them writes to a remote (MSI) home directory (now: the git-ignored `output/`). They contain no test cases,
 and importing them triggers `load_config()`.
 
 Before changing code, set up a **golden baseline** plus some small unit tests.

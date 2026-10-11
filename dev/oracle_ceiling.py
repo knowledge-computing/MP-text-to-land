@@ -76,7 +76,7 @@ def deed_counts(spans, g):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
-    ap.add_argument("--raw", default=str(rt3.DEFAULTS["raw"]), help="raw NER GeoJSON (testdata_all_predicted)")
+    ap.add_argument("--raw", default=rt3.DEFAULTS["raw"], help="raw NER GeoJSON (testdata_all_predicted)")
     ap.add_argument("--gold", default=str(DEFAULTS["gold"]))
     ap.add_argument("--summary", default=str(DEFAULTS["summary"]))
     args = ap.parse_args(argv)

@@ -80,7 +80,7 @@ def main():
                         gdf = gdf[columns_to_keep]
                         print(gdf.head(3).to_dict(orient='list'))
 
-                        save_commands_as_txt(gdf.head(2), f"<MSI_HOME>/<USER>/MapPrejudice/output/test_{folder}_commands.txt")
+                        save_commands_as_txt(gdf.head(2), f"output/test_{folder}_commands.txt")  # output/ is git-ignored
 
                         print("Successfully loaded: {}".format(geojson_file))
 

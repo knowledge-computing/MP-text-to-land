@@ -29,7 +29,10 @@ from itertools import combinations
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-JULY = REPO_ROOT.parent / "<DATA_ROOT>" / "<RUN_DIR>"
+sys.path.insert(0, str(REPO_ROOT / "dev"))
+import private_paths as pp  # noqa: E402
+
+JULY = pp.run_dir()  # MP_RUN_DIR, resolved only when the default splits are used
 DEFAULT_SPLITS = {
     "train": JULY / "train" / "train6_2_2.geojson",
     "val": JULY / "val" / "val6_2_2.geojson",

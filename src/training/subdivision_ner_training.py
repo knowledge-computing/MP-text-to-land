@@ -118,15 +118,18 @@ def fine_tune_ner(nlp, train_examples, val_examples, n_iter=20):
 def save_model(nlp, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
-    nlp.to_disk("{output_dir}/model-last")
+    nlp.to_disk(f"{output_dir}/model-last")
     print(f"Model saved to {output_dir}")
 
 # Main function
 if __name__ == "__main__":
     model_name = "en_core_web_md"
-    train_file = "/root/path/.../data/<NER_LABEL_DIR>/train_split_label_subd_with_geojsonaddcov_modified.jsonl"
-    dev_file = "/root/path/.../data/<NER_LABEL_DIR>/dev_split_label_subd_with_geojsonaddcov_modified.jsonl"
-    output_dir = "/root/path/.../models/model_output_md_geojsonaddcov"
+    # Private training data locations come from the environment (see .env.example); no built-in paths.
+    paths = {k: os.environ.get(k) for k in ("MP_NER_TRAIN_FILE", "MP_NER_DEV_FILE", "MP_NER_OUTPUT_DIR")}
+    missing = [k for k, v in paths.items() if not v]
+    if missing:
+        raise SystemExit(f"set {', '.join(missing)} (see .env.example)")
+    train_file, dev_file, output_dir = paths["MP_NER_TRAIN_FILE"], paths["MP_NER_DEV_FILE"], paths["MP_NER_OUTPUT_DIR"]
 
     # load pretrained model
     print(f"Loading pretrained model: {model_name} =========")

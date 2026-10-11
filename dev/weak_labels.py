@@ -33,8 +33,8 @@ def load_deeds(path, crs=pl.CRS):
              "n_parts": int(r.get("n_parts") or 0)} for r, geom in zip(rows, g.geometry)]
 
 
-def eligibility(d):
-    if d["county"] not in pl.LAYERS:
+def eligibility(d, counties):
+    if d["county"] not in counties:
         return "no_plat_layer"
     if d["geometry"] is None or d["geometry"].is_empty or d["geometry"].area <= 0:
         return "no_geometry"
@@ -45,9 +45,10 @@ def eligibility(d):
 
 def weak_labels(deeds, plats, errors=None):
     tree, errors = pl.plat_sindex(plats), errors if errors is not None else Counter()
+    counties = {p["county"] for p in plats}
     out = []
     for i, d in enumerate(deeds):
-        rec = {"status": eligibility(d), "plat": None, "max_frac": 0.0, "cover_frac": 0.0, "n_overlap": 0}
+        rec = {"status": eligibility(d, counties), "plat": None, "max_frac": 0.0, "cover_frac": 0.0, "n_overlap": 0}
         try:
             if rec["status"] == "eligible":
                 g = d["geometry"]

@@ -34,7 +34,7 @@ from weak_labels import summarize, weak_labels  # noqa: E402
 from src.matcher import MatchConfig, PlatIndex  # noqa: E402
 from src.matcher import frozen  # noqa: E402
 
-TEST_PRED = pl.MP / "<RUN_DIR>" / "output" / "try08" / "prediction" / "testdata_all_predicted.geojson"
+TEST_PRED = pl.pp.run_dir("output", "try08", "prediction", "testdata_all_predicted.geojson")
 SUMMARY = REPO_ROOT / "results" / "matcher" / "test_v1.json"
 PAPER_CFG = MatchConfig(scorer="ratio", norm="raw", own_county=False, cutoff=70.0)
 
@@ -87,7 +87,7 @@ def run(deeds, plats, index, errors):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
-    ap.add_argument("--pred", default=str(TEST_PRED))
+    ap.add_argument("--pred", default=TEST_PRED)
     ap.add_argument("--summary", default=str(SUMMARY))
     args = ap.parse_args(argv)
     if Path(args.summary).exists():

@@ -15,8 +15,8 @@ geojson_path, folder_names, ocrtxt_path, _ = load_config()
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Test geo sentence identifier")
-    parser.add_argument('--root_path', type=str, default="/.../<OCR_ROOT>/ocr/txt/",
-                        help='load text files of ocr results from this path')
+    parser.add_argument('--root_path', type=str, default=ocrtxt_path,
+                        help='folder of OCR text files; default: OCRTXT_PATH from .env')
     
     parser.add_argument('--keyword_threshold', type=int, default=90,
                         help='Threshold for keyword fuzzy match')
@@ -30,7 +30,10 @@ def parse_args():
     parser.add_argument('--output_path', type=str, default="./output/filtered_sentences_w_raw_txt.txt",
                         help='save filtered sentences to this path as txt file')
 
-    return parser.parse_args()
+    args = parser.parse_args()
+    if not args.root_path:
+        parser.error("no OCR text folder: pass --root_path or set OCRTXT_PATH in .env (see .env.example)")
+    return args
 
 
 def main():

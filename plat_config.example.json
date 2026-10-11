@@ -1,0 +1,15 @@
+{
+  "_comment": "Copy to a local file outside git and point MP_PLAT_CONFIG at it. Placeholders only.",
+  "root": "<plat-layer folder, absolute or relative to MP_DATA_ROOT>",
+  "layers": {
+    "anoka": {"path": "<relative/path/to/layer.shp>", "name_field": "<PLAT_NAME_FIELD>", "alias_fields": ["<ALIAS_FIELD>"]},
+    "dakota": {"path": "<relative/path/to/layer.shp>", "name_field": "<PLAT_NAME_FIELD>", "alias_fields": []},
+    "milwaukee": {"path": "<relative/path/to/layer.shp>", "name_field": "<PLAT_NAME_FIELD>", "alias_fields": []},
+    "olmsted": {"path": "<relative/path/to/layer.shp>", "name_field": "<PLAT_NAME_FIELD>", "alias_fields": ["<ALIAS_FIELD>"]},
+    "sherburne": {"path": "<relative/path/to/layer.shp>", "name_field": "<PLAT_NAME_FIELD>", "alias_fields": ["<ALIAS_FIELD>"]}
+  },
+  "rule_pairs": {
+    "olmsted": ["<PLAT_NAME_FIELD>", "<ALIAS_FIELD>"],
+    "sherburne": ["<PLAT_NAME_FIELD>", "<ALIAS_FIELD>"]
+  }
+}

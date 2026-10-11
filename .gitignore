@@ -13,7 +13,6 @@ __pycache__/
 # Data and outputs (not part of the repository)
 /data/raw/
 /data/processed/
-/data/<NER_LABEL_DIR>/
 /data/subdivision_sample/
 /output/
 /private/code/
@@ -22,14 +21,7 @@ __pycache__/
 /.DS_Store
 /.vscode/
 
-# Real/private Mapping Prejudice data - never commit
-<DATA_ROOT>/
-<OCR_ROOT>/
-<ZOONIVERSE_DIR>/
-<SPLIT_DIR>/
-<PLAT_LAYER_DIR>/
-<RUN_DIR>/
-<NER_LABEL_DIR>/
+# Data files - never commit (folder-specific rules for the private data live in .git/info/exclude)
 *.geojson
 *.shp
 *.shx
@@ -46,3 +38,10 @@ __pycache__/
 
 # Local agent instructions (internal notes; keep out of the public repo)
 CLAUDE.md
+
+# Trained models are not hosted in this repository (see README, Models)
+src/models/
+
+# Local, machine-specific configuration (private paths, plat layer config)
+configs/local/
+plat_config.json

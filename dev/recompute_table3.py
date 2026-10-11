@@ -2,7 +2,7 @@
 Aggregate-only recomputation of the GeoHCC '25 georeferencing tables from saved predictions.
 
 Reproduces, from a saved test-prediction GeoJSON:
-  * Table 3 (PLSS): the original cascade in <DATA_ROOT>/<RUN_DIR>/
+  * Table 3 (PLSS): the original cascade in the 2025 run folder's ($MP_RUN_DIR)
     load_plss_construct_triple.py (1x1 = section polygon .contains(deed); retry without
     Range direction only for deeds whose DIR is empty; 6x6 fallback only for those), plus
     corrected variants: every deed gets both a 1x1 and a 6x6 test, with the 6x6 test against
@@ -36,7 +36,10 @@ from itertools import zip_longest
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-TRY08 = REPO_ROOT.parent / "<DATA_ROOT>" / "<RUN_DIR>" / "output" / "try08"
+sys.path.insert(0, str(REPO_ROOT / "dev"))
+import private_paths as pp  # noqa: E402
+
+TRY08 = pp.run_dir("output", "try08")  # resolved only when a default is used
 DEFAULTS = {
     "pred": TRY08 / "prediction" / "all_output.geojson",
     "raw": TRY08 / "prediction" / "testdata_all_predicted.geojson",
@@ -245,11 +248,11 @@ def read(path):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
     ap.add_argument("--triples", choices=["saved", "batches", "regex"], default="saved")
-    ap.add_argument("--pred", default=str(DEFAULTS["pred"]), help="prediction GeoJSON (saved triples / Table 2)")
-    ap.add_argument("--raw", default=str(DEFAULTS["raw"]), help="raw NER GeoJSON (for --triples regex)")
+    ap.add_argument("--pred", default=DEFAULTS["pred"], help="prediction GeoJSON (saved triples / Table 2)")
+    ap.add_argument("--raw", default=DEFAULTS["raw"], help="raw NER GeoJSON (for --triples regex)")
     ap.add_argument("--batch", action="append", default=None, help="GPT batch files (for --triples batches)")
-    ap.add_argument("--plss", default=str(DEFAULTS["plss"]))
-    ap.add_argument("--subd", nargs="?", const=str(DEFAULTS["subd"]), default=None, help="also compute the subdivision figure")
+    ap.add_argument("--plss", default=DEFAULTS["plss"])
+    ap.add_argument("--subd", nargs="?", const=DEFAULTS["subd"], default=None, help="also compute the subdivision figure")
     ap.add_argument("--tag", default=None, help="output name under results/provenance/")
     ap.add_argument("--outdir", default=str(REPO_ROOT / "results" / "provenance"))
     args = ap.parse_args(argv)

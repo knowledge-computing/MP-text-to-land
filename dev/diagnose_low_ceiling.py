@@ -152,7 +152,7 @@ def diagnose(spans, county, gold, constraints, rule, geoms):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
-    ap.add_argument("--raw", default=str(rt3.DEFAULTS["raw"]))
+    ap.add_argument("--raw", default=rt3.DEFAULTS["raw"])
     ap.add_argument("--gold", default=str(DEFAULTS["gold"]))
     ap.add_argument("--valid", default=str(DEFAULTS["valid"]))
     ap.add_argument("--sections", default=str(DEFAULTS["sections"]))

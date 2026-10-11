@@ -188,9 +188,9 @@ def finish(c):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
-    ap.add_argument("--raw", default=str(rt3.DEFAULTS["raw"]))
+    ap.add_argument("--raw", default=rt3.DEFAULTS["raw"])
     ap.add_argument("--batch", action="append", default=None, help="GPT-4o batch GeoJSONs (default: try08 1-4)")
-    ap.add_argument("--plss", default=str(rt3.DEFAULTS["plss"]))
+    ap.add_argument("--plss", default=rt3.DEFAULTS["plss"])
     ap.add_argument("--gold", default=str(DEFAULTS["gold"]))
     ap.add_argument("--valid", default=str(DEFAULTS["valid"]))
     ap.add_argument("--summary", default=str(DEFAULTS["summary"]))

@@ -9,7 +9,8 @@ As a tool developer, my goal is to help the Map Prejudice team automate the proc
 
 1. [Features](#features)  
 2. [Installation](#installation)  
-3. [Usage](#usage)  
+3. [Models](#models)  
+4. [Usage](#usage)  
 
 ## Features
 
@@ -80,6 +81,26 @@ As a tool developer, my goal is to help the Map Prejudice team automate the proc
    ```
    `.env` is git-ignored and must not be committed. `FOLDER_NAMES` must be set even for tools that do not read GeoJSON, because importing `src` reads it. Run all tools from the repository root.
 
+## Models
+
+The trained spaCy NER models used by Tools 4–9 (`state_county_city_ner_model` and `subdivision_ner_model`) are
+**not hosted in this repository**. They were trained on deed text shared by a partner under a data agreement, and
+spaCy model files keep tokens from their training text (for example `vocab/strings.json`), so they cannot be
+published here. `src/models/` is git-ignored.
+
+- **Download:** Hugging Face link: _to be added_. Until then, the models are **available on request**.
+- **Where to put them:** `./src/models/<model name>/model-best` (the default `--model_path` of Tools 4–8), or pass
+  `--model_path` / `--model_aut_path` / `--model_subd_path` explicitly.
+- **Reproduce the subdivision model** with `src/training/subdivision_ner_training.py` (fine-tunes the NER component
+  of `en_core_web_md` for 20 epochs; keeps the best epoch by validation loss):
+  1. Prepare JSON Lines files with one example per line:
+     `{"text": "...", "entities": [[start_char, end_char, "LABEL"], ...]}`.
+  2. Set `MP_NER_TRAIN_FILE`, `MP_NER_DEV_FILE` and `MP_NER_OUTPUT_DIR` (see `.env.example`); the script stops
+     with an error if any is missing.
+  3. Run `python -m spacy download en_core_web_md` once, then `python -m src.training.subdivision_ner_training`.
+     Models are written to `$MP_NER_OUTPUT_DIR/model-best-epoch-<n>` and `$MP_NER_OUTPUT_DIR/model-last`.
+- The training script for `state_county_city_ner_model` is not part of this repository.
+
 ## Usage
 ### Tool 1: Identify deed sentences containing specified keywords (load *.txt files directly from the ocr results folder)
 The tool 1 is designed for deed documents in `*.txt` format without volunteer tagged information.
@@ -97,7 +118,7 @@ For example, assuming the user of this tool has collected a list of keywords in 
 2. **Run the identifier**
 ```bash
 python -m scripts.run_sentence_identifier_w_raw_txt \
-    --root_path /root/path/<OCR_ROOT>/ocr/txt/ \
+    --root_path /path/to/<ocr-root>/ocr/txt/ \
     --keyword_threshold 90 \
     --item_threshold 2 \
     --spacy_model_name en_core_web_sm \
@@ -185,14 +206,14 @@ For example, assuming the user of this tool has collected a list of keywords in 
 
 1. **Prepare your data**
    - Place OCR `*.txt` deed files under the `data/` directory, using the same folder structure as in the S3 bucket.
-   - `--root_path` must point to the folder that **contains the county folders**, i.e. the same folder as `OCRTXT_PATH` in `.env` (e.g. `.../<OCR_ROOT>/ocr/txt/`, which contains `mn-anoka-county/`, `wi-milwaukee-county/`, ...). The first folder under it becomes each row's `county`. Do not point it at a single county folder: `county` would then be that county's first subfolder, and the first subfolder of every image_id would be dropped.
+   - `--root_path` must point to the folder that **contains the county folders**, i.e. the same folder as `OCRTXT_PATH` in `.env` (e.g. `.../<ocr-root>/ocr/txt/`, which contains `mn-anoka-county/`, `wi-milwaukee-county/`, ...). The first folder under it becomes each row's `county`. Do not point it at a single county folder: `county` would then be that county's first subfolder, and the first subfolder of every image_id would be dropped.
    - Place all the keywords lists at the `data/keywords/` directory. All files endwith `*.txt` at the `data/keywords/` will be loaded. Each row in the `*.txt` files will be considered as a keyword. 
    - The `*.txt` files at the`data/keywords/not_using` directory would not be loaded anytime, so this is where the user can store the temporarily unnecessary keyword lists. Users can find the developer suggested keywords there too.
 
 2. **Run the identifier**
 ```bash
 python -m scripts.run_identify_sentences_with_imageids_f_raw_txt_to_jsonl \
-    --root_path /root/path/.../<OCR_ROOT>/ocr/txt/ \
+    --root_path /path/to/<ocr-root>/ocr/txt/ \
     --keyword_threshold 90 \
     --item_threshold 2 \
     --spacy_model_name en_core_web_sm \

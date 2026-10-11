@@ -3,7 +3,7 @@ Build the study-area PLSS section table from public layers (Phase 0, normalizer 
 
 Inputs (public data, no deed data):
   * MN_PLSS.shp (COUN, TOWN, RANG, RDIR, SECT, TRS_DESCRI) and WI_PLSS.shp (TWP, RNG, SEC, DIR_ALPHA)
-    from <DATA_ROOT>/<RUN_DIR>/PLSS/;
+    from the 2025 run folder's PLSS/ directory ($MP_RUN_DIR/PLSS);
   * Census cartographic-boundary counties (cb_2024_us_county_500k.zip: STATEFP, NAME).
 
 A section belongs to a study county when (section ∩ county) / section area >= --min-frac, so a section
@@ -36,7 +36,10 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-PLSS_DIR = REPO_ROOT.parent / "<DATA_ROOT>" / "<RUN_DIR>" / "PLSS"
+sys.path.insert(0, str(REPO_ROOT / "dev"))
+import private_paths as pp  # noqa: E402
+
+PLSS_DIR = pp.run_dir("PLSS")  # MP_RUN_DIR, resolved only when a default is used
 DEFAULTS = {
     "mn": PLSS_DIR / "MN_PLSS.shp",
     "wi": PLSS_DIR / "WI_PLSS.shp",
@@ -217,8 +220,8 @@ def county_stats(valid, sections):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
-    ap.add_argument("--mn", default=str(DEFAULTS["mn"]))
-    ap.add_argument("--wi", default=str(DEFAULTS["wi"]))
+    ap.add_argument("--mn", default=DEFAULTS["mn"])
+    ap.add_argument("--wi", default=DEFAULTS["wi"])
     ap.add_argument("--counties", default=str(DEFAULTS["counties"]))
     ap.add_argument("--min-frac", type=float, default=0.01, help="min share of a section's area inside a county")
     ap.add_argument("--mn-rdir", default="0=W", help="RDIR code mapping, e.g. '0=W' (default) or 'infer'")

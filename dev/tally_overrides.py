@@ -96,7 +96,7 @@ def correctness(triples, g):
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
     ap.add_argument("--batch", action="append", default=None, help="GPT-4o batch GeoJSONs (default: try08 batches 1-4)")
-    ap.add_argument("--saved", default=str(rt3.DEFAULTS["pred"]), help="all_output.geojson (after overrides)")
+    ap.add_argument("--saved", default=rt3.DEFAULTS["pred"], help="all_output.geojson (after overrides)")
     ap.add_argument("--gold", default=None, help="gold CSV from dev/derive_gold_trs.py")
     ap.add_argument("--summary", default=str(DEFAULT_SUMMARY))
     args = ap.parse_args(argv)
