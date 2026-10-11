@@ -60,7 +60,7 @@ class InferTry08Test(unittest.TestCase):
         for rel, text in pages.items():
             with open(os.path.join(self.ocr, rel), "w") as f:
                 f.write(text)
-        deed_a = {"image_ids": "('a1', 'a2')", "cnty_name": "Anoka", "add_cov": SECRET,
+        deed_a = {"image_ids": "('toyimg_a1', 'toyimg_a2')", "cnty_name": "Anoka", "add_cov": SECRET,
                   "saved_path": f"('{MSI}ocr/anoka/p1.txt', '{MSI}ocr/anoka/p2.txt')"}
         deed_b = {"image_ids": "['b1']", "cnty_name": "Anoka",
                   "saved_path": f"['{MSI}ocr/anoka/p3.txt', '{MSI}ocr/anoka/missing.txt']"}
@@ -133,7 +133,7 @@ class InferTry08Test(unittest.TestCase):
             script.main(["--geojson", self.geojson, "--model", model_dir, "--ocr-root", self.ocr,
                          "--out", self.out, "--summary", summary])
         printed = buf.getvalue()
-        for leak in (SECRET, "Maple", "twelve", "a1", "ocr/anoka"):
+        for leak in (SECRET, "Maple", "twelve", "toyimg_a1", "ocr/anoka"):
             self.assertNotIn(leak, printed)
         with open(summary) as f:
             self.assertEqual(json.load(f)["counts"]["deeds"], 2)
