@@ -1,0 +1,6 @@
+{
+  "_comment": "Copy to a local file outside git and point MP_RUN_FILES at it. Paths are relative to MP_RUN_DIR (or absolute). Placeholders only.",
+  "splits": {"train": "<train split .geojson>", "val": "<val split .geojson>", "test": "<test split .geojson>"},
+  "pred": {"train": "<try08 predictions on train .geojson>", "val": "<try08 predictions on val .geojson>"},
+  "try08_docs": {"train": "<try08 training docs .spacy>", "dev": "<try08 dev docs .spacy>"}
+}

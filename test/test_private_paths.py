@@ -16,7 +16,7 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(REPO_ROOT, "dev"))
 import private_paths as pp  # noqa: E402
 
-VARS = ("MP_DATA_ROOT", "MP_RUN_DIR", "MP_OCR_ROOT", "MP_PLAT_CONFIG")
+VARS = ("MP_DATA_ROOT", "MP_RUN_DIR", "MP_OCR_ROOT", "MP_PLAT_CONFIG", "MP_RUN_FILES")
 
 
 class PrivatePathsTest(unittest.TestCase):
@@ -75,6 +75,24 @@ class PrivatePathsTest(unittest.TestCase):
         cfg_path.write_text(json.dumps(cfg))
         with self.assertRaises(pp.PrivatePathError):
             pp.plat_config(self.env_file)
+
+    def test_run_files(self):
+        cfg = {"_comment": "x", "splits": {"val": "v/toy.geojson", "abs": str(self.root / "a.geojson")}}
+        cfg_path = Path(self.tmp.name) / "run_files.json"
+        cfg_path.write_text(json.dumps(cfg))
+        self.env_file.write_text(f"MP_DATA_ROOT={self.root}\nMP_RUN_DIR=toy_run\nMP_RUN_FILES={cfg_path}\n")
+        out = pp.run_files(self.env_file)
+        self.assertEqual(set(out), {"splits"})
+        self.assertEqual(out["splits"]["val"], pp.run_dir("v", "toy.geojson"))
+        self.assertEqual(out["splits"]["abs"], self.root / "a.geojson")
+        cfg_path.write_text(json.dumps({"splits": ["not", "a", "dict"]}))
+        with self.assertRaises(pp.PrivatePathError):
+            pp.run_files(self.env_file)
+
+    def test_example_run_files_has_only_placeholders(self):
+        ex = json.loads((Path(REPO_ROOT) / "run_files.example.json").read_text())
+        self.assertEqual({k for k in ex if not k.startswith("_")}, {"splits", "pred", "try08_docs"})
+        self.assertTrue(all(v.startswith("<") for g in ("splits", "pred", "try08_docs") for v in ex[g].values()))
 
     def test_example_config_has_the_expected_shape(self):
         ex = json.loads((Path(REPO_ROOT) / "plat_config.example.json").read_text())

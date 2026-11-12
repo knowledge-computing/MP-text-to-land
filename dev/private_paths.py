@@ -1,7 +1,8 @@
 """
 Locations of the private project data, read from environment variables (or from the repo's git-ignored
 .env file when a variable is not set in the environment). Nothing about the private folder layout is
-written in this repository; see .env.example and plat_config.example.json for placeholders.
+written in this repository; see .env.example, plat_config.example.json and run_files.example.json for
+placeholders.
 
     MP_DATA_ROOT    root folder of the private data (absolute path)
     MP_RUN_DIR      the 2025 run folder (splits, PLSS layers, try08 model and outputs);
@@ -12,6 +13,9 @@ written in this repository; see .env.example and plat_config.example.json for pl
                     {"root": dir (absolute or relative to MP_DATA_ROOT),
                      "layers": {county: {"path", "name_field", "alias_fields"}},
                      "rule_pairs": {county: [name_field, alias_field]}}
+    MP_RUN_FILES    local JSON (keep it out of git) naming files inside MP_RUN_DIR:
+                    {group: {name: path}}, e.g. {"splits": {"train": ...}, "pred": {...}}; each path is
+                    relative to MP_RUN_DIR (or absolute). Keys starting with "_" are ignored.
 
 A missing variable or a variable that points to a missing path raises PrivatePathError with a message
 naming the variable; there is no fallback to a built-in path. Paths are resolved only when used
@@ -100,6 +104,25 @@ def run_dir(*parts):
 
 def ocr_root():
     return LazyPath("MP_OCR_ROOT")
+
+
+def run_files(env_file=None):
+    """Parsed MP_RUN_FILES as {group: {name: path}}: relative paths become LazyPaths under MP_RUN_DIR,
+    absolute ones Paths. Values are not checked for existence here (they resolve when used)."""
+    with open(path("MP_RUN_FILES", env_file), encoding="utf-8") as f:
+        cfg = json.load(f)
+    out = {}
+    for group, files in cfg.items():
+        if group.startswith("_"):
+            continue
+        if not isinstance(files, dict) or not all(isinstance(v, str) for v in files.values()):
+            raise PrivatePathError(f"MP_RUN_FILES: group '{group}' must map names to path strings "
+                                   "(see run_files.example.json)")
+        out[group] = {}
+        for name, value in files.items():
+            p = Path(os.path.expanduser(value))
+            out[group][name] = p if p.is_absolute() else run_dir(*p.parts)
+    return out
 
 
 def plat_config(env_file=None):

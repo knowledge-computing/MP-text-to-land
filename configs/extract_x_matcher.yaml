@@ -1,0 +1,148 @@
+# Thesis experiment: extraction method x matcher (Me, 2026-11-06). Every pipeline = ONE extraction method that
+# reads the deed OCR text and returns subdivision name strings, followed by ONE matcher. No query fusion.
+# Configurations are fixed on val and then frozen; test is run once per pipeline under the pre-registration
+# docs/preregistration_test.md (approved by Me 2026-11-11). dev/subdiv_14_extract_x_matcher.py evaluates val;
+# dev/subdiv_16_test_extract_x_matcher.py is the one-time test evaluation. test_cache = the test extraction cache
+# (git-ignored); a cache with error records needs its single retry (<cache>.retry.json) before the evaluation.
+seed: 0
+
+matchers:
+  paper_b1:       # a simple baseline, NOT the paper's method (the paper reports only the paper criterion,
+                  # fuzz.ratio >= 70, no geometry; 16.18% on test): case-insensitive exact name match to the
+                  # partner plat names, own county
+    description: casefold + whitespace-collapsed predicted string == partner plat primary name (own county); first
+      predicted string with a hit wins
+  matcher_v1.0:   # src/matcher/frozen.py (ratio, n3, own county, primary names, cutoff 70); frozen 2026-10-09
+    description: frozen matcher_v1.0
+
+extractors:
+  try08_ner:
+    kind: ner
+    description: try08 spaCy pipeline (roberta-base encoder + transition NER), SUBDIVISION_p spans
+    predictions: MP_RUN_FILES pred.val (dev/infer_try08.py)
+    timing: results/infer_try08/val.json        # ner_seconds over all val deeds, model load excluded
+    test_timing: results/infer_try08/test_repro.json   # the 2026-10-09 test inference reproduction (no new run)
+    hardware: Apple M1 Pro (10-core CPU), 16 GB; CPU only (gpu false), batch 16; thesis-spacy venv
+    note: val was try08's dev set (model selection), so val is optimistic for this extractor
+  qwen2.5_7b_q4:
+    kind: llm
+    ollama_tag: qwen2.5:7b-instruct-q4_K_M
+    model_sha256: 2bada8a7450677000f678be90653b85d364de7db25eb5ea54136ada5f3933730   # GGUF blob, verified 2026-11-06
+    ollama_manifest_sha256: 156bcbf71df68f7a6581fb4ab306ed921b8114d82b6eaeab5c0442785ea9b4c3
+    prompt: dev/subdiv_09_llm_extract.py (SYSTEM, FEW_SHOT = 3 synthetic examples, KEYWORDS windows)
+    prompt_sha256: 0006b8791de5884df660b18e812f0025ecdc3b04e39d8cdd8633b90cf149469a   # sha256 of json {system, few_shot, keywords}
+    params: {window: 250, max_chars: 3000, num_ctx: 4096, temperature: 0, seed: 0, format: json}
+    cache: output/derived/subdiv_match/llm_val.jsonl      # one run over all 491 val deeds (2026-10, git-ignored)
+    test_cache: output/derived/subdiv_match/llm_test.jsonl   # config model (configs/subdiv_match.yaml llm.model)
+    test_run_log: results/subdiv_match/step7_llm_test_run.csv
+    think_toy_test: 2026-11-11 (pre-registration decision 3), 6 synthetic inputs, each sent with think false and with
+      no think field - Ollama accepted think false 6/6; message content identical 6/6; 0 thinking chars. Test
+      request therefore sends think false like the other LLMs (val had no think field).
+    ollama_digest: 845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e   # /api/tags, 2026-11-11
+    hardware: Apple M1 Pro, 16 GB unified memory; Ollama on 127.0.0.1 (Metal); Ollama 0.40.3 at time of writing
+      (the version used for the run was not logged)
+    runtime: Ollama runner ggml; GGUF Q4_K_M; no thinking capability, so think was not sent (the run predates
+      the explicit think option; equivalent to think false)
+  gemma4_e4b_q4:
+    kind: llm
+    ollama_tag: gemma4:e4b-it-q4_K_M     # not plain gemma4:e4b: on Apple Silicon that tag resolves to an MLX nvfp4
+                                         # build that rejects format json (HTTP 501), and it differs across machines
+    model_sha256: 370c2879f17648d337b0ab4e208fdce348e24d1060064e93d7645daafd56d39c   # GGUF blob (5.49 GB), verified 2026-11-07
+    ollama_manifest_sha256: df5980f196b410171c6c71f2b2b18c7a07f07656bf783a4dfeeac15c5fbd531b
+    ollama_digest: dc35e8d9c6061baa6f0fa870975ab6932e2542b579b13ea0f199fa4bb7300c9c   # /api/tags
+    quantization: Q4_K_M (ollama show; GGUF, 7.5B parameters); Qwen2.5-7B is also Q4_K_M
+    prompt: dev/subdiv_09_llm_extract.py (SYSTEM, FEW_SHOT = 3 synthetic examples, KEYWORDS windows)
+    prompt_sha256: 0006b8791de5884df660b18e812f0025ecdc3b04e39d8cdd8633b90cf149469a   # same frozen prompt as Qwen
+    params: {window: 250, max_chars: 3000, num_ctx: 4096, temperature: 0, seed: 0, format: json, think: false}
+    request: options {temperature 0, seed 0, num_ctx 4096} identical to the Qwen run; format json; think false sent
+      explicitly (thinking capability, default true; thinking text never stored, only its length, which must be 0)
+    model_defaults: Modelfile temperature 1, top_k 64, top_p 0.95, draft_num_predict 3; temperature overridden to 0;
+      top_k / top_p not sent (no effect under greedy decoding; Me 2026-11-07); draft_num_predict not sent
+    runtime: Ollama runner llamacpp (Qwen used ggml); the manifest includes a 99 MB draft model (speculative decoding,
+      draft_num_predict 3) and a vision/audio projector (unused, text only)
+    toy_test: 2026-11-07, synthetic text only, 6 inputs x 2 runs - 12/12 JSON parsed, 0 thinking chars, 6/6 identical
+      across runs; about 1.6-2.2 s per first call (cache-cold) on short inputs
+    cache: output/derived/subdiv_match/llm_val__gemma4_e4b_it_q4_K_M.jsonl   # git-ignored
+    test_cache: output/derived/subdiv_match/llm_test__gemma4_e4b_it_q4_K_M.jsonl
+    test_run_log: results/subdiv_match/step7_llm_test_run__gemma4_e4b_it_q4_K_M.csv
+    hardware: Apple M1 Pro, 16 GB unified memory; Ollama 0.40.3 on 127.0.0.1 (Metal, 100% GPU)
+  gemma4_31b_q4:
+    kind: llm
+    status: val run done on MSI (Me, 2026-11-08) in two jobs, a 20-deed timing job then 471 deeds resumed from that
+      cache; 491/491 ok, 0 errors, 0 with thinking; both jobs used the same manifest digest and prompt (cache counts).
+      Setup check (LLM_EVAL_DRY_RUN=1) passed first on interactive-gpu, A40.
+    ollama_tag: gemma4:31b-it-q4_K_M      # ollama.com/library/gemma4/tags, checked 2026-11-07 (20 GB; not -mtp, -qat, MLX)
+    model_sha256: cd20f2b3f2e30239023189c04e65754b0cc7c38959665ac727461ee470df16cf   # GGUF blob, 18,670,033,120 bytes, verified in the job
+    ollama_manifest_sha256: 859aadd7c86ec08046d4bde5757e1a0fe452e3559c8f38ef76c857cb4d4498ca   # sha256 of the manifest file (not the /api/tags digest)
+    quantization: Q4_K_M (gguf, 30.7B parameters; from /api/show in the setup check)
+    prompt: dev/subdiv_09_llm_extract.py (SYSTEM, FEW_SHOT = 3 synthetic examples, KEYWORDS windows)
+    prompt_sha256: 0006b8791de5884df660b18e812f0025ecdc3b04e39d8cdd8633b90cf149469a   # same frozen prompt
+    params: {window: 250, max_chars: 3000, num_ctx: 4096, temperature: 0, seed: 0, format: json, think: false}
+    request: options {temperature 0, seed 0, num_ctx 4096} identical to the local runs; format json; think false
+      sent explicitly; top_k / top_p not sent (no effect under greedy decoding)
+    job: dev/msi/llm_eval.sbatch (1 GPU >= 40 GB, 8 cores, 48 GB RAM, 2 h; first a 20-deed timing check)
+    cache: output/derived/subdiv_match/llm_val__gemma4_31b_it_q4_K_M.jsonl   # git-ignored
+    test_cache: output/derived/subdiv_match/llm_test__gemma4_31b_it_q4_K_M.jsonl   # MSI, copied back (option A)
+    test_run_log: results/subdiv_match/step7_llm_test_run__gemma4_31b_it_q4_K_M.csv   # copied back from MSI
+    ollama_digest: 17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97   # /api/tags, logged in every record
+    hardware: "MSI interactive-gpu, NVIDIA A40 46 GB, x86_64 Linux (el8), Ollama 0.40.3 (llamacpp runner), Python 3.11.18;
+      s/deed = per-deed wall clock over both jobs (each job's first request includes loading the model; 1 deed > 30 s)"
+  qwen3.8_27b_q4:
+    kind: llm
+    status: val run done on MSI (Me, reported 2026-11-10) in two jobs, a 20-deed timing job then 471 deeds resumed from
+      that cache; 491/491 ok, 0 errors, 0 with thinking; one manifest digest and one prompt hash in all records (cache
+      counts). Setup check (LLM_EVAL_DRY_RUN=1) passed first on interactive-gpu, A40.
+    ollama_tag: qwen3.8:27b-q4_K_M        # ollama.com/library/qwen3.8/tags, checked 2026-11-07 (18 GB; not the -mtp
+                                          # multi-token-prediction variant); thinking capability, so think false matters
+    model_sha256: f5f1dd8920d417aac2718b0bda3403da274301efdd6760b4f0f4b864ff2ad57d   # GGUF blob, 16,810,714,464 bytes, verified in the job
+    ollama_manifest_sha256: c3742ec550064485060cb35c1ce00ddb914cf4e9924b04896e7d661e8c5307cc   # sha256 of the manifest file (not the /api/tags digest)
+    ollama_digest: 25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e   # /api/tags, logged in every record
+    quantization: Q4_K_M (gguf, 27.3B parameters; checked by the job's setup check; the job refuses anything else)
+    runtime: /api/show reported no runner (empty in the run CSV); Gemma 4 31B on the same setup reported llamacpp
+    prompt: dev/subdiv_09_llm_extract.py (SYSTEM, FEW_SHOT = 3 synthetic examples, KEYWORDS windows)
+    prompt_sha256: 0006b8791de5884df660b18e812f0025ecdc3b04e39d8cdd8633b90cf149469a   # same frozen prompt
+    params: {window: 250, max_chars: 3000, num_ctx: 4096, temperature: 0, seed: 0, format: json, think: false}
+    request: options {temperature 0, seed 0, num_ctx 4096} identical to the local runs; format json; think false
+      sent explicitly; top_k / top_p not sent (no effect under greedy decoding)
+    job: dev/msi/llm_eval.sbatch (1 GPU >= 40 GB, 8 cores, 48 GB RAM, 2 h; first a 20-deed timing check)
+    cache: output/derived/subdiv_match/llm_val__qwen3.8_27b_q4_K_M.jsonl   # git-ignored
+    test_cache: output/derived/subdiv_match/llm_test__qwen3.8_27b_q4_K_M.jsonl   # MSI, copied back (option A)
+    test_run_log: results/subdiv_match/step7_llm_test_run__qwen3.8_27b_q4_K_M.csv   # copied back from MSI
+    hardware: "MSI interactive-gpu, NVIDIA A40 46 GB, Linux, Ollama 0.40.3; s/deed = per-deed wall clock over both jobs
+      (from the cache); the 471-deed job took 1,813.3 s (results/subdiv_match/step7_llm_val_run__qwen3.8_27b_q4_K_M.csv)"
+  gliner_large_v2.5:
+    kind: gliner
+    description: GLiNER zero-shot span NER (no training, no tuning on val); entities of any label = subdivision names
+    model: gliner-community/gliner_large-v2.5     # the urchade/ copy is no longer on the Hub (401, 2026-11-07)
+    revision: 3d6d1760be1c591069f85f207fced9214df8b15f   # Apache-2.0; encoder microsoft/deberta-v3-large; max_len 768
+    weights_file: pytorch_model.bin               # fp32, GLiNER's default load
+    encoder_config: microsoft/deberta-v3-large@64a8c8eab3e352a784c658aef62be1662607476f   # config + tokenizer files only
+    model_sha256: b0a0f6f2109367a7157d7a0a00f8383d80ba232c1fd9c7fa88ee653011226c64   # = Hub LFS sha256, verified 2026-11-07
+    labels: [subdivision name]                    # approved by Me 2026-11-07 (with threshold 0.5); chosen on 6 synthetic toy texts only, never on
+                                                  # val. Toy: [subdivision name] 6/6 names, 3 extra strings (all PLSS);
+                                                  # [subdivision, addition, plat name] 6/6, 14 extra (lots, blocks, counties)
+    threshold: 0.5                                # library default
+    flat_ner: true
+    chunk_tokens: 384                             # GLiNER word tokens per chunk (half of max_len: subword headroom)
+    chunk_overlap: 64
+    batch_size: 8
+    window: 250                                   # same keyword windows as the LLM extractors
+    max_chars: 3000
+    script: dev/subdiv_15_gliner_extract.py (thesis-hf venv; HF_HUB_OFFLINE=1)
+    cache: output/derived/subdiv_match/gliner_val__gliner_large_v2.5.jsonl   # git-ignored
+    test_cache: output/derived/subdiv_match/gliner_test__gliner_large_v2.5.jsonl
+    test_run_log: results/extract_x_matcher/run_gliner_test__gliner_large_v2.5.csv
+    toy_test: 2026-11-07, synthetic text only - weights sha256 ok, 6/6 identical across 2 runs, 0 truncation
+      warnings; about 0.1-0.5 s per call on MPS (model load 17.5 s)
+    hardware: Apple M1 Pro, 16 GB; torch 2.14.1 on MPS, gliner 0.2.29, transformers 5.16.1; model load 16.5 s
+      excluded from s/deed (results/extract_x_matcher/run_gliner_val__gliner_large_v2.5.csv)
+
+eval:
+  deeds: all val deeds (dev/infer_try08.py val predictions; one row per deed)
+  eligibility: matcher_v1.0's (weak_labels.eligibility; county with a partner plat layer, single-part geometry)
+  metrics: matcher_v1.0's pre-registered set (dev/eval_matcher_val.evaluate) - centroid-in over (b) all eligible
+    deeds [primary] and (a) eligible deeds with >= 1 extracted string; plat accuracy vs the geometric weak label;
+    contains; intersects; plus the paper criterion (>= 1 plat name at fuzz.ratio >= 70, raw, all counties)
+  extraction: recall = share of deeds with >= 1 extracted string (all val deeds and eligible deeds); seconds per
+    deed; hardware
+  results: results/extract_x_matcher/

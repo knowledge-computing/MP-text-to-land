@@ -1,0 +1,80 @@
+# Subdivision gazetteer + baseline matchers (src/subdiv_match, dev/subdiv_0*.py).
+# Evaluated on train/val only; the test split is frozen (CLAUDE.md). Test doc_nums are read only to
+# remove them from the public alias source (step 2), never to evaluate.
+seed: 0
+
+paths:
+  # Private inputs are not named here: src/subdiv_match/config.py reads them from the local MP_RUN_FILES JSON
+  # (dev/private_paths.py; placeholders in run_files.example.json): splits {train, val, test} (test: identifiers
+  # only, for the step 2 / step 4 exclusion lists), pred {train, val} (dev/infer_try08.py outputs, one row per
+  # deed), try08_docs {train, dev} (try08 training / dev docs, step 7b). OCR comes from MP_OCR_ROOT and the
+  # partner plat layers from MP_PLAT_CONFIG.
+  # Public data and repo-local outputs (relative to the repo root)
+  mngeo_dir: ../public_layers/mngeo_plan_parcels_open
+  mclio_dir: ../public_layers/mclio_parcels
+  public_repo: ../public_repos/mp-us-racial-covenants
+  processor_repo: ../public_repos/racial_covenants_processor
+  derived: output/derived/subdiv_match       # git-ignored (mixes partner data)
+  results: results/subdiv_match              # aggregate CSVs only
+
+mngeo:
+  url: https://enterprise.gisdata.mn.gov/aghost/rest/services/us_mn_state_mngeo/plan_parcels_open/MapServer/1
+  counties: [Anoka, Dakota, Olmsted, Sherburne, Washington]
+  fields: [co_name, plat_name, block, lot]
+  page_size: 2000
+  geometry_precision: 2                           # EPSG:26915 metres
+
+public:
+  # our six counties as they appear in mp-us-racial-covenants (matched case-insensitively)
+  counties: [anoka, dakota, milwaukee, olmsted, sherburne, washington]
+
+normalizer:
+  version: std_v1                 # src/subdiv_match/normalize.py
+
+gazetteer:
+  counties: [anoka, dakota, milwaukee, olmsted, sherburne, washington]
+  sources: [partner, mngeo, mclio, public, train]   # public, train = add_cov -> add_mod aliases
+
+matchers:
+  topk: [1, 5]
+  token_set: {scorer: token_set_ratio, cutoff: 0}
+  tfidf: {analyzer: char_wb, ngram_range: [3, 5], k: 20, min_df: 1, sublinear_tf: true}
+  rerank:
+    k: 20                         # candidates from the TF-IDF stage
+    model: logistic_regression
+    C: 1.0
+    class_weight: balanced
+    max_iter: 2000
+  query_sources: [ner, add_cov]   # ner = try08 SUBDIVISION_p; add_cov = volunteer transcription
+
+eval:
+  # gazetteer variants (subsets of sources) evaluated side by side; rerankers are fit per variant
+  gazetteers:   # "layers" = no covenant aliases: the deployment-realistic setting for a new county
+    full: [partner, mngeo, mclio, public, train]
+    full_no_mclio: [partner, mngeo, public, train]
+    layers: [partner, mngeo, mclio]
+    layers_no_mclio: [partner, mngeo]
+  coverage_sources:                # val gold coverage by source subset
+    partner: [partner]
+    mngeo: [mngeo]
+    mclio: [mclio]
+    layers_no_mclio: [partner, mngeo]
+    layers: [partner, mngeo, mclio]
+    public: [public]
+    train: [train]
+    full_no_mclio: [partner, mngeo, public, train]
+    full: [partner, mngeo, mclio, public, train]
+
+mclio:   # Milwaukee County LIO parcels (public); the older PropertyInfo/Parcels service is stopped
+  url: https://lio.milwaukeecountywi.gov/arcgis/rest/services/PropertyInfo/Parcels_EagleView/MapServer/0
+  fields: [TAXKEY, MUNINAME, LEGALDESCR, CONDO_NAME]
+  page_size: 2000
+  max_allowable_offset: 0.5     # metres; generalized geometry (full detail stalls the server)
+
+llm:     # baseline B3: local Ollama only (127.0.0.1); deed text never leaves the machine
+  model: qwen2.5:7b-instruct-q4_K_M
+  model_sha256: 2bada8a7450677000f678be90653b85d364de7db25eb5ea54136ada5f3933730   # GGUF blob (Ollama manifest layer 'model'), verified 2026-11-06
+  window: 250        # characters around each legal-description keyword
+  max_chars: 3000
+  num_ctx: 4096
+  think: false      # sent explicitly with every request (Qwen2.5 has no thinking mode; Gemma 4 defaults to true)
