@@ -279,7 +279,7 @@ Where they are:
 ## 11. Approval
 
 - Approved by Me: 2026-11-11
-- Frozen code commit: _(hash)_
+- Frozen code commit: b16a305566d88d97fffe1fc11fd7b1dc37ac911a
 
 The frozen code and this document are committed together; a second commit then fills in only the hash above. After
 that, only §10 may change.
