@@ -274,7 +274,9 @@ Where they are:
 
 ## 10. Deviations log
 
-(empty)
+- 2026-11-17: no deviations. All five extractors ran once over the 2,436 test deeds with 0 error records, so no
+  retry was needed; Gemma 4 31B and Qwen3.8-27B ran on MSI A40s with `--time=05:00:00`; the laptop extractors ran
+  one at a time. try08 + `matcher_v1.0` reproduced `results/matcher/test_v1.json` exactly, and the evaluation ran once.
 
 ## 11. Approval
 

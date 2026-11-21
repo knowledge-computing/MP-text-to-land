@@ -1,0 +1,12 @@
+family,m,x,y,n_deeds,centroid_in_x,centroid_in_y,pct_x,pct_y,diff_points,b_only_x,c_only_y,p,p_holm,significant
+family1_extractor,5,qwen2.5_7b_q4 + matcher_v1.0,try08_ner + matcher_v1.0,2435,1840,1851,75.56,76.02,-0.45,176,187,0.5997388497769727,0.5997388497769727,False
+family1_extractor,5,gemma4_e4b_q4 + matcher_v1.0,try08_ner + matcher_v1.0,2435,1816,1851,74.58,76.02,-1.44,171,206,0.07979269840442947,0.15958539680885894,False
+family1_extractor,5,gemma4_31b_q4 + matcher_v1.0,try08_ner + matcher_v1.0,2435,1964,1851,80.66,76.02,4.64,197,84,1.2593815196663185e-11,5.037526078665274e-11,True
+family1_extractor,5,qwen3.8_27b_q4 + matcher_v1.0,try08_ner + matcher_v1.0,2435,1952,1851,80.16,76.02,4.15,188,87,1.0729702768846071e-09,3.2189108306538215e-09,True
+family1_extractor,5,gliner_large_v2.5 + matcher_v1.0,try08_ner + matcher_v1.0,2435,1708,1851,70.14,76.02,-5.87,149,292,9.021553693266787e-12,4.510776846633394e-11,True
+family2_matcher,6,try08_ner + matcher_v1.0,try08_ner + paper_b1,2435,1851,1294,76.02,53.14,22.87,560,3,1.970258620248878e-162,3.940517240497756e-162,True
+family2_matcher,6,qwen2.5_7b_q4 + matcher_v1.0,qwen2.5_7b_q4 + paper_b1,2435,1840,1187,75.56,48.75,26.82,654,1,8.775799151303176e-195,4.387899575651588e-194,True
+family2_matcher,6,gemma4_e4b_q4 + matcher_v1.0,gemma4_e4b_q4 + paper_b1,2435,1816,1165,74.58,47.84,26.74,653,2,2.874087599794399e-192,1.1496350399177596e-191,True
+family2_matcher,6,gemma4_31b_q4 + matcher_v1.0,gemma4_31b_q4 + paper_b1,2435,1964,1318,80.66,54.13,26.53,649,3,4.943897715396321e-189,1.4831693146188963e-188,True
+family2_matcher,6,qwen3.8_27b_q4 + matcher_v1.0,qwen3.8_27b_q4 + paper_b1,2435,1952,1296,80.16,53.22,26.94,657,1,1.1019915473911572e-195,6.611949284346943e-195,True
+family2_matcher,6,gliner_large_v2.5 + matcher_v1.0,gliner_large_v2.5 + paper_b1,2435,1708,1203,70.14,49.4,20.74,507,2,1.5489004696749793e-148,1.5489004696749793e-148,True
