@@ -277,6 +277,11 @@ Where they are:
 - 2026-11-17: no deviations. All five extractors ran once over the 2,436 test deeds with 0 error records, so no
   retry was needed; Gemma 4 31B and Qwen3.8-27B ran on MSI A40s with `--time=05:00:00`; the laptop extractors ran
   one at a time. try08 + `matcher_v1.0` reproduced `results/matcher/test_v1.json` exactly, and the evaluation ran once.
+- 2026-11-22, MSI cleanup (§8 decision 4): on 2026-11-17, right after the evaluation (13:02), I deleted the MSI
+  copies of the val and test splits and OCR pages, the two test caches and the Ollama models. The two MSI test run logs
+  matched the committed laptop copies by sha256 and were deleted on 2026-11-22; nothing from test is left on MSI. The
+  laptop test caches used by the evaluation are now the only copies (they match their run logs: 2,436 deeds, 0 errors;
+  I backed them up). Not a deviation: decision 4 only requires deletion after the evaluation.
 
 ## 11. Approval
 

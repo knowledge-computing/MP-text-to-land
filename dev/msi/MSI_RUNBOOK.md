@@ -272,3 +272,14 @@ its `--retry-errors` once if its log shows `cache_errors` above 0:
 
 **g. Delete the MSI copies** after the evaluation: the test caches and markers, the test run logs, the test split
 and the test OCR pages under `<DATA_DIR>`.
+
+Cleanup note (2026-11-17 to 11-22): on 2026-11-17, right after the evaluation ran at 13:02, I deleted on MSI
+`<DATA_DIR>` (`rm -rf`: the val and test splits, the OCR pages and `run_files.json`), the `*.jsonl` caches in
+`<CODE_DIR>/output/derived/subdiv_match/` (`rm -f`; the folder was last changed at 13:30) and the Ollama models folder
+`<OLLAMA_DIR>/models` (`rm -rf`). There were no retry markers. So at the 7g check (2026-11-21/22) the test caches, test
+split and test OCR pages were already gone, and the laptop test caches are the only copies. They match their run logs
+(2,436 deeds, 0 errors, 0 with thinking), have sha256 `6496ea3e…9d95` (Gemma 4 31B) and `92229e52…cf27` (Qwen3.8-27B),
+and are in my Time Machine backup on an external drive (2026-11-22). The two MSI test run logs matched the laptop
+copies by sha256 (committed in c5a60f9) and were then deleted, as were the two uploaded page lists and the empty data
+folder. Only the two val run logs remain in `<CODE_DIR>/results/subdiv_match/`; no deed data or derived names are left
+on MSI.
