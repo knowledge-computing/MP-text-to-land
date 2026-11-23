@@ -1,0 +1,54 @@
+# Matcher ablation on VAL (dev/matcher_ablation_val.py). EXPLORATORY: val only, not pre-registered, never run on
+# test. Every value below was fixed by Me on 2026-11-22, before the first real run.
+version: matcher_ablation_val_v1
+status: exploratory (val only, not pre-registered)
+seed: 0                       # nothing is random; kept for the experiment convention
+
+# Query sources = the six extractors' val outputs, as listed in this (frozen, read-only) config.
+extractor_config: configs/extract_x_matcher.yaml
+
+# The matcher ladder: A -> A' -> B -> C separates case/punctuation normalization, fuzziness and the learned rules.
+# All four use the partner plat layers, the deed's own county, primary names only and matcher_v1.0's tie rule
+# (earlier predicted string first, then the first key in the county pool).
+matchers:
+  A:        {kind: exact, form: casefold}   # paper_b1 (subdiv_14 ExactIndex): casefold + collapsed whitespace
+  A_prime:  {kind: exact, form: n1}         # exact match after n1 (upper case, punctuation -> space, collapse)
+  B:        {kind: fuzzy, scorer: ratio, norm: n1, own_county: true, aliases: false, cutoff: 70}   # no learned rules
+  C:        {kind: frozen}                  # matcher_v1.0 = ratio, n3 (learned rules), own county, primary, 70
+extra_rows:                                 # reported, not part of the ladder or the error decomposition
+  B_raw:    {kind: fuzzy, scorer: ratio, norm: raw, own_county: true, aliases: false, cutoff: 70, sources: [try08_ner]}
+
+# Oracle query = the deed's add_mod values (volunteer modern-parcel addition, from the val split rows, in
+# first-appearance order), sent through each matcher in place of an extractor's strings.
+oracle:
+  source_name: oracle_add_mod
+  gold_field: add_mod
+
+# Error decomposition of every eligible deed the pipeline gets wrong (centroid not in the top-1 plat, or no
+# top-1). The first category that applies wins, in this order:
+errors:
+  name_agreement: {scorer: ratio, form: n1, threshold: 90}   # "right name": some extracted string vs some add_mod
+  order:
+    - no_extraction                       # E1  the extractor returned no string
+    - gold_no_gold                        # E2c the deed has no add_mod value (cannot be decomposed further)
+    - gold_not_in_gazetteer               # E2a the oracle fails under this matcher and no partner plat primary name
+                                          #     in the deed's county is n1-equal to any add_mod value
+    - gold_in_gazetteer_oracle_fails      # E2b the oracle fails under this matcher, although an n1-equal name exists
+    - right_name_no_top1                  # E3  name agreement holds, but the matcher returns no top-1
+    - right_name_wrong_plat               # E3  name agreement holds, top-1 plat does not contain the centroid
+    - wrong_name_no_top1                  # E4  no name agreement, no top-1
+    - wrong_name_wrong_plat               # E4  no name agreement, top-1 plat does not contain the centroid
+  correct_split: [correct_gold_in_gazetteer, correct_gold_not_in_gazetteer, correct_no_gold]
+
+# Outputs are written only if every check passes.
+reproduction:
+  val_cells: results/extract_x_matcher/val_cells.csv   # A == paper_b1 and C == matcher_v1.0, all six extractors
+  val_grid: results/matcher/val_grid.json              # try08: B == ratio|n1|county|primary, C == ratio|n3|county|primary
+  int_fields: [eligible_b, with_extraction_a, top1, centroid_in]
+  pct_fields: [centroid_in_pct_b, centroid_in_pct_a, plat_acc_pct_b, plat_acc_pct_a, contains_pct_b, intersects_pct_b]
+  grid_fields: [b_all, a_with_pred, top1, plat_correct, centroid_in, contains, intersects]
+
+paired:                       # discordant deeds on centroid-in; exact McNemar p for information only (no correction)
+  pairs: [[A_prime, A], [B, A_prime], [C, B], [C, A]]
+
+out: results/matcher_ablation

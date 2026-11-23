@@ -38,8 +38,10 @@ All LLMs: same frozen prompt, temperature 0, thinking mode recorded.
 
 - Centroid-in over 271 eligible val deeds; matcher_v1.0 deeds: Gemma 4 31B 217, Qwen3.8-27B 212,
   try08 211, Gemma 4 E4B 204, Qwen2.5-7B 203, GLiNER 184.
-- matcher_v1.0 adds 19.2–24.4 points for all six extractors (GLiNER +19.2 to
-  Gemma 4 31B +24.4), so the matcher matters more than the extractor.
+- matcher_v1.0 adds 19.2–24.4 points over paper_b1 for all six extractors (GLiNER +19.2 to
+  Gemma 4 31B +24.4). Relative to an exact-match baseline, the choice of matching method had a larger
+  effect than the choice among the tested extractors (matcher_v1.0 range across extractors: 184–217 deeds,
+  12.2 points).
 - The top three (Gemma 4 31B, Qwen3.8-27B, try08) are within 6 deeds; no
   significance test on val.
 - Large LLMs beat small ones (217/212 vs 204/203 deeds) through name quality,
@@ -81,7 +83,7 @@ Centroid-in over all 2,435 eligible test deeds (deeds in brackets); no deviation
   - Qwen2.5-7B −0.45 (176 / 187; p 0.60, Holm 0.60) and Gemma 4 E4B −1.44 (171 / 206; 0.0798, Holm 0.16): no
     significant difference.
 - Family 2 (matcher_v1.0 vs paper_b1 within each extractor; Holm m = 6): matcher_v1.0 is better for all six,
-  +20.7 to +26.9 points, with 507–657 deeds only it gets right vs 1–3 only paper_b1 gets right (Holm p ≤ 1.6e-148).
+  +20.7 to +26.9 points, with 507–657 deeds only it gets right vs 1–3 only paper_b1 gets right (largest Holm p 1.5e-148).
 - Per county (matcher_v1.0, centroid-in): Milwaukee (1,369) large LLMs 89.0 / 88.8, try08 81.6; Anoka (518)
   Qwen3.8 90.0, Gemma E4B 88.4, Gemma 31B 88.0, try08 82.4, GLiNER 57.1; Olmsted (347) 56.5–63.4 for all;
   Dakota (64) 57.8–65.6; Sherburne (137) try08 44.5 vs 19.0–22.6 for the others.

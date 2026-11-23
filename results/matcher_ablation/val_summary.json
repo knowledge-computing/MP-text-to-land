@@ -1,0 +1,86 @@
+{
+ "version": "matcher_ablation_val_v1",
+ "status": "exploratory (val only, not pre-registered)",
+ "config_sha256": "5ec15238547d879447df2edc0a7a19d41c54f0c6b301b4623d17e32ab54903e6",
+ "extractor_config_sha256": "d763c046e99adb91a5e41968a33200c1a66aba097e4d854d6e44a04fd548d0b4",
+ "matcher_C": "matcher_v1.0",
+ "frozen_rules_sha256": "c8ee1ca12b701fa81cc08a8e78035de44d687340dfffe779e5fcb9729c64ac66",
+ "val_deeds": 491,
+ "gold_join_missing_keys": 0,
+ "missing_in_cache": {
+  "qwen2.5_7b_q4": 0,
+  "gemma4_e4b_q4": 0,
+  "gemma4_31b_q4": 0,
+  "qwen3.8_27b_q4": 0,
+  "gliner_large_v2.5": 0
+ },
+ "gold": {
+  "anoka": {
+   "deeds": 109,
+   "deeds_with_gold": 109,
+   "eligible": 85,
+   "eligible_with_gold": 85,
+   "eligible_gold_in_gazetteer": 85
+  },
+  "dakota": {
+   "deeds": 13,
+   "deeds_with_gold": 13,
+   "eligible": 8,
+   "eligible_with_gold": 8,
+   "eligible_gold_in_gazetteer": 6
+  },
+  "milwaukee": {
+   "deeds": 225,
+   "deeds_with_gold": 224,
+   "eligible": 123,
+   "eligible_with_gold": 122,
+   "eligible_gold_in_gazetteer": 91
+  },
+  "olmsted": {
+   "deeds": 62,
+   "deeds_with_gold": 62,
+   "eligible": 54,
+   "eligible_with_gold": 54,
+   "eligible_gold_in_gazetteer": 6
+  },
+  "sherburne": {
+   "deeds": 1,
+   "deeds_with_gold": 1,
+   "eligible": 1,
+   "eligible_with_gold": 1,
+   "eligible_gold_in_gazetteer": 0
+  },
+  "washington": {
+   "deeds": 81,
+   "deeds_with_gold": 79,
+   "eligible": 0,
+   "eligible_with_gold": 0,
+   "eligible_gold_in_gazetteer": 0
+  },
+  "ALL": {
+   "deeds": 491,
+   "deeds_with_gold": 488,
+   "eligible": 271,
+   "eligible_with_gold": 270,
+   "eligible_gold_in_gazetteer": 188
+  }
+ },
+ "checks": {
+  "reproduction_compared": 804,
+  "reproduction_mismatches": 0,
+  "consistency_mismatches": 0
+ },
+ "errors": {
+  "qwen2.5_7b_q4:cached_errors": 0,
+  "gemma4_e4b_q4:cached_errors": 0,
+  "gemma4_31b_q4:cached_errors": 0,
+  "qwen3.8_27b_q4:cached_errors": 0,
+  "gliner_large_v2.5:cached_errors": 0
+ },
+ "versions": {
+  "python": "3.11.9",
+  "rapidfuzz": "3.14.6",
+  "shapely": "2.1.2"
+ },
+ "seconds": 13.9
+}

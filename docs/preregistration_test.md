@@ -282,6 +282,7 @@ Where they are:
   matched the committed laptop copies by sha256 and were deleted on 2026-11-22; nothing from test is left on MSI. The
   laptop test caches used by the evaluation are now the only copies (they match their run logs: 2,436 deeds, 0 errors;
   I backed them up). Not a deviation: decision 4 only requires deletion after the evaluation.
+- Erratum (2026-11-22): §3.2 gives the A40 memory as 46 GB; the driver reports 46,068 MiB (about 48 GB). This is a unit slip in the description and affected no run.
 
 ## 11. Approval
 
