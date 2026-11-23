@@ -1,0 +1,177 @@
+{
+ "status": "descriptive recount (read-only, aggregates only)",
+ "split_train": {
+  "features": 7308,
+  "pages": 1616,
+  "pages_without_underscore": 100,
+  "deeds_image_ids_county": 937,
+  "deeds_image_ids_no_county": 937,
+  "deeds_docnum_county": 1124,
+  "deeds_docnum_no_county": 1124,
+  "components_linked_by_docnum": 906,
+  "split_image_ids_deeds_with_>1_docnum": 116,
+  "split_extra_docnums_from_those_deeds": 231,
+  "merged_docnums_shared_by_>1_deed": 39,
+  "merged_image_ids_deeds_involved": 53,
+  "components_with_>1_deed": 22,
+  "by_county_image_ids_deeds": {
+   "anoka": 186,
+   "dakota": 21,
+   "milwaukee": 354,
+   "olmsted": 105,
+   "sherburne": 10,
+   "washington": 261
+  },
+  "by_county_docnum_deeds": {
+   "anoka": 185,
+   "dakota": 41,
+   "milwaukee": 353,
+   "olmsted": 105,
+   "sherburne": 4,
+   "washington": 436
+  },
+  "parse": {
+   "features": 7308
+  }
+ },
+ "split_val": {
+  "features": 2436,
+  "pages": 777,
+  "pages_without_underscore": 61,
+  "deeds_image_ids_county": 491,
+  "deeds_image_ids_no_county": 491,
+  "deeds_docnum_county": 568,
+  "deeds_docnum_no_county": 568,
+  "components_linked_by_docnum": 487,
+  "split_image_ids_deeds_with_>1_docnum": 41,
+  "split_extra_docnums_from_those_deeds": 82,
+  "merged_docnums_shared_by_>1_deed": 5,
+  "merged_image_ids_deeds_involved": 8,
+  "components_with_>1_deed": 4,
+  "by_county_image_ids_deeds": {
+   "anoka": 109,
+   "dakota": 13,
+   "milwaukee": 225,
+   "olmsted": 62,
+   "sherburne": 1,
+   "washington": 81
+  },
+  "by_county_docnum_deeds": {
+   "anoka": 108,
+   "dakota": 23,
+   "milwaukee": 225,
+   "olmsted": 62,
+   "sherburne": 1,
+   "washington": 149
+  },
+  "parse": {
+   "features": 2436
+  }
+ },
+ "split_test": {
+  "features": 2436,
+  "pages": 3254,
+  "pages_without_underscore": 420,
+  "deeds_image_ids_county": 2436,
+  "deeds_image_ids_no_county": 2436,
+  "deeds_docnum_county": 2336,
+  "deeds_docnum_no_county": 2336,
+  "components_linked_by_docnum": 2301,
+  "split_image_ids_deeds_with_>1_docnum": 18,
+  "split_extra_docnums_from_those_deeds": 36,
+  "merged_docnums_shared_by_>1_deed": 17,
+  "merged_image_ids_deeds_involved": 151,
+  "components_with_>1_deed": 16,
+  "by_county_image_ids_deeds": {
+   "anoka": 519,
+   "dakota": 64,
+   "milwaukee": 1369,
+   "olmsted": 347,
+   "sherburne": 137
+  },
+  "by_county_docnum_deeds": {
+   "anoka": 519,
+   "dakota": 84,
+   "milwaukee": 1369,
+   "olmsted": 347,
+   "sherburne": 17
+  },
+  "parse": {
+   "features": 2436
+  }
+ },
+ "splits_union": {
+  "features": 12180,
+  "pages": 5034,
+  "pages_without_underscore": 526,
+  "deeds_image_ids_county": 3455,
+  "deeds_image_ids_no_county": 3455,
+  "deeds_docnum_county": 3572,
+  "deeds_docnum_no_county": 3572,
+  "components_linked_by_docnum": 3277,
+  "split_image_ids_deeds_with_>1_docnum": 155,
+  "split_extra_docnums_from_those_deeds": 309,
+  "merged_docnums_shared_by_>1_deed": 57,
+  "merged_image_ids_deeds_involved": 216,
+  "components_with_>1_deed": 38,
+  "by_county_image_ids_deeds": {
+   "anoka": 710,
+   "dakota": 86,
+   "milwaukee": 1741,
+   "olmsted": 460,
+   "sherburne": 148,
+   "washington": 310
+  },
+  "by_county_docnum_deeds": {
+   "anoka": 709,
+   "dakota": 121,
+   "milwaukee": 1740,
+   "olmsted": 460,
+   "sherburne": 17,
+   "washington": 525
+  }
+ },
+ "full_geojson": {
+  "features": 12226,
+  "pages": 5035,
+  "pages_without_underscore": 526,
+  "deeds_image_ids_county": 3455,
+  "deeds_image_ids_no_county": 3455,
+  "deeds_docnum_county": 3573,
+  "deeds_docnum_no_county": 3573,
+  "components_linked_by_docnum": 3277,
+  "split_image_ids_deeds_with_>1_docnum": 156,
+  "split_extra_docnums_from_those_deeds": 310,
+  "merged_docnums_shared_by_>1_deed": 57,
+  "merged_image_ids_deeds_involved": 216,
+  "components_with_>1_deed": 38,
+  "by_county_image_ids_deeds": {
+   "anoka": 710,
+   "dakota": 86,
+   "milwaukee": 1741,
+   "olmsted": 460,
+   "sherburne": 148,
+   "washington": 310
+  },
+  "by_county_docnum_deeds": {
+   "anoka": 709,
+   "dakota": 122,
+   "milwaukee": 1740,
+   "olmsted": 460,
+   "sherburne": 17,
+   "washington": 525
+  },
+  "parse": {
+   "folders": 7,
+   "features": 32510,
+   "features_empty_ids": 20284,
+   "features_with_repeated_id": 15
+  },
+  "distinct_raw_image_ids_strings": 3455,
+  "distinct_image_ids_sets": 3455
+ },
+ "errors": {
+  "count": 0,
+  "types": {}
+ }
+}

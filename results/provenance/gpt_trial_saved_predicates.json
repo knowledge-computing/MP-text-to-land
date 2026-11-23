@@ -1,0 +1,65 @@
+{
+ "status": "descriptive recomputation from saved published outputs (no method change)",
+ "deeds_total": 2436,
+ "with_triple": 1470,
+ "failed_step1_with_dir_never_retried": 88,
+ "table3": {
+  "original_1x1_contains": {
+   "hits": 1258,
+   "pct_of_with_triple": 85.58
+  },
+  "original_1x1_intersects": {
+   "hits": 1265,
+   "pct_of_with_triple": 86.05
+  },
+  "original_1x1_overlap_area": {
+   "hits": 1265,
+   "pct_of_with_triple": 86.05
+  },
+  "original_6x6_contains": {
+   "hits": 1270,
+   "pct_of_with_triple": 86.39
+  },
+  "original_6x6_intersects": {
+   "hits": 1278,
+   "pct_of_with_triple": 86.94
+  },
+  "original_6x6_overlap_area": {
+   "hits": 1278,
+   "pct_of_with_triple": 86.94
+  },
+  "corrected_1x1_contains": {
+   "hits": 1258,
+   "pct_of_with_triple": 85.58
+  },
+  "corrected_1x1_intersects": {
+   "hits": 1265,
+   "pct_of_with_triple": 86.05
+  },
+  "corrected_1x1_overlap_area": {
+   "hits": 1265,
+   "pct_of_with_triple": 86.05
+  },
+  "corrected_6x6_contains": {
+   "hits": 1291,
+   "pct_of_with_triple": 87.82
+  },
+  "corrected_6x6_intersects": {
+   "hits": 1292,
+   "pct_of_with_triple": 87.89
+  },
+  "corrected_6x6_overlap_area": {
+   "hits": 1292,
+   "pct_of_with_triple": 87.89
+  }
+ },
+ "corrected_6x6_or_1x1": {
+  "contains": 1291,
+  "intersects": 1292,
+  "overlap_area": 1292
+ },
+ "check_vs_published": {
+  "mismatches": []
+ },
+ "errors": {}
+}
